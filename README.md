@@ -7,7 +7,6 @@ Hệ thống giúp:
 - Quản lý sản phẩm (thêm, sửa, xóa)
 - Quản lý đơn hàng
 - Theo dõi tồn kho
-- Hỗ trợ nhân viên vận hành hiệu quả
 
 ---
 
