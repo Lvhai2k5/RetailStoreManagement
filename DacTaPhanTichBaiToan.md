@@ -1,4 +1,4 @@
-## ĐẶC TẢ NGHIỆP VỤ (BUSINESS ONLY)
+## ĐẶC TẢ NGHIỆP VỤ (BUSINESS ONLY) _ReatilStoreManagement
 
 Hệ thống được xây dựng nhằm hỗ trợ quản lý hoạt động kinh doanh của một cửa hàng bán lẻ với hai quy trình chính: mua tại chỗ và đặt trước. Trong quy trình mua tại chỗ, khách hàng trực tiếp đến cửa hàng, chủ cửa hàng tạo đơn hàng, hệ thống ghi nhận các sản phẩm được chọn, tính toán giá bán hiện tại và thực hiện thanh toán ngay bằng tiền mặt hoặc chuyển khoản. Sau khi thanh toán hoàn tất, đơn hàng được xác nhận và có thể in hóa đơn.
 
@@ -16,7 +16,7 @@ Hệ thống cũng hỗ trợ quản lý nhà cung cấp, cho phép lưu trữ v
 
 Cách tiếp cận này đảm bảo phản ánh chính xác tình hình kinh doanh thực tế và tách biệt rõ ràng giữa hoạt động quản lý tồn kho và hoạt động tài chính.
 
-## ĐẶC TẢ NGHIỆP VỤ LIÊN HỆ CSDL (TECHNICAL VIEW)
+## ĐẶC TẢ NGHIỆP VỤ LIÊN HỆ CSDL (TECHNICAL VIEW) _ReatilStoreManagement
 
 Hệ thống quản lý bán lẻ được thiết kế dựa trên mô hình dữ liệu quan hệ, trong đó các thực thể chính bao gồm Products, ImportBatches, Orders, OrderDetails, InventoryTransactions, SaleAllocations, ProductPriceHistory, Suppliers, Returns và các bảng liên quan khác.
 
