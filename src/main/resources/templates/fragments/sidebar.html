@@ -1,10 +1,10 @@
 <div th:fragment="sidebar">
-  <!-- Sidebar -->
   <div class="sidebar">
 
     <!-- Logo -->
     <div class="logo">
-      🛍️ <span>Retail Admin</span>
+      🛍️ Retail
+      <span>Admin Panel</span>
     </div>
 
     <!-- Menu -->
@@ -14,7 +14,7 @@
       </li>
 
       <li>
-        <span>📦</span> Quản lý đơn
+        <span>📦</span> Đơn hàng
       </li>
 
       <li>
@@ -44,32 +44,27 @@
   <!-- STYLE -->
   <style>
     .sidebar {
-      width: 260px;
-      height: 100vh;
-      position: fixed;
-      left: 0;
-      top: 0;
+      width: 250px;
+      min-height: 100vh;
       background: linear-gradient(180deg, #667eea, #764ba2);
+      color: white;
       padding: 20px;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      box-shadow: 5px 0 20px rgba(0,0,0,0.2);
-      animation: slideIn 0.6s ease;
     }
 
     /* Logo */
     .logo {
       font-size: 22px;
       font-weight: 700;
-      color: white;
-      margin-bottom: 30px;
       text-align: center;
+      margin-bottom: 30px;
     }
 
     .logo span {
       display: block;
-      font-size: 14px;
+      font-size: 13px;
       font-weight: 300;
       opacity: 0.8;
     }
@@ -82,69 +77,45 @@
     .menu li {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 10px;
       padding: 12px 15px;
       margin-bottom: 10px;
-      border-radius: 12px;
+      border-radius: 10px;
       cursor: pointer;
-      color: white;
-      transition: all 0.3s ease;
-      position: relative;
+      transition: 0.3s;
     }
 
-    .menu li span {
-      font-size: 18px;
-    }
-
-    /* Hover */
     .menu li:hover {
       background: rgba(255,255,255,0.2);
       transform: translateX(5px);
     }
 
-    /* Active */
     .menu li.active {
       background: white;
       color: #764ba2;
       font-weight: 500;
     }
 
-    .menu li.active span {
-      color: #764ba2;
-    }
-
     /* Bottom */
     .bottom {
-      text-align: center;
+      margin-top: 20px;
     }
 
     .logout {
       width: 100%;
       padding: 10px;
-      border-radius: 20px;
       border: none;
+      border-radius: 20px;
       background: white;
       color: #764ba2;
-      cursor: pointer;
       font-weight: 500;
+      cursor: pointer;
       transition: 0.3s;
     }
 
     .logout:hover {
       background: #ff4d6d;
       color: white;
-    }
-
-    /* Animation */
-    @keyframes slideIn {
-      from {
-        transform: translateX(-100%);
-        opacity: 0;
-      }
-      to {
-        transform: translateX(0);
-        opacity: 1;
-      }
     }
   </style>
 </div>
