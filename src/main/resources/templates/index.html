@@ -166,10 +166,9 @@
 
   <script>
     // Auto chuyển sau 3 giây
-    setTimeout(() => {
-      document.getElementById("splash").style.display = "none";
-      document.getElementById("dashboard").style.display = "block";
-    }, 3000);
+	setTimeout(() => {
+	  window.location.href = "/dashboard";
+	}, 3000);
   </script>
 
 </body>
