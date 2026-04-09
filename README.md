@@ -15,3 +15,12 @@ Hệ thống giúp:
 - Áp dụng mô hình MVC
 - Thực hành quy trình Agile với Jira
 - Quản lý source code bằng GitHub
+
+
+----
+
+## 🎯 Các công cụ được sử dụng
+- Figma làm giao diện
+- Github quản lý source code
+- SpringTool phát triển phần mềm
+- Jira quản lý thời gian cho dự án và công việc
