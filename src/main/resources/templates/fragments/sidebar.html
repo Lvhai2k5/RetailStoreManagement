@@ -1,13 +1,150 @@
 <div th:fragment="sidebar">
+  <!-- Sidebar -->
   <div class="sidebar">
-    <h2>🛍️ Retail</h2>
+
+    <!-- Logo -->
+    <div class="logo">
+      🛍️ <span>Retail Admin</span>
+    </div>
+
+    <!-- Menu -->
     <ul class="menu">
-      <li>🏠 Dashboard</li>
-      <li>📦 Quản lý đơn</li>
-      <li>🛒 Sản phẩm</li>
-      <li>👥 Khách hàng</li>
-      <li>📊 Báo cáo</li>
-      <li>⚙️ Cài đặt</li>
+      <li class="active">
+        <span>🏠</span> Dashboard
+      </li>
+
+      <li>
+        <span>📦</span> Quản lý đơn
+      </li>
+
+      <li>
+        <span>🛒</span> Sản phẩm
+      </li>
+
+      <li>
+        <span>👥</span> Khách hàng
+      </li>
+
+      <li>
+        <span>📊</span> Báo cáo
+      </li>
+
+      <li>
+        <span>⚙️</span> Cài đặt
+      </li>
     </ul>
+
+    <!-- Bottom -->
+    <div class="bottom">
+      <button class="logout">🚪 Đăng xuất</button>
+    </div>
+
   </div>
+
+  <!-- STYLE -->
+  <style>
+    .sidebar {
+      width: 260px;
+      height: 100vh;
+      position: fixed;
+      left: 0;
+      top: 0;
+      background: linear-gradient(180deg, #667eea, #764ba2);
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      box-shadow: 5px 0 20px rgba(0,0,0,0.2);
+      animation: slideIn 0.6s ease;
+    }
+
+    /* Logo */
+    .logo {
+      font-size: 22px;
+      font-weight: 700;
+      color: white;
+      margin-bottom: 30px;
+      text-align: center;
+    }
+
+    .logo span {
+      display: block;
+      font-size: 14px;
+      font-weight: 300;
+      opacity: 0.8;
+    }
+
+    /* Menu */
+    .menu {
+      list-style: none;
+    }
+
+    .menu li {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 15px;
+      margin-bottom: 10px;
+      border-radius: 12px;
+      cursor: pointer;
+      color: white;
+      transition: all 0.3s ease;
+      position: relative;
+    }
+
+    .menu li span {
+      font-size: 18px;
+    }
+
+    /* Hover */
+    .menu li:hover {
+      background: rgba(255,255,255,0.2);
+      transform: translateX(5px);
+    }
+
+    /* Active */
+    .menu li.active {
+      background: white;
+      color: #764ba2;
+      font-weight: 500;
+    }
+
+    .menu li.active span {
+      color: #764ba2;
+    }
+
+    /* Bottom */
+    .bottom {
+      text-align: center;
+    }
+
+    .logout {
+      width: 100%;
+      padding: 10px;
+      border-radius: 20px;
+      border: none;
+      background: white;
+      color: #764ba2;
+      cursor: pointer;
+      font-weight: 500;
+      transition: 0.3s;
+    }
+
+    .logout:hover {
+      background: #ff4d6d;
+      color: white;
+    }
+
+    /* Animation */
+    @keyframes slideIn {
+      from {
+        transform: translateX(-100%);
+        opacity: 0;
+      }
+      to {
+        transform: translateX(0);
+        opacity: 1;
+      }
+    }
+  </style>
 </div>
