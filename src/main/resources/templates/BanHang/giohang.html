@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+
+<html class="light" lang="vi"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Bán hàng - Merchant Core</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "on-tertiary-container": "#00344a",
+              "on-secondary": "#ffffff",
+              "on-background": "#181c1c",
+              "surface-dim": "#d7dbda",
+              "surface-container-highest": "#e0e3e2",
+              "surface-variant": "#e0e3e2",
+              "surface-container-lowest": "#ffffff",
+              "error-container": "#ffdad6",
+              "on-secondary-fixed": "#001d33",
+              "surface-tint": "#8b4d4d",
+              "on-tertiary": "#ffffff",
+              "inverse-on-surface": "#eef1f0",
+              "outline-variant": "#d7c1c1",
+              "outline": "#857372",
+              "surface-container-low": "#f1f4f3",
+              "secondary": "#45617c",
+              "on-tertiary-fixed-variant": "#004c6b",
+              "on-secondary-container": "#46627d",
+              "surface": "#f7faf9",
+              "error": "#ba1a1a",
+              "surface-container": "#ebeeed",
+              "on-primary-fixed-variant": "#6f3637",
+              "on-surface-variant": "#524343",
+              "primary-fixed-dim": "#ffb3b2",
+              "inverse-primary": "#ffb3b2",
+              "tertiary-container": "#589fc8",
+              "on-primary": "#ffffff",
+              "on-tertiary-fixed": "#001e2d",
+              "on-error-container": "#93000a",
+              "tertiary-fixed": "#c6e7ff",
+              "on-surface": "#181c1c",
+              "secondary-fixed": "#cee5ff",
+              "surface-bright": "#f7faf9",
+              "primary-fixed": "#ffdad9",
+              "primary": "#8b4d4d",
+              "on-secondary-fixed-variant": "#2d4963",
+              "on-primary-fixed": "#380b0f",
+              "inverse-surface": "#2d3131",
+              "secondary-container": "#c0ddfd",
+              "tertiary-fixed-dim": "#89cffa",
+              "tertiary": "#08658b",
+              "secondary-fixed-dim": "#adc9e9",
+              "primary-container": "#cd8484",
+              "on-primary-container": "#522021",
+              "background": "#f7faf9",
+              "on-error": "#ffffff",
+              "surface-container-high": "#e6e9e8"
+            },
+            fontFamily: {
+              "headline": ["Manrope"],
+              "body": ["Inter"],
+              "label": ["Inter"]
+            },
+            borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f7faf9;
+        }
+        h1, h2, h3, h4, .font-headline {
+            font-family: 'Manrope', sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface">
+<!-- TopNavBar -->
+<header class="fixed top-0 right-0 left-0 z-40 flex justify-between items-center px-6 h-16 bg-white dark:bg-slate-900 shadow-sm border-b border-slate-200 dark:border-slate-800">
+<div class="flex items-center gap-8">
+<span class="text-xl font-bold text-[#cd8484] font-headline">Merchant Core</span>
+<div class="relative hidden md:block w-96">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">search</span>
+<input class="w-full pl-10 pr-4 py-2 bg-slate-100 border-none rounded-lg text-sm focus:ring-2 focus:ring-[#cd8484]" placeholder="Tìm kiếm chức năng..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="p-2 hover:bg-slate-50 rounded-full transition-colors">
+<span class="material-symbols-outlined text-slate-600">notifications</span>
+</button>
+<button class="p-2 hover:bg-slate-50 rounded-full transition-colors">
+<span class="material-symbols-outlined text-slate-600">help</span>
+</button>
+<div class="h-8 w-8 rounded-full overflow-hidden border border-slate-200">
+<img alt="Ảnh đại diện người dùng" class="w-full h-full object-cover" data-alt="professional headshot of a smiling asian business owner in a modern retail office setting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAOUfeJjbqhRBbyrch-YmKUz8GvmmEfCcILbn9AGmOzNy-HLLpCHk7bQ_rKCfT3Brbhy2hL7ZInHNb9kF-rszqICnkHHEa3YvtJWhUz7Z5ekiTU4rkpklreq3FI4zohEu9cRnY7tBqMCzGf-dG5kNUtMKZ_pmXaHx7ChGkliU7d_-H-nNLxXkcJjGtv2Du0WT1nWJK37ovSZr6e8bSK7MBJu8rDm47i9U_Qv6ZxprUq2gA4SVh4Akw1k7Os-jSqDfN1X6AOytist01t"/>
+</div>
+</div>
+</header>
+<!-- SideNavBar -->
+<aside class="fixed left-0 top-0 h-full w-64 z-50 flex flex-col pt-4 pb-4 bg-slate-50 dark:bg-slate-950 border-r border-slate-200 dark:border-slate-800">
+<div class="px-6 mb-8">
+<div class="flex items-center gap-3">
+<div class="bg-[#cd8484] p-2 rounded-lg">
+<span class="material-symbols-outlined text-white" style="font-variation-settings: 'FILL' 1;">storefront</span>
+</div>
+<div>
+<h2 class="text-lg font-black text-[#cd8484] font-headline">Merchant Core</h2>
+<p class="text-[10px] text-slate-500 uppercase tracking-wider">Hệ thống quản lý bán lẻ</p>
+</div>
+</div>
+</div>
+<nav class="flex-1 space-y-1 px-3">
+<a class="flex items-center gap-3 px-3 py-2.5 text-slate-600 hover:bg-slate-200 hover:text-slate-900 transition-all scale-98 rounded-lg" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="text-sm font-medium">Bảng điều khiển</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 text-slate-600 hover:bg-slate-200 hover:text-slate-900 transition-all scale-98 rounded-lg" href="#">
+<span class="material-symbols-outlined">factory</span>
+<span class="text-sm font-medium">Nhà cung cấp</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 text-slate-600 hover:bg-slate-200 hover:text-slate-900 transition-all scale-98 rounded-lg" href="#">
+<span class="material-symbols-outlined">category</span>
+<span class="text-sm font-medium">Danh mục sản phẩm</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 text-slate-600 hover:bg-slate-200 hover:text-slate-900 transition-all scale-98 rounded-lg" href="#">
+<span class="material-symbols-outlined">inventory_2</span>
+<span class="text-sm font-medium">Sản phẩm</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 bg-[#cd8484]/10 text-[#cd8484] font-bold border-r-4 border-[#cd8484] transition-all scale-98 rounded-l-lg" href="#">
+<span class="material-symbols-outlined">shopping_cart</span>
+<span class="text-sm font-medium">Đơn hàng</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 text-slate-600 hover:bg-slate-200 hover:text-slate-900 transition-all scale-98 rounded-lg" href="#">
+<span class="material-symbols-outlined">layers</span>
+<span class="text-sm font-medium">Lô hàng</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 text-slate-600 hover:bg-slate-200 hover:text-slate-900 transition-all scale-98 rounded-lg" href="#">
+<span class="material-symbols-outlined">assignment_return</span>
+<span class="text-sm font-medium">Trả hàng</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 text-slate-600 hover:bg-slate-200 hover:text-slate-900 transition-all scale-98 rounded-lg" href="#">
+<span class="material-symbols-outlined">analytics</span>
+<span class="text-sm font-medium">Báo cáo</span>
+</a>
+</nav>
+<div class="px-3 pt-4 mt-4 border-t border-slate-200">
+<a class="flex items-center gap-3 px-3 py-2.5 text-slate-600 hover:bg-slate-200 hover:text-slate-900 transition-all scale-98 rounded-lg" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="text-sm font-medium">Cài đặt</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 text-slate-600 hover:bg-slate-200 hover:text-slate-900 transition-all scale-98 rounded-lg" href="#">
+<span class="material-symbols-outlined">logout</span>
+<span class="text-sm font-medium">Đăng xuất</span>
+</a>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="ml-64 pt-20 p-6 min-h-screen">
+<div class="grid grid-cols-12 gap-6 h-[calc(100vh-120px)]">
+<!-- Left Panel: Product Entry & Cart -->
+<div class="col-span-8 flex flex-col gap-6">
+<!-- Scan Area -->
+<div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200 flex items-center gap-4">
+<div class="flex-1 relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[#cd8484]">barcode_scanner</span>
+<input class="w-full pl-10 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:ring-2 focus:ring-[#cd8484] focus:border-[#cd8484] transition-all" placeholder="Nhập ProductID hoặc quét mã để thêm nhanh..." type="text"/>
+</div>
+<button class="bg-[#cd8484] text-white px-6 py-3 rounded-lg font-bold flex items-center gap-2 hover:bg-[#b57373] transition-colors">
+<span class="material-symbols-outlined">add_circle</span>
+                        Thêm
+                    </button>
+</div>
+<!-- Cart List -->
+<div class="bg-white rounded-xl shadow-sm border border-slate-200 flex-1 flex flex-col overflow-hidden">
+<div class="px-6 py-4 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
+<h3 class="font-bold text-slate-800 flex items-center gap-2">
+<span class="material-symbols-outlined text-[#cd8484]">shopping_basket</span>
+                            Giỏ hàng hiện tại (3 sản phẩm)
+                        </h3>
+<button class="text-sm text-error font-medium hover:underline">Xóa tất cả</button>
+</div>
+<div class="flex-1 overflow-y-auto">
+<table class="w-full text-left">
+<thead class="sticky top-0 bg-white border-b border-slate-100">
+<tr class="text-slate-500 text-xs font-semibold uppercase tracking-wider">
+<th class="px-6 py-4">Sản phẩm</th>
+<th class="px-6 py-4 text-center">Số lượng</th>
+<th class="px-6 py-4 text-right">Đơn giá bán</th>
+<th class="px-6 py-4 text-right">Thành tiền</th>
+<th class="px-6 py-4"></th>
+</tr>
+</thead>
+<tbody class="divide-y divide-slate-50">
+<!-- Cart Item 1: Thùng mì Hảo Hảo -->
+<tr class="hover:bg-slate-50 transition-colors">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded bg-slate-100 flex items-center justify-center">
+<span class="material-symbols-outlined text-slate-400">inventory</span>
+</div>
+<div>
+<div class="font-bold text-slate-800">Thùng mì Hảo Hảo (30 gói)</div>
+<div class="text-xs text-slate-400">PID: HAOHAO-BOX-01</div>
+</div>
+</div>
+</td>
+<td class="px-6 py-4">
+<div class="flex items-center justify-center gap-2">
+<button class="w-8 h-8 rounded border border-slate-200 flex items-center justify-center text-slate-600 hover:bg-slate-100">
+<span class="material-symbols-outlined text-sm">remove</span>
+</button>
+<input class="w-12 text-center p-1 border-slate-200 rounded text-sm focus:ring-[#cd8484]" type="number" value="1"/>
+<button class="w-8 h-8 rounded border border-slate-200 flex items-center justify-center text-slate-600 hover:bg-slate-100">
+<span class="material-symbols-outlined text-sm">add</span>
+</button>
+</div>
+</td>
+<td class="px-6 py-4 text-right">
+<div class="text-sm font-medium">115.000 đ</div>
+<div class="text-[10px] text-tertiary">Trừ kho: Lô #242</div>
+</td>
+<td class="px-6 py-4 text-right">
+<div class="font-bold text-slate-800">115.000 đ</div>
+</td>
+<td class="px-6 py-4 text-right">
+<button class="text-slate-300 hover:text-error transition-colors">
+<span class="material-symbols-outlined">delete</span>
+</button>
+</td>
+</tr>
+<!-- Cart Item 2: Lốc sữa Vinamilk -->
+<tr class="hover:bg-slate-50 transition-colors">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded bg-slate-100 flex items-center justify-center">
+<span class="material-symbols-outlined text-slate-400">water_drop</span>
+</div>
+<div>
+<div class="font-bold text-slate-800">Lốc sữa Vinamilk ít đường</div>
+<div class="text-xs text-slate-400">PID: VNM-PACK-4</div>
+</div>
+</div>
+</td>
+<td class="px-6 py-4">
+<div class="flex items-center justify-center gap-2">
+<button class="w-8 h-8 rounded border border-slate-200 flex items-center justify-center text-slate-600 hover:bg-slate-100">
+<span class="material-symbols-outlined text-sm">remove</span>
+</button>
+<input class="w-12 text-center p-1 border-slate-200 rounded text-sm focus:ring-[#cd8484]" type="number" value="2"/>
+<button class="w-8 h-8 rounded border border-slate-200 flex items-center justify-center text-slate-600 hover:bg-slate-100">
+<span class="material-symbols-outlined text-sm">add</span>
+</button>
+</div>
+</td>
+<td class="px-6 py-4 text-right">
+<div class="text-sm font-medium">28.000 đ</div>
+<div class="text-[10px] text-tertiary">Trừ kho: Lô #118</div>
+</td>
+<td class="px-6 py-4 text-right">
+<div class="font-bold text-slate-800">56.000 đ</div>
+</td>
+<td class="px-6 py-4 text-right">
+<button class="text-slate-300 hover:text-error transition-colors">
+<span class="material-symbols-outlined">delete</span>
+</button>
+</td>
+</tr>
+<!-- Cart Item 3: Chai dầu ăn 1L -->
+<tr class="hover:bg-slate-50 transition-colors">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded bg-slate-100 flex items-center justify-center">
+<span class="material-symbols-outlined text-slate-400">liquor</span>
+</div>
+<div>
+<div class="font-bold text-slate-800">Chai dầu ăn Simply 1L</div>
+<div class="text-xs text-slate-400">PID: SIMPLY-1L</div>
+</div>
+</div>
+</td>
+<td class="px-6 py-4">
+<div class="flex items-center justify-center gap-2">
+<button class="w-8 h-8 rounded border border-slate-200 flex items-center justify-center text-slate-600 hover:bg-slate-100">
+<span class="material-symbols-outlined text-sm">remove</span>
+</button>
+<input class="w-12 text-center p-1 border-slate-200 rounded text-sm focus:ring-[#cd8484]" type="number" value="1"/>
+<button class="w-8 h-8 rounded border border-slate-200 flex items-center justify-center text-slate-600 hover:bg-slate-100">
+<span class="material-symbols-outlined text-sm">add</span>
+</button>
+</div>
+</td>
+<td class="px-6 py-4 text-right">
+<div class="text-sm font-medium">45.500 đ</div>
+<div class="text-[10px] text-tertiary">Trừ kho: Lô #302</div>
+</td>
+<td class="px-6 py-4 text-right">
+<div class="font-bold text-slate-800">45.500 đ</div>
+</td>
+<td class="px-6 py-4 text-right">
+<button class="text-slate-300 hover:text-error transition-colors">
+<span class="material-symbols-outlined">delete</span>
+</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<!-- Right Panel: Summary & Checkout -->
+<div class="col-span-4 flex flex-col gap-6">
+<div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 flex flex-col gap-6 h-full">
+<div>
+<h3 class="font-bold text-slate-800 mb-4 flex items-center gap-2">
+<span class="material-symbols-outlined text-[#cd8484]">summarize</span>
+                            Tóm tắt đơn hàng
+                        </h3>
+<div class="space-y-3">
+<div class="flex justify-between text-slate-600">
+<span>Tạm tính (3 mặt hàng)</span>
+<span>216.500 đ</span>
+</div>
+<div class="flex justify-between text-slate-600">
+<span>Giảm giá</span>
+<span class="text-error">- 0 đ</span>
+</div>
+<div class="flex justify-between text-slate-600">
+<span>Thuế VAT (8%)</span>
+<span>17.320 đ</span>
+</div>
+<div class="pt-3 border-t border-slate-100 flex justify-between items-center">
+<span class="font-bold text-lg text-slate-800">Tổng tiền</span>
+<span class="font-extrabold text-2xl text-[#cd8484]">233.820 đ</span>
+</div>
+</div>
+</div>
+<div>
+<label class="block text-sm font-bold text-slate-700 mb-3">Phương thức thanh toán</label>
+<div class="grid grid-cols-2 gap-3">
+<label class="relative flex flex-col items-center justify-center p-4 border-2 border-[#cd8484] bg-[#cd8484]/5 rounded-xl cursor-pointer">
+<input checked="" class="hidden" name="payment" type="radio"/>
+<span class="material-symbols-outlined text-[#cd8484] mb-1" style="font-variation-settings: 'FILL' 1;">payments</span>
+<span class="text-xs font-bold text-[#cd8484]">Tiền mặt</span>
+</label>
+<label class="relative flex flex-col items-center justify-center p-4 border border-slate-200 rounded-xl cursor-pointer hover:bg-slate-50 transition-colors">
+<input class="hidden" name="payment" type="radio"/>
+<span class="material-symbols-outlined text-slate-400 mb-1">account_balance</span>
+<span class="text-xs font-bold text-slate-500">Chuyển khoản</span>
+</label>
+</div>
+</div>
+<div class="flex-1">
+<label class="block text-sm font-bold text-slate-700 mb-2">Cơ chế trừ kho &amp; Ghi chú</label>
+<div class="mb-3 p-3 bg-blue-50 border border-blue-100 rounded-lg text-blue-800 text-xs flex items-start gap-2">
+<span class="material-symbols-outlined text-sm mt-0.5">inventory</span>
+<div>
+<p class="font-bold">Quy tắc FIFO đang áp dụng:</p>
+<p class="mt-0.5 opacity-80">Hệ thống ưu tiên trừ tồn kho từ các lô hàng nhập sớm nhất để đảm bảo hạn sử dụng.</p>
+</div>
+</div>
+<textarea class="w-full h-20 p-3 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:ring-2 focus:ring-[#cd8484] focus:border-[#cd8484] resize-none" placeholder="Nhập ghi chú cho khách hàng..."></textarea>
+</div>
+<div class="pt-4 border-t border-slate-100">
+<button class="w-full py-4 bg-[#cd8484] text-white rounded-xl font-black text-lg shadow-lg shadow-[#cd8484]/30 hover:bg-[#b57373] active:scale-[0.98] transition-all flex items-center justify-center gap-3">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">receipt_long</span>
+                            Thanh toán &amp; In hóa đơn
+                        </button>
+</div>
+</div>
+</div>
+</div>
+</main>
+</body></html>

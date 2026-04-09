@@ -1,0 +1,272 @@
+<!DOCTYPE html><html class="light" lang="vi"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "tertiary-container": "#589fc8",
+              "on-secondary-container": "#46627d",
+              "error-container": "#ffdad6",
+              "surface-container-high": "#e6e9e8",
+              "surface-container-low": "#f1f4f3",
+              "outline": "#857372",
+              "on-surface-variant": "#524343",
+              "on-primary-fixed": "#380b0f",
+              "primary-fixed-dim": "#ffb3b2",
+              "on-surface": "#181c1c",
+              "on-secondary": "#ffffff",
+              "surface-tint": "#8b4d4d",
+              "error": "#ba1a1a",
+              "background": "#f7faf9",
+              "inverse-on-surface": "#eef1f0",
+              "surface-dim": "#d7dbda",
+              "on-background": "#181c1c",
+              "primary": "#8b4d4d",
+              "surface-bright": "#f7faf9",
+              "inverse-surface": "#2d3131",
+              "surface": "#f7faf9",
+              "on-primary-container": "#522021",
+              "on-error": "#ffffff",
+              "surface-variant": "#e0e3e2",
+              "on-tertiary-container": "#00344a",
+              "on-secondary-fixed": "#001d33",
+              "inverse-primary": "#ffb3b2",
+              "surface-container-highest": "#e0e3e2",
+              "primary-fixed": "#ffdad9",
+              "tertiary": "#08658b",
+              "on-primary-fixed-variant": "#6f3637",
+              "primary-container": "#cd8484",
+              "on-tertiary-fixed": "#001e2d",
+              "secondary-container": "#c0ddfd",
+              "secondary": "#45617c",
+              "on-error-container": "#93000a",
+              "secondary-fixed-dim": "#adc9e9",
+              "outline-variant": "#d7c1c1",
+              "on-primary": "#ffffff",
+              "on-tertiary-fixed-variant": "#004c6b",
+              "tertiary-fixed-dim": "#89cffa",
+              "secondary-fixed": "#cee5ff",
+              "on-secondary-fixed-variant": "#2d4963",
+              "on-tertiary": "#ffffff",
+              "tertiary-fixed": "#c6e7ff",
+              "surface-container-lowest": "#ffffff",
+              "surface-container": "#ebeeed"
+            },
+            fontFamily: {
+              "headline": ["Manrope"],
+              "body": ["Inter"],
+              "label": ["Inter"]
+            },
+            borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+          },
+        },
+      }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+        h1, h2, h3, h4 { font-family: 'Manrope', sans-serif; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background min-h-screen">
+<!-- SideNavBar -->
+<aside class="h-screen w-64 border-r fixed left-0 top-0 bg-white dark:bg-slate-900 border-slate-100 dark:border-slate-800 shadow-sm dark:shadow-none z-50">
+<div class="flex flex-col h-full py-6">
+<div class="px-6 mb-8">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded bg-primary-container flex items-center justify-center text-white">
+<span class="material-symbols-outlined" style="font-variation-settings: &quot;FILL&quot; 1;">inventory_2</span>
+</div>
+<div>
+<h2 class="text-xl font-bold text-[#cd8484] dark:text-[#cd8484] tracking-tight" style="">NexRetail</h2>
+<p class="text-[10px] uppercase tracking-widest text-slate-400 font-bold" style="">Hệ thống quản lý bán lẻ</p>
+</div>
+</div>
+</div>
+<nav class="flex-1 space-y-1">
+<a class="flex items-center gap-3 px-4 py-3 text-slate-600 dark:text-slate-400 hover:text-[#cd8484] dark:hover:text-[#cd8484] hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors duration-200 font-manrope text-sm font-medium" href="#" style="">
+<span class="material-symbols-outlined" style="">dashboard</span>
+<span class="" style="">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-[#cd8484] bg-[#cd8484]/10 dark:bg-[#cd8484]/20 border-r-4 border-[#cd8484] font-bold font-manrope text-sm" href="#" style="">
+<span class="material-symbols-outlined" style="font-variation-settings: &quot;FILL&quot; 1;">inventory_2</span>
+<span class="" style="">Nhà cung cấp</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-600 dark:text-slate-400 hover:text-[#cd8484] dark:hover:text-[#cd8484] hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors duration-200 font-manrope text-sm font-medium" href="#" style="">
+<span class="material-symbols-outlined" style="">category</span>
+<span class="" style="">Loại sản phẩm</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-600 dark:text-slate-400 hover:text-[#cd8484] dark:hover:text-[#cd8484] hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors duration-200 font-manrope text-sm font-medium" href="#" style="">
+<span class="material-symbols-outlined" style="">shopping_bag</span>
+<span class="" style="">Sản phẩm</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-600 dark:text-slate-400 hover:text-[#cd8484] dark:hover:text-[#cd8484] hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors duration-200 font-manrope text-sm font-medium" href="#" style="">
+<span class="material-symbols-outlined" style="">receipt_long</span>
+<span class="" style="">Đơn hàng</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-600 dark:text-slate-400 hover:text-[#cd8484] dark:hover:text-[#cd8484] hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors duration-200 font-manrope text-sm font-medium" href="#" style="">
+<span class="material-symbols-outlined" style="">assignment_return</span>
+<span class="" style="">Trả hàng</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-600 dark:text-slate-400 hover:text-[#cd8484] dark:hover:text-[#cd8484] hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors duration-200 font-manrope text-sm font-medium" href="#" style="">
+<span class="material-symbols-outlined" style="">analytics</span>
+<span class="" style="">Báo cáo</span>
+</a>
+</nav>
+<div class="mt-auto px-4 pt-6 border-t border-slate-100 dark:border-slate-800">
+<a class="flex items-center gap-3 px-4 py-3 text-slate-600 dark:text-slate-400 hover:text-[#cd8484] dark:hover:text-[#cd8484] transition-colors font-manrope text-sm font-medium mb-2" href="#" style="">
+<span class="material-symbols-outlined" style="">settings</span>
+<span class="" style="">Cài đặt</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-600 dark:text-slate-400 hover:text-error transition-colors font-manrope text-sm font-medium" href="#" style="">
+<span class="material-symbols-outlined" style="">logout</span>
+<span class="" style="">Đăng xuất</span>
+</a>
+</div>
+</div>
+</aside>
+<!-- Main Content -->
+<main class="ml-64 min-h-screen">
+<!-- TopNavBar -->
+<header class="flex justify-between items-center h-16 px-8 sticky top-0 z-40 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-100 dark:border-slate-800">
+<div class="flex items-center flex-1 max-w-xl">
+<div class="relative w-full">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-lg" style="">search</span>
+<input class="w-full bg-surface-container-low border-none rounded-lg py-2 pl-10 pr-4 text-sm focus:ring-2 focus:ring-primary-container/20 placeholder:text-slate-400" placeholder="Tìm kiếm nhà cung cấp..." type="text">
+</div>
+</div>
+<div class="flex items-center gap-6">
+<button class="relative text-slate-500 hover:text-[#cd8484] transition-colors" style="">
+<span class="material-symbols-outlined" style="">notifications</span>
+<span class="absolute -top-1 -right-1 w-2 h-2 bg-primary rounded-full border-2 border-white"></span>
+</button>
+<button class="text-slate-500 hover:text-[#cd8484] transition-colors" style="">
+<span class="material-symbols-outlined" style="">help_outline</span>
+</button>
+<div class="flex items-center gap-3 border-l pl-6 border-slate-200">
+<div class="text-right">
+<p class="text-xs font-bold text-on-background" style="">Admin Profile</p>
+<p class="text-[10px] text-slate-500" style="">Quản trị viên</p>
+</div>
+<img alt="Admin Profile" class="w-8 h-8 rounded-full border border-slate-200" data-alt="Professional portrait of a business administrator in a modern office setting with soft natural lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAUw6C9Vkk5RSJ2osFfyVcZGcwjigCqES4hTLX4kkjpsn17fqr1DHTIH8tbGJJ3klfDk6qY2PyqiBssiydcEFH0HTmjwSYT0ZHTGtu1T_H6pbAG83Y0Hr2VXGGIVYKw6WTk6tlqgFt5tcKbRx0N3yodRUz8lRtk9khwOONAdCaV4V82y-GKjbHKt_rlmXbRNnKzdghc5J2Jjvjz9U_S0R6H8Id8yMw4ByGiLSVw_7aCaIrLjyqa-WxTSz1rmz-21qex-ZitQ2ZFMfMi" style="">
+</div>
+</div>
+</header>
+<!-- Page Header -->
+<div class="px-8 py-8">
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
+<div>
+<h1 class="text-2xl font-extrabold tracking-tight text-on-background" style="">Quản lý nhà cung cấp</h1>
+<p class="text-sm text-slate-500 mt-1" style="">Quản lý thông tin và theo dõi tình trạng các đối tác cung ứng của bạn.</p>
+</div>
+<button class="flex items-center gap-2 bg-primary-container text-white px-6 py-2.5 rounded-lg font-bold shadow-lg shadow-primary-container/20 active:scale-95 transition-all hover:bg-primary transition-colors" style="">
+<span class="material-symbols-outlined text-lg" style="">add</span>
+<span class="" style="">Thêm nhà cung cấp mới</span>
+</button>
+</div>
+<!-- Dashboard Quick Stats (Bento Style) -->
+<div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+<div class="bg-white p-6 rounded-xl border border-slate-100 shadow-sm flex items-center gap-4">
+<div class="w-12 h-12 rounded-lg bg-[#cd8484]/10 flex items-center justify-center text-[#cd8484]">
+<span class="material-symbols-outlined" style="font-variation-settings: &quot;FILL&quot; 1;">groups</span>
+</div>
+<div>
+<p class="text-xs font-semibold text-slate-500 uppercase tracking-wider" style="">Tổng đối tác</p>
+<p class="text-xl font-bold text-on-background" style="">124</p>
+</div>
+</div>
+<div class="bg-white p-6 rounded-xl border border-slate-100 shadow-sm flex items-center gap-4">
+<div class="w-12 h-12 rounded-lg bg-tertiary-container/10 flex items-center justify-center text-tertiary">
+<span class="material-symbols-outlined" style="font-variation-settings: &quot;FILL&quot; 1;">inventory</span>
+</div>
+<div>
+<p class="text-xs font-semibold text-slate-500 uppercase tracking-wider" style="">Lưu trữ</p>
+<p class="text-xl font-bold text-on-background" style="">86</p>
+</div>
+</div>
+<div class="bg-white p-6 rounded-xl border border-slate-100 shadow-sm flex items-center gap-4">
+<div class="w-12 h-12 rounded-lg bg-green-50 flex items-center justify-center text-green-600">
+<span class="material-symbols-outlined" style="font-variation-settings: &quot;FILL&quot; 1;">verified</span>
+</div>
+<div>
+<p class="text-xs font-semibold text-slate-500 uppercase tracking-wider" style="">Đang hoạt động</p>
+<p class="text-xl font-bold text-on-background" style="">112</p>
+</div>
+</div>
+<div class="bg-white p-6 rounded-xl border border-slate-100 shadow-sm flex items-center gap-4">
+<div class="w-12 h-12 rounded-lg bg-amber-50 flex items-center justify-center text-amber-600">
+<span class="material-symbols-outlined" style="font-variation-settings: &quot;FILL&quot; 1;">error</span>
+</div>
+<div>
+<p class="text-xs font-semibold text-slate-500 uppercase tracking-wider" style="">Cần cập nhật</p>
+<p class="text-xl font-bold text-on-background" style="">12</p>
+</div>
+</div>
+</div>
+<!-- Table Section -->
+<div class="bg-white rounded-xl border border-slate-100 shadow-sm overflow-hidden">
+<!-- Table Filters -->
+<div class="p-6 border-b border-slate-50 flex flex-wrap items-center justify-between gap-4">
+<div class="flex items-center gap-3">
+<div class="relative group">
+<button class="flex items-center gap-2 px-4 py-2 border border-slate-200 rounded-lg text-sm font-medium text-slate-600 hover:border-[#cd8484] hover:text-[#cd8484] transition-all" style="">
+<span class="material-symbols-outlined text-lg" style="">filter_list</span>
+<span class="" style="">Bộ lọc</span>
+</button>
+</div>
+<div class="flex items-center bg-surface-container-low p-1 rounded-lg">
+<button class="px-4 py-1.5 text-xs font-bold rounded-md bg-white text-[#cd8484] shadow-sm" style="">Tất cả</button>
+<button class="px-4 py-1.5 text-xs font-medium text-slate-500 hover:text-slate-700" style="">Lưu trữ</button>
+<button class="px-4 py-1.5 text-xs font-medium text-slate-500 hover:text-slate-700" style="">Dịch vụ</button>
+</div>
+</div>
+<div class="text-xs text-slate-400 font-medium" style="">
+                        Hiển thị 10 trong số 124 nhà cung cấp
+                    </div>
+</div>
+<!-- Table Content -->
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container-lowest"><th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider border-b border-slate-100" style="">STT/Mã</th><th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider border-b border-slate-100" style="">Tên nhà cung cấp</th><th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider border-b border-slate-100" style="">Số điện thoại</th><th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider border-b border-slate-100" style="">Địa chỉ</th><th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider border-b border-slate-100 text-right" style="">Thao tác</th></tr>
+</thead>
+<tbody class="divide-y divide-slate-50"><tr class="hover:bg-slate-50/50 transition-colors group"><td class="px-6 py-4 text-sm font-medium text-slate-400" style="">01</td><td class="px-6 py-4" style=""><div class="flex items-center gap-3"><div class="w-8 h-8 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center font-bold text-xs" style="">V</div><div><p class="text-sm font-bold text-on-background" style="">Vinamilk JSC</p></div></div></td><td class="px-6 py-4 text-xs text-slate-600" style="">028 3915 0000</td><td class="px-6 py-4 text-xs text-slate-600" style="">10 Tân Trào, P. Tân Phú, Q.7, TP.HCM</td><td class="px-6 py-4 text-right" style=""><div class="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity"><button class="p-1.5 text-slate-400 hover:text-primary-container hover:bg-primary-container/10 rounded transition-all" style=""><span class="material-symbols-outlined text-lg" style="">edit</span></button><button class="p-1.5 text-slate-400 hover:text-error hover:bg-error/10 rounded transition-all" style=""><span class="material-symbols-outlined text-lg" style="">delete</span></button></div></td></tr><tr class="hover:bg-slate-50/50 transition-colors group"><td class="px-6 py-4 text-sm font-medium text-slate-400" style="">02</td><td class="px-6 py-4" style=""><div class="flex items-center gap-3"><div class="w-8 h-8 rounded-lg bg-orange-50 text-orange-600 flex items-center justify-center font-bold text-xs" style="">M</div><div><p class="text-sm font-bold text-on-background" style="">Masan Group</p></div></div></td><td class="px-6 py-4 text-xs text-slate-600" style="">028 6256 3862</td><td class="px-6 py-4 text-xs text-slate-600" style="">M-Plaza Saigon, Lê Duẩn, Q.1, TP.HCM</td><td class="px-6 py-4 text-right" style=""><div class="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity"><button class="p-1.5 text-slate-400 hover:text-primary-container hover:bg-primary-container/10 rounded transition-all" style=""><span class="material-symbols-outlined text-lg" style="">edit</span></button><button class="p-1.5 text-slate-400 hover:text-error hover:bg-error/10 rounded transition-all" style=""><span class="material-symbols-outlined text-lg" style="">delete</span></button></div></td></tr><tr class="hover:bg-slate-50/50 transition-colors group"><td class="px-6 py-4 text-sm font-medium text-slate-400" style="">03</td><td class="px-6 py-4" style=""><div class="flex items-center gap-3"><div class="w-8 h-8 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center font-bold text-xs" style="">A</div><div><p class="text-sm font-bold text-on-background" style="">Acecook Vietnam</p></div></div></td><td class="px-6 py-4 text-xs text-slate-600" style="">028 3815 4064</td><td class="px-6 py-4 text-xs text-slate-600" style="">KCN Tân Bình, Q.Tân Phú, TP.HCM</td><td class="px-6 py-4 text-right" style=""><div class="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity"><button class="p-1.5 text-slate-400 hover:text-primary-container hover:bg-primary-container/10 rounded transition-all" style=""><span class="material-symbols-outlined text-lg" style="">edit</span></button><button class="p-1.5 text-slate-400 hover:text-error hover:bg-error/10 rounded transition-all" style=""><span class="material-symbols-outlined text-lg" style="">delete</span></button></div></td></tr><tr class="hover:bg-slate-50/50 transition-colors group"><td class="px-6 py-4 text-sm font-medium text-slate-400" style="">04</td><td class="px-6 py-4" style=""><div class="flex items-center gap-3"><div class="w-8 h-8 rounded-lg bg-pink-50 text-pink-600 flex items-center justify-center font-bold text-xs" style="">K</div><div><p class="text-sm font-bold text-on-background" style="">Kido Group</p></div></div></td><td class="px-6 py-4 text-xs text-slate-600" style="">028 3823 9977</td><td class="px-6 py-4 text-xs text-slate-600" style="">138-142 Hai Bà Trưng, Q.1, TP.HCM</td><td class="px-6 py-4 text-right" style=""><div class="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity"><button class="p-1.5 text-slate-400 hover:text-primary-container hover:bg-primary-container/10 rounded transition-all" style=""><span class="material-symbols-outlined text-lg" style="">edit</span></button><button class="p-1.5 text-slate-400 hover:text-error hover:bg-error/10 rounded transition-all" style=""><span class="material-symbols-outlined text-lg" style="">delete</span></button></div></td></tr></tbody>
+</table>
+</div>
+<!-- Pagination -->
+<div class="px-6 py-4 bg-surface-container-low flex items-center justify-between border-t border-slate-100">
+<button class="flex items-center gap-1 text-xs font-bold text-slate-500 hover:text-[#cd8484] disabled:opacity-50" disabled="" style="">
+<span class="material-symbols-outlined text-sm" style="">chevron_left</span>
+                        Trước
+                    </button>
+<div class="flex items-center gap-2">
+<button class="w-8 h-8 rounded-lg bg-primary-container text-white text-xs font-bold shadow-sm" style="">1</button>
+<button class="w-8 h-8 rounded-lg text-slate-500 hover:bg-white text-xs font-bold transition-all" style="">2</button>
+<button class="w-8 h-8 rounded-lg text-slate-500 hover:bg-white text-xs font-bold transition-all" style="">3</button>
+<span class="text-slate-400" style="">...</span>
+<button class="w-8 h-8 rounded-lg text-slate-500 hover:bg-white text-xs font-bold transition-all" style="">12</button>
+</div>
+<button class="flex items-center gap-1 text-xs font-bold text-slate-500 hover:text-[#cd8484]" style="">
+                        Sau
+                        <span class="material-symbols-outlined text-sm" style="">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+</main>
+<!-- Floating Action Button (FAB) Suppression check: Only on relevant screens -->
+<!-- As per instructions: "suppress the FAB on Settings, Profile, Details, and Transactional screens." -->
+<!-- This is a Dashboard/List screen, rendering FAB for adding new entity as it aligns with primary action -->
+<button class="fixed bottom-8 right-8 md:hidden w-14 h-14 bg-primary rounded-full shadow-2xl flex items-center justify-center text-white active:scale-95 transition-transform z-50" style="">
+<span class="material-symbols-outlined text-3xl" style="">add</span>
+</button>
+</body></html>

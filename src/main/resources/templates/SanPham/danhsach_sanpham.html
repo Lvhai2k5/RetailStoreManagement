@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+
+<html class="light" lang="vi"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Danh sách Sản phẩm - Merchant Core</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "outline-variant": "#d7c1c1",
+              "outline": "#857372",
+              "tertiary-container": "#589fc8",
+              "primary-container": "#cd8484",
+              "on-primary-fixed-variant": "#6f3637",
+              "tertiary-fixed": "#c6e7ff",
+              "on-surface": "#181c1c",
+              "secondary": "#45617c",
+              "on-tertiary-fixed-variant": "#004c6b",
+              "on-tertiary-container": "#00344a",
+              "on-primary": "#ffffff",
+              "error-container": "#ffdad6",
+              "on-tertiary": "#ffffff",
+              "inverse-primary": "#ffb3b2",
+              "surface-dim": "#d7dbda",
+              "surface-variant": "#e0e3e2",
+              "primary-fixed": "#ffdad9",
+              "primary": "#8b4d4d",
+              "inverse-surface": "#2d3131",
+              "surface-container-lowest": "#ffffff",
+              "surface": "#f7faf9",
+              "surface-container-low": "#f1f4f3",
+              "error": "#ba1a1a",
+              "surface-container": "#ebeeed",
+              "on-primary-container": "#522021",
+              "surface-tint": "#8b4d4d",
+              "on-primary-fixed": "#380b0f",
+              "secondary-fixed": "#cee5ff",
+              "on-tertiary-fixed": "#001e2d",
+              "tertiary-fixed-dim": "#89cffa",
+              "surface-container-high": "#e6e9e8",
+              "on-background": "#181c1c",
+              "background": "#f7faf9",
+              "on-secondary": "#ffffff",
+              "primary-fixed-dim": "#ffb3b2",
+              "on-secondary-fixed-variant": "#2d4963",
+              "on-error": "#ffffff",
+              "on-secondary-fixed": "#001d33",
+              "on-error-container": "#93000a",
+              "on-secondary-container": "#46627d",
+              "secondary-fixed-dim": "#adc9e9",
+              "secondary-container": "#c0ddfd",
+              "on-surface-variant": "#524343",
+              "tertiary": "#08658b",
+              "surface-bright": "#f7faf9",
+              "inverse-on-surface": "#eef1f0",
+              "surface-container-highest": "#e0e3e2"
+            },
+            fontFamily: {
+              "headline": ["Manrope"],
+              "body": ["Inter"],
+              "label": ["Inter"]
+            },
+            borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+          },
+        },
+      }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; background-color: #f7faf9; }
+        h1, h2, h3, .font-headline { font-family: 'Manrope', sans-serif; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+    </style>
+</head>
+<body class="text-on-background">
+<!-- SideNavBar Shell -->
+<aside class="bg-white dark:bg-slate-950 h-screen w-64 border-r border-slate-200 dark:border-slate-800 fixed left-0 top-0 flex flex-col py-6 z-50">
+<div class="px-6 mb-8 flex items-center gap-3">
+<div class="w-10 h-10 bg-primary-container flex items-center justify-center rounded-lg">
+<span class="material-symbols-outlined text-white" style="font-variation-settings: 'FILL' 1;">storefront</span>
+</div>
+<div>
+<h1 class="text-xl font-black text-[#cd8484] dark:text-[#cd8484] font-manrope">Merchant Core</h1>
+<p class="text-[10px] font-inter uppercase tracking-widest text-slate-500 font-bold">Retail Management</p>
+</div>
+</div>
+<nav class="flex-1 space-y-1">
+<a class="flex items-center px-6 py-3 transition-colors duration-200 ease-in-out text-slate-600 dark:text-slate-400 font-medium hover:bg-slate-50 dark:hover:bg-slate-900 hover:text-[#cd8484]" href="#">
+<span class="material-symbols-outlined mr-3" data-icon="dashboard">dashboard</span>
+<span class="font-inter text-sm">Dashboard</span>
+</a>
+<a class="flex items-center px-6 py-3 transition-colors duration-200 ease-in-out text-slate-600 dark:text-slate-400 font-medium hover:bg-slate-50 dark:hover:bg-slate-900 hover:text-[#cd8484]" href="#">
+<span class="material-symbols-outlined mr-3" data-icon="store">store</span>
+<span class="font-inter text-sm">Nhà cung cấp</span>
+</a>
+<a class="flex items-center px-6 py-3 transition-colors duration-200 ease-in-out text-[#cd8484] font-bold border-r-4 border-[#cd8484] bg-red-50 dark:bg-red-900/10" href="#">
+<span class="material-symbols-outlined mr-3" data-icon="inventory_2" style="font-variation-settings: 'FILL' 1;">inventory_2</span>
+<span class="font-inter text-sm">Sản phẩm</span>
+</a>
+<a class="flex items-center px-6 py-3 transition-colors duration-200 ease-in-out text-slate-600 dark:text-slate-400 font-medium hover:bg-slate-50 dark:hover:bg-slate-900 hover:text-[#cd8484]" href="#">
+<span class="material-symbols-outlined mr-3" data-icon="input">input</span>
+<span class="font-inter text-sm">Nhập hàng</span>
+</a>
+<a class="flex items-center px-6 py-3 transition-colors duration-200 ease-in-out text-slate-600 dark:text-slate-400 font-medium hover:bg-slate-50 dark:hover:bg-slate-900 hover:text-[#cd8484]" href="#">
+<span class="material-symbols-outlined mr-3" data-icon="receipt_long">receipt_long</span>
+<span class="font-inter text-sm">Đơn hàng</span>
+</a>
+<a class="flex items-center px-6 py-3 transition-colors duration-200 ease-in-out text-slate-600 dark:text-slate-400 font-medium hover:bg-slate-50 dark:hover:bg-slate-900 hover:text-[#cd8484]" href="#">
+<span class="material-symbols-outlined mr-3" data-icon="assignment_return">assignment_return</span>
+<span class="font-inter text-sm">Trả hàng</span>
+</a>
+<a class="flex items-center px-6 py-3 transition-colors duration-200 ease-in-out text-slate-600 dark:text-slate-400 font-medium hover:bg-slate-50 dark:hover:bg-slate-900 hover:text-[#cd8484]" href="#">
+<span class="material-symbols-outlined mr-3" data-icon="report_problem">report_problem</span>
+<span class="font-inter text-sm">Hàng lỗi</span>
+</a>
+<a class="flex items-center px-6 py-3 transition-colors duration-200 ease-in-out text-slate-600 dark:text-slate-400 font-medium hover:bg-slate-50 dark:hover:bg-slate-900 hover:text-[#cd8484]" href="#">
+<span class="material-symbols-outlined mr-3" data-icon="analytics">analytics</span>
+<span class="font-inter text-sm">Báo cáo</span>
+</a>
+</nav>
+<div class="px-6 pt-6 border-t border-slate-200 dark:border-slate-800">
+<div class="flex items-center gap-3">
+<img alt="Merchant Core Logo" class="w-8 h-8 rounded-full" data-alt="portrait of a professional asian business woman in corporate attire with soft office lighting background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC53zf9dOPhkM_HUOQEC1D_E4LYERvMI8f30VxF1ucwCOqaNOQ10O9lpYGrgxyC7hrqMI3lF__Pw85QUV18OH4W9NbXPk1piOnf7aEPuo89XOmx1EYcLJFMQo2FAS3hcoyWs-UvxQwOJTeO26FnFeSj4GykZpzaE9OakAgxd_dYtajLrgwlIhJ01_MrUfCYD0blEFo2ZcsiNFrAde86egF13C9JXRUwtYMFU0wUttAvngTg6QuIxFf1auzoBAB3kVuW3DciGdOVvUzD"/>
+<div class="flex-1 overflow-hidden">
+<p class="text-xs font-bold truncate">Admin Manager</p>
+<p class="text-[10px] text-slate-500 truncate">admin@merchantcore.vn</p>
+</div>
+</div>
+</div>
+</aside>
+<!-- Main Canvas -->
+<main class="ml-64 min-h-screen pb-12">
+<!-- TopNavBar Shell -->
+<header class="bg-white/80 dark:bg-slate-950/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 sticky top-0 z-40 flex justify-between items-center w-full pl-8 pr-8 h-16">
+<div class="flex items-center flex-1 max-w-xl">
+<div class="relative w-full">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">search</span>
+<input class="w-full pl-10 pr-4 py-2 bg-surface-container-low border-none focus:ring-2 focus:ring-[#cd8484] rounded-lg text-sm" placeholder="Tìm kiếm sản phẩm, mã SKU..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-4 ml-8">
+<button class="w-10 h-10 flex items-center justify-center text-slate-500 hover:text-[#cd8484] transition-colors relative">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+<span class="absolute top-2 right-2 w-2 h-2 bg-error rounded-full"></span>
+</button>
+<div class="h-6 w-px bg-slate-200"></div>
+<button class="flex items-center gap-2 text-slate-500 hover:text-[#cd8484] transition-colors">
+<span class="material-symbols-outlined" data-icon="account_circle">account_circle</span>
+<span class="font-inter text-sm font-medium">Hồ sơ</span>
+</button>
+</div>
+</header>
+<!-- Page Content -->
+<div class="p-8">
+<!-- Header Section -->
+<div class="flex justify-between items-end mb-8">
+<div>
+<h2 class="text-2xl font-extrabold font-headline text-slate-900 tracking-tight">Danh sách Sản phẩm</h2>
+<p class="text-slate-500 font-inter text-sm mt-1">Quản lý kho hàng và thông số lợi nhuận sản phẩm</p>
+</div>
+<button class="bg-[#cd8484] hover:bg-[#b87373] text-white px-6 py-2.5 rounded-lg font-bold flex items-center gap-2 shadow-sm transition-all">
+<span class="material-symbols-outlined text-[20px]">add</span>
+                    Thêm sản phẩm mới
+                </button>
+</div>
+<!-- Stats Widgets Bento Grid -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+<div class="bg-white p-6 rounded-xl shadow-sm border border-slate-100 flex items-center gap-5">
+<div class="w-14 h-14 rounded-full bg-red-50 flex items-center justify-center text-[#cd8484]">
+<span class="material-symbols-outlined text-3xl" style="font-variation-settings: 'FILL' 1;">inventory</span>
+</div>
+<div>
+<p class="text-slate-500 text-xs font-bold uppercase tracking-wider">Tổng sản phẩm</p>
+<p class="text-2xl font-black font-headline text-slate-900">1,284</p>
+<p class="text-green-600 text-[10px] font-bold mt-1 flex items-center">
+<span class="material-symbols-outlined text-[14px] mr-1">trending_up</span>
+                            +12% so với tháng trước
+                        </p>
+</div>
+</div>
+<div class="bg-white p-6 rounded-xl shadow-sm border border-slate-100 flex items-center gap-5">
+<div class="w-14 h-14 rounded-full bg-blue-50 flex items-center justify-center text-tertiary">
+<span class="material-symbols-outlined text-3xl" style="font-variation-settings: 'FILL' 1;">star</span>
+</div>
+<div>
+<p class="text-slate-500 text-xs font-bold uppercase tracking-wider">Sản phẩm bán chạy</p>
+<p class="text-2xl font-black font-headline text-slate-900">42</p>
+<p class="text-slate-400 text-[10px] font-medium mt-1">Top 5 đóng góp 30% doanh thu</p>
+</div>
+</div>
+<div class="bg-white p-6 rounded-xl shadow-sm border border-slate-100 flex items-center gap-5">
+<div class="w-14 h-14 rounded-full bg-amber-50 flex items-center justify-center text-amber-600">
+<span class="material-symbols-outlined text-3xl" style="font-variation-settings: 'FILL' 1;">running_with_errors</span>
+</div>
+<div>
+<p class="text-slate-500 text-xs font-bold uppercase tracking-wider">Sắp hết hàng</p>
+<p class="text-2xl font-black font-headline text-slate-900">15</p>
+<p class="text-error text-[10px] font-bold mt-1 flex items-center">
+<span class="material-symbols-outlined text-[14px] mr-1">warning</span>
+                            Cần nhập hàng ngay
+                        </p>
+</div>
+</div>
+</div>
+<!-- Table Container -->
+<div class="bg-white rounded-xl shadow-sm border border-slate-100 overflow-hidden">
+<div class="p-4 border-b border-slate-100 bg-slate-50/50 flex justify-between items-center">
+<div class="flex items-center gap-4">
+<div class="flex items-center gap-2 px-3 py-1.5 bg-white border border-slate-200 rounded-lg text-xs font-medium text-slate-600">
+<span class="material-symbols-outlined text-[16px]">filter_list</span>
+                            Bộ lọc
+                        </div>
+<div class="flex items-center gap-2 px-3 py-1.5 bg-white border border-slate-200 rounded-lg text-xs font-medium text-slate-600">
+                            Danh mục: Tất cả
+                            <span class="material-symbols-outlined text-[16px]">expand_more</span>
+</div>
+</div>
+<div class="text-xs text-slate-400 font-inter">Hiển thị 1 - 10 trong tổng số 1,284 sản phẩm</div>
+</div>
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="text-slate-400 text-[11px] uppercase tracking-wider font-bold border-b border-slate-100">
+<th class="px-6 py-4">Mã sản phẩm</th>
+<th class="px-6 py-4">Tên sản phẩm</th>
+<th class="px-6 py-4 text-center">Tỷ lệ lợi nhuận (%)</th>
+<th class="px-6 py-4 text-right">Giá bán mặc định</th>
+<th class="px-6 py-4 text-center">Tổng tồn kho</th>
+<th class="px-6 py-4 text-right">Thao tác</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-slate-50">
+<tr class="hover:bg-slate-50 transition-colors group">
+<td class="px-6 py-4 font-inter text-sm font-bold text-[#cd8484]">FOD-2201</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-lg bg-slate-100 overflow-hidden shrink-0 flex items-center justify-center">
+<span class="material-symbols-outlined text-slate-400">shopping_basket</span>
+</div>
+<div>
+<p class="text-sm font-semibold text-slate-900">Gạo ST25 Túi 5kg</p>
+<p class="text-[11px] text-slate-400">Thực phẩm khô • A An</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-4 text-center">
+<span class="px-2.5 py-1 bg-green-50 text-green-700 rounded-full text-xs font-bold">12.5%</span>
+</td>
+<td class="px-6 py-4 text-right font-bold text-sm text-slate-900">185,000 ₫</td>
+<td class="px-6 py-4 text-center">
+<span class="text-sm font-medium text-slate-900">45</span>
+</td>
+<td class="px-6 py-4 text-right">
+<button class="text-slate-400 hover:text-[#cd8484] transition-colors">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</td>
+</tr>
+<tr class="hover:bg-slate-50 transition-colors group">
+<td class="px-6 py-4 font-inter text-sm font-bold text-[#cd8484]">COS-1045</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-lg bg-slate-100 overflow-hidden shrink-0 flex items-center justify-center">
+<span class="material-symbols-outlined text-slate-400">sanitizer</span>
+</div>
+<div>
+<p class="text-sm font-semibold text-slate-900">Nước rửa chén Sunlight 3.6kg</p>
+<p class="text-[11px] text-slate-400">Hóa mỹ phẩm • Unilever</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-4 text-center">
+<span class="px-2.5 py-1 bg-green-50 text-green-700 rounded-full text-xs font-bold">15.0%</span>
+</td>
+<td class="px-6 py-4 text-right font-bold text-sm text-slate-900">112,000 ₫</td>
+<td class="px-6 py-4 text-center">
+<span class="text-sm font-medium text-error font-bold">12</span>
+</td>
+<td class="px-6 py-4 text-right">
+<button class="text-slate-400 hover:text-[#cd8484] transition-colors">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</td>
+</tr>
+<tr class="hover:bg-slate-50 transition-colors group">
+<td class="px-6 py-4 font-inter text-sm font-bold text-[#cd8484]">BEV-3310</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-lg bg-slate-100 overflow-hidden shrink-0 flex items-center justify-center">
+<span class="material-symbols-outlined text-slate-400">liquor</span>
+</div>
+<div>
+<p class="text-sm font-semibold text-slate-900">Bia Heineken Lon 330ml (Thùng 24)</p>
+<p class="text-[11px] text-slate-400">Đồ uống • Heineken</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-4 text-center">
+<span class="px-2.5 py-1 bg-green-50 text-green-700 rounded-full text-xs font-bold">8.2%</span>
+</td>
+<td class="px-6 py-4 text-right font-bold text-sm text-slate-900">425,000 ₫</td>
+<td class="px-6 py-4 text-center">
+<span class="text-sm font-medium text-slate-900">80</span>
+</td>
+<td class="px-6 py-4 text-right">
+<button class="text-slate-400 hover:text-[#cd8484] transition-colors">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</td>
+</tr>
+<tr class="hover:bg-slate-50 transition-colors group">
+<td class="px-6 py-4 font-inter text-sm font-bold text-[#cd8484]">MLK-4402</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-lg bg-slate-100 overflow-hidden shrink-0 flex items-center justify-center">
+<span class="material-symbols-outlined text-slate-400">vaccines</span>
+</div>
+<div>
+<p class="text-sm font-semibold text-slate-900">Sữa tươi TH True Milk 1L</p>
+<p class="text-[11px] text-slate-400">Sữa &amp; Bánh • TH Group</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-4 text-center">
+<span class="px-2.5 py-1 bg-green-50 text-green-700 rounded-full text-xs font-bold">10.0%</span>
+</td>
+<td class="px-6 py-4 text-right font-bold text-sm text-slate-900">32,500 ₫</td>
+<td class="px-6 py-4 text-center">
+<span class="text-sm font-medium text-slate-900">120</span>
+</td>
+<td class="px-6 py-4 text-right">
+<button class="text-slate-400 hover:text-[#cd8484] transition-colors">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</td>
+</tr>
+<tr class="hover:bg-slate-50 transition-colors group">
+<td class="px-6 py-4 font-inter text-sm font-bold text-[#cd8484]">BAK-5589</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-lg bg-slate-100 overflow-hidden shrink-0 flex items-center justify-center">
+<span class="material-symbols-outlined text-slate-400">cake</span>
+</div>
+<div>
+<p class="text-sm font-semibold text-slate-900">Bánh Choco-Pie (Hộp 12 cái)</p>
+<p class="text-[11px] text-slate-400">Sữa &amp; Bánh • Orion</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-4 text-center">
+<span class="px-2.5 py-1 bg-green-50 text-green-700 rounded-full text-xs font-bold">18.5%</span>
+</td>
+<td class="px-6 py-4 text-right font-bold text-sm text-slate-900">54,000 ₫</td>
+<td class="px-6 py-4 text-center">
+<span class="text-sm font-medium text-slate-900">36</span>
+</td>
+<td class="px-6 py-4 text-right">
+<button class="text-slate-400 hover:text-[#cd8484] transition-colors">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="p-6 border-t border-slate-100 flex items-center justify-between">
+<div class="flex items-center gap-2">
+<button class="w-8 h-8 rounded border border-slate-200 flex items-center justify-center text-slate-400 hover:bg-slate-50">
+<span class="material-symbols-outlined text-[18px]">chevron_left</span>
+</button>
+<button class="w-8 h-8 rounded bg-[#cd8484] text-white flex items-center justify-center text-xs font-bold">1</button>
+<button class="w-8 h-8 rounded border border-slate-200 flex items-center justify-center text-xs font-bold text-slate-600 hover:bg-slate-50 transition-colors">2</button>
+<button class="w-8 h-8 rounded border border-slate-200 flex items-center justify-center text-xs font-bold text-slate-600 hover:bg-slate-50 transition-colors">3</button>
+<span class="text-slate-400 text-xs px-2">...</span>
+<button class="w-8 h-8 rounded border border-slate-200 flex items-center justify-center text-xs font-bold text-slate-600 hover:bg-slate-50 transition-colors">12</button>
+<button class="w-8 h-8 rounded border border-slate-200 flex items-center justify-center text-slate-400 hover:bg-slate-50 transition-colors">
+<span class="material-symbols-outlined text-[18px]">chevron_right</span>
+</button>
+</div>
+<div class="flex items-center gap-3">
+<span class="text-xs text-slate-500">Số dòng mỗi trang:</span>
+<select class="text-xs border-slate-200 rounded-lg focus:ring-[#cd8484] focus:border-[#cd8484] py-1">
+<option>10</option>
+<option>20</option>
+<option>50</option>
+</select>
+</div>
+</div>
+</div>
+<!-- Footer Meta -->
+<div class="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6">
+<div class="bg-primary-container/10 p-4 rounded-lg border border-[#cd8484]/20 flex items-start gap-4">
+<span class="material-symbols-outlined text-[#cd8484]">info</span>
+<div>
+<h4 class="text-sm font-bold text-[#cd8484]">Lưu ý về Giá bán mặc định</h4>
+<p class="text-xs text-slate-600 mt-1">Giá bán hiển thị được tính dựa trên trung bình cộng giá nhập của 2 lô hàng mới nhất cộng với tỷ lệ lợi nhuận định cấu hình cho mặt hàng tạp hóa.</p>
+</div>
+</div>
+<div class="bg-tertiary-container/10 p-4 rounded-lg border border-tertiary-container/20 flex items-start gap-4">
+<span class="material-symbols-outlined text-tertiary">history</span>
+<div>
+<h4 class="text-sm font-bold text-tertiary">Cập nhật gần nhất</h4>
+<p class="text-xs text-slate-600 mt-1">Hệ thống vừa đồng bộ tồn kho với kho tổng cách đây 5 phút. 3 sản phẩm nhóm Hóa mỹ phẩm mới được thêm vào sáng nay.</p>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- FAB for Quick Access -->
+<button class="fixed bottom-8 right-8 w-14 h-14 bg-[#cd8484] text-white rounded-full shadow-lg hover:scale-105 transition-transform flex items-center justify-center md:hidden">
+<span class="material-symbols-outlined">add</span>
+</button>
+</body></html>

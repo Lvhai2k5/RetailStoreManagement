@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+
+<html class="light" lang="vi"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Nhập Hàng Chi Tiết - Quản Lý Tạp Hóa</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "tertiary-fixed-dim": "#89cffa",
+                        "surface-container-highest": "#e0e3e2",
+                        "inverse-surface": "#2d3131",
+                        "secondary-fixed": "#cee5ff",
+                        "on-tertiary-fixed-variant": "#004c6b",
+                        "on-background": "#181c1c",
+                        "error": "#ba1a1a",
+                        "surface": "#f7faf9",
+                        "on-primary-fixed": "#380b0f",
+                        "inverse-on-surface": "#eef1f0",
+                        "primary-fixed-dim": "#ffb3b2",
+                        "outline": "#857372",
+                        "on-error-container": "#93000a",
+                        "secondary": "#45617c",
+                        "surface-dim": "#d7dbda",
+                        "on-secondary-fixed": "#001d33",
+                        "tertiary-container": "#589fc8",
+                        "on-tertiary-container": "#00344a",
+                        "on-surface": "#181c1c",
+                        "on-tertiary-fixed": "#001e2d",
+                        "on-primary-fixed-variant": "#6f3637",
+                        "error-container": "#ffdad6",
+                        "on-secondary-fixed-variant": "#2d4963",
+                        "surface-variant": "#e0e3e2",
+                        "on-surface-variant": "#524343",
+                        "primary-fixed": "#ffdad9",
+                        "primary-container": "#cd8484",
+                        "outline-variant": "#d7c1c1",
+                        "surface-tint": "#8b4d4d",
+                        "on-secondary": "#ffffff",
+                        "background": "#f7faf9",
+                        "on-secondary-container": "#46627d",
+                        "on-error": "#ffffff",
+                        "surface-container-low": "#f1f4f3",
+                        "on-primary-container": "#522021",
+                        "surface-container": "#ebeeed",
+                        "inverse-primary": "#ffb3b2",
+                        "tertiary": "#08658b",
+                        "on-primary": "#ffffff",
+                        "primary": "#8b4d4d",
+                        "surface-container-high": "#e6e9e8",
+                        "secondary-fixed-dim": "#adc9e9",
+                        "tertiary-fixed": "#c6e7ff",
+                        "surface-bright": "#f7faf9",
+                        "secondary-container": "#c0ddfd",
+                        "on-tertiary": "#ffffff",
+                        "surface-container-lowest": "#ffffff"
+                    },
+                    fontFamily: {
+                        "headline": ["Manrope"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    },
+                    borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            display: inline-block;
+            line-height: 1;
+            text-transform: none;
+            letter-spacing: normal;
+            word-wrap: normal;
+            white-space: nowrap;
+            direction: ltr;
+        }
+        body { font-family: 'Inter', sans-serif; }
+        h1, h2, h3 { font-family: 'Manrope', sans-serif; }
+    </style>
+</head>
+<body class="bg-surface text-on-surface">
+<!-- TopNavBar -->
+<header class="fixed top-0 w-full z-50 flex justify-between items-center px-6 h-16 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 shadow-sm font-manrope">
+<div class="text-xl font-bold text-[#cd8484]">Quản Lý Tạp Hóa</div>
+<div class="flex items-center gap-4">
+<div class="hidden md:flex gap-6 mr-8">
+<a class="text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-all duration-200 ease-in-out px-2 py-1" href="#">Trang chủ</a>
+<a class="text-[#cd8484] border-b-2 border-[#cd8484] px-2 py-1" href="#">Nhập hàng</a>
+<a class="text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-all duration-200 ease-in-out px-2 py-1" href="#">Kho hàng</a>
+</div>
+<button class="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition-all">
+<span class="material-symbols-outlined text-slate-600" data-icon="notifications">notifications</span>
+</button>
+<button class="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition-all">
+<span class="material-symbols-outlined text-slate-600" data-icon="account_circle">account_circle</span>
+</button>
+</div>
+</header>
+<!-- SideNavBar -->
+<aside class="hidden md:flex flex-col fixed left-0 top-16 h-[calc(100vh-64px)] z-40 h-screen w-64 border-r border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 font-manrope">
+<div class="p-6">
+<h2 class="text-lg font-black text-[#cd8484]">Tạp Hóa Store</h2>
+<p class="text-xs text-slate-500 uppercase tracking-wider mt-1">Quản lý hệ thống</p>
+</div>
+<nav class="flex-1 px-4 space-y-1">
+<a class="flex items-center gap-3 px-4 py-3 text-slate-500 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-800 active:scale-95 transition-transform rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span>Tổng quan</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 bg-[#cd8484]/10 text-[#cd8484] font-bold border-r-4 border-[#cd8484] active:scale-95 transition-transform rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="inventory_2">inventory_2</span>
+<span>Nhập hàng</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-500 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-800 active:scale-95 transition-transform rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="warehouse">warehouse</span>
+<span>Kho hàng</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-500 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-800 active:scale-95 transition-transform rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="local_shipping">local_shipping</span>
+<span>Nhà cung cấp</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-500 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-800 active:scale-95 transition-transform rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="analytics">analytics</span>
+<span>Báo cáo</span>
+</a>
+</nav>
+</aside>
+<!-- Main Content Canvas -->
+<main class="md:ml-64 pt-24 pb-12 px-6 min-h-screen">
+<div class="max-w-4xl mx-auto">
+<!-- Progress Tracker -->
+<div class="mb-10">
+<div class="flex items-center justify-between relative">
+<div class="absolute top-1/2 left-0 w-full h-0.5 bg-surface-container-highest -translate-y-1/2 z-0"></div>
+<div class="relative z-10 flex flex-col items-center group">
+<div class="w-10 h-10 rounded-full bg-primary text-on-primary flex items-center justify-center font-bold mb-2 shadow-lg">
+<span class="material-symbols-outlined" data-icon="check">check</span>
+</div>
+<span class="text-xs font-semibold text-primary uppercase">Bước 1: Cơ bản</span>
+</div>
+<div class="relative z-10 flex flex-col items-center">
+<div class="w-10 h-10 rounded-full bg-primary text-on-primary flex items-center justify-center font-bold mb-2 shadow-lg ring-4 ring-primary/20">
+                            2
+                        </div>
+<span class="text-xs font-semibold text-primary uppercase">Bước 2: Chi tiết lô</span>
+</div>
+<div class="relative z-10 flex flex-col items-center">
+<div class="w-10 h-10 rounded-full bg-surface-container-highest text-on-surface-variant flex items-center justify-center font-bold mb-2">
+                            3
+                        </div>
+<span class="text-xs font-semibold text-on-surface-variant uppercase">Bước 3: Xác nhận</span>
+</div>
+</div>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+<!-- Left Column: Summary Info -->
+<div class="lg:col-span-1 space-y-6">
+<div class="bg-white p-6 rounded-xl shadow-sm border border-outline-variant">
+<h3 class="text-sm font-bold text-secondary mb-4 flex items-center gap-2">
+<span class="material-symbols-outlined text-lg" data-icon="info">info</span>
+                            THÔNG TIN ĐÃ CHỌN
+                        </h3>
+<div class="space-y-4">
+<div>
+<label class="text-[10px] font-bold text-outline uppercase">Nhà cung cấp</label>
+<div class="flex items-center gap-2 mt-1">
+<div class="w-8 h-8 rounded bg-surface-container flex items-center justify-center overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Vinamilk company logo minimalist icon" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB3pUHhv0RR1WO4oRRucOnwSjwjYbUyRQBr_LvAofKsRqIOQ51J-Ja8VsB2j1LhGmssnn0MdFJUxKkmoGUcOSOskb_WHQgyE72oGb6FeBOIBcjp0YIw2ed5RZVEJV0IBX67kufot7tGmK1IIzagWK4a_k17v3ohmcFAYdcxH7VoMHHZ0RyzagXfbn-HjPc5KDzAF68WFyFP9FtbRIN_DmKXdrT0Iu04IjR36My3DSxqhVj33DE9zYc4_m7bbn72hwmIww6gz8cF0nP4"/>
+</div>
+<p class="font-semibold text-on-surface">Vinamilk</p>
+</div>
+</div>
+<div>
+<label class="text-[10px] font-bold text-outline uppercase">Loại sản phẩm</label>
+<div class="flex items-center gap-2 mt-1">
+<span class="material-symbols-outlined text-tertiary" data-icon="category">category</span>
+<p class="font-semibold text-on-surface">Sữa tươi</p>
+</div>
+</div>
+</div>
+</div>
+<div class="bg-secondary text-on-secondary p-6 rounded-xl shadow-lg relative overflow-hidden">
+<div class="relative z-10">
+<h3 class="text-sm font-medium opacity-80 mb-1">Tổng cộng dự kiến</h3>
+<p class="text-3xl font-black tracking-tight">32,000,000đ</p>
+<p class="text-xs mt-2 opacity-70 italic">* Dựa trên số lượng nhập thực tế</p>
+</div>
+<div class="absolute -right-4 -bottom-4 opacity-10">
+<span class="material-symbols-outlined text-9xl" data-icon="receipt_long" style="font-size: 120px;">receipt_long</span>
+</div>
+</div>
+</div>
+<!-- Right Column: Detail Form -->
+<div class="lg:col-span-2">
+<div class="bg-white rounded-xl shadow-sm border border-outline-variant overflow-hidden">
+<div class="bg-surface-container-low px-6 py-4 border-b border-outline-variant">
+<h2 class="text-lg font-bold text-primary flex items-center gap-2">
+<span class="material-symbols-outlined" data-icon="add_box">add_box</span>
+                                Nhập chi tiết lô hàng
+                            </h2>
+</div>
+<form class="p-6 space-y-6">
+<!-- Product Selection -->
+<div class="space-y-2">
+<label class="text-sm font-bold text-on-surface flex items-center gap-1">
+                                    Sản phẩm cụ thể <span class="text-error">*</span>
+</label>
+<div class="relative">
+<select class="w-full bg-surface border-outline-variant rounded-lg px-4 py-3 focus:ring-2 focus:ring-primary/20 focus:border-primary appearance-none transition-all">
+<option>Sữa tươi TH True Milk 180ml (Ít đường)</option>
+<option>Sữa tươi TH True Milk 110ml (Có đường)</option>
+<option>Sữa tươi Vinamilk 100% 180ml</option>
+</select>
+<div class="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none">
+<span class="material-symbols-outlined text-outline" data-icon="expand_more">expand_more</span>
+</div>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<!-- Quantity -->
+<div class="space-y-2">
+<label class="text-sm font-bold text-on-surface">Số lượng nhập</label>
+<div class="flex">
+<input class="w-full bg-surface border-outline-variant rounded-l-lg px-4 py-3 focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all" type="number" value="100"/>
+<div class="bg-surface-container px-4 flex items-center border border-l-0 border-outline-variant rounded-r-lg text-sm font-medium text-outline">
+                                            Thùng
+                                        </div>
+</div>
+</div>
+<!-- Unit -->
+<div class="space-y-2">
+<label class="text-sm font-bold text-on-surface">Đơn vị tính</label>
+<div class="grid grid-cols-3 gap-2">
+<button class="py-3 px-2 border-2 border-primary bg-primary/5 text-primary font-bold rounded-lg text-sm" type="button">Thùng</button>
+<button class="py-3 px-2 border border-outline-variant hover:bg-surface-container transition-colors rounded-lg text-sm" type="button">Lốc</button>
+<button class="py-3 px-2 border border-outline-variant hover:bg-surface-container transition-colors rounded-lg text-sm" type="button">Chai</button>
+</div>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<!-- Buying Price -->
+<div class="space-y-2">
+<label class="text-sm font-bold text-on-surface">Giá nhập (đ/thùng)</label>
+<div class="relative">
+<input class="w-full bg-surface border-outline-variant rounded-lg pl-4 pr-12 py-3 focus:ring-2 focus:ring-primary/20 focus:border-primary font-mono font-bold text-primary" type="text" value="320,000"/>
+<div class="absolute right-4 top-1/2 -translate-y-1/2 text-outline text-xs">VNĐ</div>
+</div>
+</div>
+<!-- Selling Price (Auto calculated) -->
+<div class="space-y-2">
+<label class="text-sm font-bold text-on-surface flex items-center justify-between">
+                                        Giá bán dự kiến 
+                                        <span class="text-[10px] bg-tertiary/10 text-tertiary px-2 py-0.5 rounded-full">Lợi nhuận 30%</span>
+</label>
+<div class="relative">
+<input class="w-full bg-surface-container-low border-dashed border-outline-variant rounded-lg pl-4 pr-12 py-3 focus:outline-none font-mono font-bold text-tertiary" readonly="" type="text" value="416,000"/>
+<div class="absolute right-4 top-1/2 -translate-y-1/2 text-outline text-xs">VNĐ</div>
+</div>
+</div>
+</div>
+<!-- Expiry Date -->
+<div class="space-y-2">
+<label class="text-sm font-bold text-on-surface">Hạn sử dụng</label>
+<div class="relative">
+<input class="w-full bg-surface border-outline-variant rounded-lg px-4 py-3 focus:ring-2 focus:ring-primary/20 focus:border-primary appearance-none transition-all" type="date"/>
+<div class="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none">
+<span class="material-symbols-outlined text-outline" data-icon="calendar_today">calendar_today</span>
+</div>
+</div>
+<p class="text-[11px] text-on-surface-variant italic mt-1">* Hệ thống sẽ tự động nhắc nhở khi còn 15 ngày tới hạn.</p>
+</div>
+<div class="pt-6 flex flex-col sm:flex-row items-center gap-4 border-t border-outline-variant">
+<button class="w-full sm:w-auto px-8 py-3 rounded-lg border border-outline-variant text-on-surface-variant font-bold hover:bg-surface-container transition-all flex items-center justify-center gap-2" type="button">
+<span class="material-symbols-outlined text-lg" data-icon="arrow_back">arrow_back</span>
+                                    Quay lại
+                                </button>
+<button class="w-full sm:flex-1 py-4 bg-primary text-on-primary font-black text-lg rounded-lg shadow-lg shadow-primary/20 hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-2" type="button">
+                                    Hoàn tất nhập hàng
+                                    <span class="material-symbols-outlined" data-icon="check_circle">check_circle</span>
+</button>
+</div>
+</form>
+</div>
+<!-- Batch History Hint (Asymmetric Element) -->
+<div class="mt-6 bg-tertiary-container/20 p-4 rounded-xl border border-tertiary-container/30 flex items-start gap-4">
+<div class="bg-white p-2 rounded-lg shadow-sm">
+<span class="material-symbols-outlined text-tertiary" data-icon="history">history</span>
+</div>
+<div>
+<p class="text-xs font-bold text-tertiary uppercase tracking-wider mb-1">Gợi ý từ lần trước</p>
+<p class="text-sm text-on-tertiary-container">Lô hàng gần nhất nhập với giá <span class="font-bold">315,000đ</span> vào ngày 15/10/2023.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- FAB (Suppressed on Details screen per logic, but shown here for visualization of system capability if it were home) -->
+<!-- Suppressed on this Task-Focused screen -->
+</body></html>

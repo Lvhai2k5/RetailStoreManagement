@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+
+<html class="light" lang="vi"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Nhập Hàng Mới - Quản Lý Tạp Hóa</title>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;family=Inter:wght@300;400;500;600&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "tertiary-fixed-dim": "#89cffa",
+              "surface-container-highest": "#e0e3e2",
+              "inverse-surface": "#2d3131",
+              "secondary-fixed": "#cee5ff",
+              "on-tertiary-fixed-variant": "#004c6b",
+              "on-background": "#181c1c",
+              "error": "#ba1a1a",
+              "surface": "#f7faf9",
+              "on-primary-fixed": "#380b0f",
+              "inverse-on-surface": "#eef1f0",
+              "primary-fixed-dim": "#ffb3b2",
+              "outline": "#857372",
+              "on-error-container": "#93000a",
+              "secondary": "#45617c",
+              "surface-dim": "#d7dbda",
+              "on-secondary-fixed": "#001d33",
+              "tertiary-container": "#589fc8",
+              "on-tertiary-container": "#00344a",
+              "on-surface": "#181c1c",
+              "on-tertiary-fixed": "#001e2d",
+              "on-primary-fixed-variant": "#6f3637",
+              "error-container": "#ffdad6",
+              "on-secondary-fixed-variant": "#2d4963",
+              "surface-variant": "#e0e3e2",
+              "on-surface-variant": "#524343",
+              "primary-fixed": "#ffdad9",
+              "primary-container": "#cd8484",
+              "outline-variant": "#d7c1c1",
+              "surface-tint": "#8b4d4d",
+              "on-secondary": "#ffffff",
+              "background": "#f7faf9",
+              "on-secondary-container": "#46627d",
+              "on-error": "#ffffff",
+              "surface-container-low": "#f1f4f3",
+              "on-primary-container": "#522021",
+              "surface-container": "#ebeeed",
+              "inverse-primary": "#ffb3b2",
+              "tertiary": "#08658b",
+              "on-primary": "#ffffff",
+              "primary": "#8b4d4d",
+              "surface-container-high": "#e6e9e8",
+              "secondary-fixed-dim": "#adc9e9",
+              "tertiary-fixed": "#c6e7ff",
+              "surface-bright": "#f7faf9",
+              "secondary-container": "#c0ddfd",
+              "on-tertiary": "#ffffff",
+              "surface-container-lowest": "#ffffff"
+            },
+            fontFamily: {
+              "headline": ["Manrope"],
+              "body": ["Inter"],
+              "label": ["Inter"]
+            },
+            borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+          },
+        },
+      }
+    </script>
+<style>
+      .material-symbols-outlined {
+        font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      }
+      body {
+        font-family: 'Inter', sans-serif;
+        background-color: #f7faf9;
+      }
+      h1, h2, h3, .brand-font {
+        font-family: 'Manrope', sans-serif;
+      }
+    </style>
+</head>
+<body class="text-on-surface">
+<!-- TopNavBar -->
+<nav class="fixed top-0 w-full z-50 flex justify-between items-center px-6 h-16 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 shadow-sm font-manrope">
+<div class="text-xl font-bold text-[#cd8484]">Quản Lý Tạp Hóa</div>
+<div class="flex items-center gap-4">
+<button class="p-2 text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-all duration-200 ease-in-out">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="p-2 text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-all duration-200 ease-in-out">
+<span class="material-symbols-outlined">account_circle</span>
+</button>
+</div>
+</nav>
+<!-- SideNavBar -->
+<aside class="hidden md:flex flex-col fixed left-0 top-16 h-[calc(100vh-64px)] w-64 z-40 bg-slate-50 dark:bg-slate-950 border-r border-slate-200 dark:border-slate-800 font-manrope">
+<div class="p-6">
+<h2 class="text-lg font-black text-[#cd8484]">Tạp Hóa Store</h2>
+<p class="text-xs text-slate-500 dark:text-slate-400">Quản lý hệ thống</p>
+</div>
+<nav class="flex-1 px-4 space-y-1">
+<a class="flex items-center gap-3 px-4 py-3 text-slate-500 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-800 active:scale-95 transition-transform" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span>Tổng quan</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 bg-[#cd8484]/10 text-[#cd8484] font-bold border-r-4 border-[#cd8484] active:scale-95 transition-transform" href="#">
+<span class="material-symbols-outlined">inventory_2</span>
+<span>Nhập hàng</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-500 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-800 active:scale-95 transition-transform" href="#">
+<span class="material-symbols-outlined">warehouse</span>
+<span>Kho hàng</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-500 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-800 active:scale-95 transition-transform" href="#">
+<span class="material-symbols-outlined">local_shipping</span>
+<span>Nhà cung cấp</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-500 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-800 active:scale-95 transition-transform" href="#">
+<span class="material-symbols-outlined">analytics</span>
+<span>Báo cáo</span>
+</a>
+</nav>
+</aside>
+<!-- Main Content Canvas -->
+<main class="md:ml-64 mt-16 p-4 md:p-8 min-h-screen">
+<div class="max-w-4xl mx-auto">
+<!-- Header Section -->
+<div class="mb-8">
+<h1 class="text-2xl md:text-3xl font-extrabold text-on-surface tracking-tight mb-2">Tạo Đơn Nhập Hàng</h1>
+<p class="text-on-surface-variant font-body">Bắt đầu quy trình nhập hàng mới vào kho của bạn.</p>
+</div>
+<!-- Progress Tracker -->
+<div class="mb-10 relative">
+<div class="flex items-center justify-between max-w-lg mx-auto relative z-10">
+<div class="flex flex-col items-center gap-2">
+<div class="w-10 h-10 rounded-full bg-primary text-white flex items-center justify-center font-bold shadow-md">1</div>
+<span class="text-xs md:text-sm font-semibold text-primary">Thông tin nguồn hàng</span>
+</div>
+<div class="flex-1 h-0.5 bg-outline-variant mx-4 -mt-6"></div>
+<div class="flex flex-col items-center gap-2">
+<div class="w-10 h-10 rounded-full bg-surface-container-highest text-on-surface-variant flex items-center justify-center font-bold">2</div>
+<span class="text-xs md:text-sm font-medium text-on-surface-variant">Chi tiết lô hàng</span>
+</div>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-12 gap-8">
+<!-- Main Form Section -->
+<div class="md:col-span-8 space-y-6">
+<!-- Section 1: Chọn Nhà cung cấp -->
+<section class="bg-surface-container-lowest p-6 rounded-xl border border-outline-variant shadow-sm transition-all hover:shadow-md">
+<div class="flex items-center justify-between mb-6">
+<h2 class="text-lg font-bold flex items-center gap-2">
+<span class="material-symbols-outlined text-[#cd8484]">store</span>
+                                Chọn Nhà cung cấp
+                            </h2>
+<button class="text-xs font-bold text-[#cd8484] flex items-center gap-1 hover:underline">
+<span class="material-symbols-outlined text-sm">add_circle</span>
+                                Thêm nhà cung cấp mới
+                            </button>
+</div>
+<div class="space-y-4">
+<label class="block text-sm font-semibold text-on-surface-variant mb-1">Tên nhà cung cấp</label>
+<div class="relative group">
+<select class="w-full bg-surface border-outline-variant rounded-lg px-4 py-3 focus:ring-2 focus:ring-[#cd8484] focus:border-[#cd8484] appearance-none transition-all cursor-pointer">
+<option disabled="" selected="" value="">Chọn một đơn vị cung cấp...</option>
+<option value="acecook">Công ty Acecook Việt Nam</option>
+<option value="vinamilk">Công ty CP Sữa Việt Nam (Vinamilk)</option>
+<option value="masan">Tập đoàn Masan</option>
+<option value="pepsi">Suntory PepsiCo Việt Nam</option>
+</select>
+<span class="material-symbols-outlined absolute right-3 top-3.5 pointer-events-none text-on-surface-variant">expand_more</span>
+</div>
+<p class="text-xs text-on-surface-variant/70 italic">* Vui lòng chọn nhà cung cấp để hiển thị danh mục sản phẩm tương ứng.</p>
+</div>
+</section>
+<!-- Section 2: Chọn Loại sản phẩm -->
+<section class="bg-surface-container-lowest p-6 rounded-xl border border-outline-variant shadow-sm transition-all hover:shadow-md opacity-50 pointer-events-none select-none">
+<div class="flex items-center justify-between mb-6">
+<h2 class="text-lg font-bold flex items-center gap-2">
+<span class="material-symbols-outlined text-[#cd8484]">category</span>
+                                Loại sản phẩm
+                            </h2>
+<button class="text-xs font-bold text-[#cd8484] flex items-center gap-1 hover:underline">
+<span class="material-symbols-outlined text-sm">add_circle</span>
+                                Thêm loại mới
+                            </button>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+<div class="space-y-2">
+<label class="block text-sm font-semibold text-on-surface-variant">Phân nhóm</label>
+<div class="relative">
+<select class="w-full bg-surface border-outline-variant rounded-lg px-4 py-3 focus:ring-2 focus:ring-[#cd8484] focus:border-[#cd8484] appearance-none">
+<option disabled="" selected="" value="">Chọn phân nhóm...</option>
+<option>Mì tôm &amp; Thực phẩm liền</option>
+<option>Sữa tươi &amp; Sữa bột</option>
+<option>Nước ngọt &amp; Đồ uống</option>
+<option>Gia vị &amp; Đồ khô</option>
+</select>
+<span class="material-symbols-outlined absolute right-3 top-3.5 pointer-events-none text-on-surface-variant">expand_more</span>
+</div>
+</div>
+<div class="space-y-2">
+<label class="block text-sm font-semibold text-on-surface-variant">Mục tiêu nhập</label>
+<div class="flex items-center h-[50px] px-4 bg-surface-container-low rounded-lg border border-dashed border-outline">
+<span class="text-on-surface-variant text-sm italic">Hãy chọn nhà cung cấp trước</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Navigation Action -->
+<div class="flex justify-end pt-4">
+<button class="bg-[#cd8484] hover:bg-[#b47373] text-white px-10 py-4 rounded-xl font-bold flex items-center gap-3 shadow-lg shadow-[#cd8484]/20 transition-all active:scale-95 group">
+                            Tiếp tục sang Bước 2
+                            <span class="material-symbols-outlined transition-transform group-hover:translate-x-1">arrow_forward</span>
+</button>
+</div>
+</div>
+<!-- Info Sidebar (Bento Style) -->
+<div class="md:col-span-4 space-y-4">
+<div class="bg-secondary-container p-6 rounded-xl text-on-secondary-container">
+<h3 class="font-bold mb-2 flex items-center gap-2">
+<span class="material-symbols-outlined">tips_and_updates</span>
+                            Lưu ý nhanh
+                        </h3>
+<p class="text-sm leading-relaxed">Việc chọn đúng <span class="font-bold">Nhà cung cấp</span> giúp hệ thống tự động lọc danh sách sản phẩm và áp dụng các chính sách chiết khấu đã lưu.</p>
+</div>
+<div class="relative overflow-hidden rounded-xl h-48 group">
+<img alt="Grocery shelves" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" data-alt="close-up of neatly organized grocery store shelves with various colorful food packages in soft indoor lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD8Uh4ubzxc8-wcmCLkjq0ZzVvR4oLEEa5GtMSr3BznfSY_QPHYBaPflBhjxqzAd8UA4SMnFWUSIC_z26BDwJ6zxxx-2zBgcOHXi9jalVL4V9lybJ9ZC4-Kpah0H6Nv-XHdFhHNsd2uz61wtBnAyvewCnRrbXB5bBXtngWBoKXJ--KKQ_q7LlV6gPUwqmXmQ9VUulsyzw9DmIDgMWvYPEc2oEyVjjgouandKYS91XycDuIqeRJhyYHp4WKm15WaQ5ndjF5fEkELeCZe"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent flex flex-col justify-end p-4">
+<p class="text-white text-xs font-medium">Kho hàng hiện tại</p>
+<h4 class="text-white font-bold">92% Dung tích đầy</h4>
+</div>
+</div>
+<div class="bg-white border border-outline-variant p-6 rounded-xl">
+<h3 class="text-sm font-bold text-on-surface-variant mb-4 uppercase tracking-wider">Lịch sử nhập gần đây</h3>
+<div class="space-y-4">
+<div class="flex items-start gap-3">
+<div class="w-8 h-8 rounded bg-surface-container-high flex items-center justify-center text-[#cd8484]">
+<span class="material-symbols-outlined text-sm">history</span>
+</div>
+<div>
+<p class="text-xs font-bold">Acecook - Mì Hảo Hảo</p>
+<p class="text-[10px] text-on-surface-variant">2 ngày trước • 50 thùng</p>
+</div>
+</div>
+<div class="flex items-start gap-3">
+<div class="w-8 h-8 rounded bg-surface-container-high flex items-center justify-center text-[#cd8484]">
+<span class="material-symbols-outlined text-sm">history</span>
+</div>
+<div>
+<p class="text-xs font-bold">Vinamilk - Sữa tươi 1L</p>
+<p class="text-[10px] text-on-surface-variant">5 ngày trước • 20 lốc</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Contextual FAB (Hidden on this specific sub-page as per instructions) -->
+<!-- Suppressed: FAB is for Home/Dashboard, not Transactional sub-pages -->
+</body></html>
