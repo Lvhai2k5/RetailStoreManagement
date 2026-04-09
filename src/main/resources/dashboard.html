@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+
+<html class="light" lang="vi"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "primary": "#cd8484", 
+              "secondary": "#10b981",
+              "accent": "#cd8484", 
+              "background": "#ffffff",
+              "surface": "#ffffff",
+              "on-surface": "#1e293b",
+              "on-surface-variant": "#64748b",
+              "outline": "#f1f5f9",
+              "error": "#ef4444",
+              "success": "#10b981"
+            },
+            fontFamily: {
+              "headline": ["Manrope"],
+              "body": ["Inter"],
+              "label": ["Inter"]
+            },
+            borderRadius: {"DEFAULT": "0.375rem", "lg": "0.5rem", "xl": "0.75rem", "2xl": "1rem", "full": "9999px"},
+            boxShadow: {
+              'soft': '0 2px 15px -3px rgba(0, 0, 0, 0.04), 0 4px 6px -2px rgba(0, 0, 0, 0.02)',
+              'elevated': '0 10px 15px -3px rgba(0, 0, 0, 0.05)',
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body { font-family: 'Inter', sans-serif; }
+        h1, h2, h3, .font-headline { font-family: 'Manrope', sans-serif; }
+        .glass {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+        }
+        .sidebar-item-active {
+            color: #cd8484;
+            background: #fdf4f4;
+            border-right: 3px solid #cd8484;
+        }
+    </style>
+</head>
+<body class="bg-[#f8fafc] text-on-surface antialiased selection:bg-rose-100 selection:text-primary">
+<!-- SideNavBar -->
+<aside class="fixed left-0 top-0 h-full flex flex-col z-40 bg-white border-r border-outline w-64">
+<div class="px-8 py-10">
+<h1 class="text-xl font-extrabold text-[#3b3a5e] tracking-tight">Executive Retail</h1>
+<p class="text-[10px] text-on-surface-variant/70 mt-1 uppercase tracking-[0.2em] font-bold">Bảng quản trị</p>
+</div>
+<nav class="flex-1 space-y-1 mt-4">
+<!-- Active: Dashboard -->
+<a class="sidebar-item-active flex items-center gap-4 px-8 py-4 font-bold transition-all duration-200" href="#">
+<span class="material-symbols-outlined text-[24px]" style="font-variation-settings: 'FILL' 1;">grid_view</span>
+<span class="text-[15px]">Dashboard</span>
+</a>
+<a class="flex items-center gap-4 px-8 py-4 text-[#64748b] hover:text-primary hover:bg-rose-50/50 transition-all duration-200" href="#">
+<span class="material-symbols-outlined text-[24px]">assignment_turned_in</span>
+<span class="text-[15px]">Nhà cung cấp</span>
+</a>
+<a class="flex items-center gap-4 px-8 py-4 text-[#64748b] hover:text-primary hover:bg-rose-50/50 transition-all duration-200" href="#">
+<span class="material-symbols-outlined text-[24px]">category</span>
+<span class="text-[15px]">Loại sản phẩm</span>
+</a>
+<a class="flex items-center gap-4 px-8 py-4 text-[#64748b] hover:text-primary hover:bg-rose-50/50 transition-all duration-200" href="#">
+<span class="material-symbols-outlined text-[24px]">inventory_2</span>
+<span class="text-[15px]">Sản phẩm</span>
+</a>
+<a class="flex items-center gap-4 px-8 py-4 text-[#64748b] hover:text-primary hover:bg-rose-50/50 transition-all duration-200" href="#">
+<span class="material-symbols-outlined text-[24px]">shopping_cart</span>
+<span class="text-[15px]">Đơn hàng</span>
+</a>
+<a class="flex items-center gap-4 px-8 py-4 text-[#64748b] hover:text-primary hover:bg-rose-50/50 transition-all duration-200" href="#">
+<span class="material-symbols-outlined text-[24px]">assignment_return</span>
+<span class="text-[15px]">Trả hàng</span>
+</a>
+<a class="flex items-center gap-4 px-8 py-4 text-[#64748b] hover:text-primary hover:bg-rose-50/50 transition-all duration-200" href="#">
+<span class="material-symbols-outlined text-[24px]">bar_chart</span>
+<span class="text-[15px]">Báo cáo</span>
+</a>
+</nav>
+<div class="p-6 border-t border-outline flex items-center gap-3">
+<img alt="Minh Quân" class="w-10 h-10 rounded-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD1Me0QFZ7eEtO6r2NAC32d_EgjTU6YjD3gjrB-2pi_nberm92XczCWgGGCr6nhwFsFX2p77M6DrIfHNFfxSYKpIfyTaclHoJYo_2V-FNX-rO9C_km723e0FniSFo4Ne9caGnZIDCnRk6h5rzGJ4s3zPrsRSJ8uy-YXCFA5jwS0yXrvUMy1Aa9hZ-Bt94wiQxBmgHOqJ_wohaj5ttrFOAo4evdONEfPphE33Q56P_0yaVlPKUAMk0aBzGEsuOQlHsHg-zDPrd3atOFJ"/>
+<div class="flex flex-col">
+<span class="text-sm font-bold text-on-surface">Minh Quân</span>
+<span class="text-[11px] text-on-surface-variant font-medium">Quản lý cửa hàng</span>
+</div>
+</div>
+</aside>
+<!-- TopNavBar -->
+<header class="fixed top-0 right-0 left-64 h-20 flex items-center justify-between px-10 z-30 glass border-b border-outline">
+<div class="flex items-center gap-4 flex-1">
+<div class="relative w-full max-w-md">
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant/60" data-icon="search">search</span>
+<input class="w-full bg-[#f1f5f9]/50 border-transparent rounded-xl py-2 pl-12 pr-4 text-sm focus:ring-2 focus:ring-primary/20 focus:bg-white focus:border-primary/30 transition-all" placeholder="Tìm kiếm sản phẩm, đơn hàng..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<button class="relative p-2 text-on-surface-variant hover:text-primary transition-all">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+<span class="absolute top-2 right-2 w-2 h-2 bg-error rounded-full ring-2 ring-white"></span>
+</button>
+<button class="p-2 text-on-surface-variant hover:text-primary transition-all">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+</button>
+<div class="h-6 w-px bg-outline"></div>
+<div class="flex items-center gap-3">
+<img alt="Người dùng" class="w-9 h-9 rounded-full object-cover border border-outline shadow-sm" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBxbADpohq7TefcBF5_zlTD8PQK1FbX7KjjpnLVIniZRJe2_Uq6LOvDCKlobegbRhXcOJdV_sNcUCHn4Uaip-W5K20yyMRtZPaPbtqW9E6a2OOGjnYakpl3EPYs38R-NBTK6C1sBu5biRU0Aibur4VRiqd2d2ivDZv8HUz8lDo97Z9RMddrmFa5gt-ZSvHBMzZmBrdOafMDXjKExCkS4A0bdSMBCd1FWnGSBOmSRDWjDmO7C04oVSu5_-q9P9CgBgidJ9xx5HOGth_H"/>
+</div>
+</div>
+</header>
+<!-- Main Content -->
+<main class="ml-64 pt-28 px-10 pb-12 min-h-screen">
+<!-- Dashboard Header -->
+<div class="mb-10">
+<h2 class="text-2xl font-bold text-[#1e293b] tracking-tight mb-1">Tổng quan cửa hàng</h2>
+<p class="text-sm text-on-surface-variant font-medium">
+            Chào buổi sáng, Quân 👋 <span class="mx-2 opacity-30">•</span> Dưới đây là hiệu suất kinh doanh hôm nay.
+        </p>
+</div>
+<!-- Statistics Grid -->
+<div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-10">
+<!-- Daily Revenue -->
+<div class="bg-surface p-6 rounded-2xl shadow-soft border border-outline flex flex-col justify-between">
+<div class="flex items-center justify-between mb-8">
+<div class="p-3 bg-rose-50 text-primary rounded-xl">
+<span class="material-symbols-outlined text-[24px]" data-icon="payments">payments</span>
+</div>
+<span class="text-[11px] font-bold text-success bg-success/10 px-2.5 py-1 rounded-full flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px] font-bold" data-icon="trending_up">trending_up</span> 12.5%
+                </span>
+</div>
+<div>
+<p class="text-on-surface-variant text-[11px] font-bold mb-1 uppercase tracking-wider">Doanh thu ngày</p>
+<h3 class="text-xl font-bold text-on-surface">24.500.000đ</h3>
+</div>
+</div>
+<!-- Number of Orders -->
+<div class="bg-surface p-6 rounded-2xl shadow-soft border border-outline flex flex-col justify-between">
+<div class="flex items-center justify-between mb-8">
+<div class="p-3 bg-emerald-50 text-secondary rounded-xl">
+<span class="material-symbols-outlined text-[24px]" data-icon="shopping_cart">shopping_cart</span>
+</div>
+<span class="text-[11px] font-bold text-on-surface-variant bg-slate-100 px-2.5 py-1 rounded-full">+8 đơn</span>
+</div>
+<div>
+<p class="text-on-surface-variant text-[11px] font-bold mb-1 uppercase tracking-wider">Số lượng đơn hàng</p>
+<h3 class="text-xl font-bold text-on-surface">142</h3>
+</div>
+</div>
+<!-- Best Selling Product -->
+<div class="bg-surface p-6 rounded-2xl shadow-soft border border-outline flex flex-col justify-between">
+<div class="flex items-center justify-between mb-8">
+<div class="p-3 bg-blue-50 text-blue-500 rounded-xl">
+<span class="material-symbols-outlined text-[24px]" data-icon="trending_up">trending_up</span>
+</div>
+</div>
+<div>
+<p class="text-on-surface-variant text-[11px] font-bold mb-1 uppercase tracking-wider">Sản phẩm bán chạy nhất</p>
+<h3 class="text-lg font-bold text-on-surface truncate">Sữa Hạt Macca 1L</h3>
+</div>
+</div>
+<!-- New Products -->
+<div class="bg-surface p-6 rounded-2xl shadow-soft border border-outline flex flex-col justify-between">
+<div class="flex items-center justify-between mb-8">
+<div class="p-3 bg-violet-50 text-violet-500 rounded-xl">
+<span class="material-symbols-outlined text-[24px]" data-icon="new_releases">new_releases</span>
+</div>
+</div>
+<div>
+<p class="text-on-surface-variant text-[11px] font-bold mb-1 uppercase tracking-wider">Sản phẩm mới</p>
+<h3 class="text-xl font-bold text-on-surface">12</h3>
+</div>
+</div>
+</div>
+<!-- Charts and Secondary Sections -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-10">
+<!-- Sales Trend Chart -->
+<div class="lg:col-span-2 bg-surface rounded-2xl p-8 shadow-soft border border-outline">
+<div class="flex items-center justify-between mb-8">
+<div>
+<h3 class="text-lg font-bold text-on-surface">Thống kê đơn hàng trong ngày</h3>
+<p class="text-xs text-on-surface-variant mt-0.5 font-medium">Cập nhật theo thời gian thực</p>
+</div>
+<select class="bg-slate-50 border border-slate-200 text-xs rounded-lg px-4 py-2 font-bold text-on-surface focus:ring-2 focus:ring-primary/10 outline-none">
+<option>Hôm nay</option>
+<option>7 ngày qua</option>
+</select>
+</div>
+<div class="relative h-[280px] w-full bg-slate-50/30 rounded-xl flex items-end justify-between px-8 py-6 border border-slate-100/50">
+<div class="h-[40%] w-8 bg-[#d6d8f5] rounded-lg transition-all hover:bg-primary/40 cursor-pointer"></div>
+<div class="h-[65%] w-8 bg-[#d6d8f5] rounded-lg transition-all hover:bg-primary/40 cursor-pointer"></div>
+<div class="h-[50%] w-8 bg-[#d6d8f5] rounded-lg transition-all hover:bg-primary/40 cursor-pointer"></div>
+<div class="h-[85%] w-8 bg-[#3b3a5e] rounded-lg transition-all hover:opacity-90 cursor-pointer"></div>
+<div class="h-[70%] w-8 bg-[#d6d8f5] rounded-lg transition-all hover:bg-primary/40 cursor-pointer"></div>
+<div class="h-[95%] w-8 bg-[#3b3a5e] rounded-lg transition-all hover:opacity-90 cursor-pointer"></div>
+<div class="h-[60%] w-8 bg-[#d6d8f5] rounded-lg transition-all hover:bg-primary/40 cursor-pointer"></div>
+<div class="h-[45%] w-8 bg-[#d6d8f5] rounded-lg transition-all hover:bg-primary/40 cursor-pointer"></div>
+<div class="h-[80%] w-8 bg-[#3b3a5e] rounded-lg transition-all hover:opacity-90 cursor-pointer"></div>
+<div class="h-[55%] w-8 bg-[#d6d8f5] rounded-lg transition-all hover:bg-primary/40 cursor-pointer"></div>
+</div>
+<div class="flex justify-between mt-4 px-8 text-[10px] text-on-surface-variant font-bold uppercase tracking-widest">
+<span>08:00</span><span>10:00</span><span>12:00</span><span>14:00</span><span>16:00</span><span>18:00</span><span>20:00</span>
+</div>
+</div>
+<!-- Sidebar Widgets -->
+<div class="space-y-8">
+<!-- Top 5 Bán chạy -->
+<div class="bg-surface rounded-2xl p-6 shadow-soft border border-outline">
+<h3 class="text-md font-bold text-on-surface mb-6">Top 5 bán chạy</h3>
+<div class="space-y-5">
+<div class="flex items-center gap-4">
+<span class="text-xl font-bold text-slate-200 italic">01</span>
+<div class="flex-1">
+<p class="text-sm font-bold text-on-surface truncate">Sữa Hạt Macca 1L</p>
+<p class="text-[10px] font-semibold text-on-surface-variant">215 đơn</p>
+</div>
+<div class="w-12 h-1 bg-slate-100 rounded-full overflow-hidden">
+<div class="bg-secondary h-full w-[90%]"></div>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<span class="text-xl font-bold text-slate-200 italic">02</span>
+<div class="flex-1">
+<p class="text-sm font-bold text-on-surface truncate">Bánh Mì Nguyên Cám</p>
+<p class="text-[10px] font-semibold text-on-surface-variant">189 đơn</p>
+</div>
+<div class="w-12 h-1 bg-slate-100 rounded-full overflow-hidden">
+<div class="bg-secondary h-full w-[75%]"></div>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<span class="text-xl font-bold text-slate-200 italic">03</span>
+<div class="flex-1">
+<p class="text-sm font-bold text-on-surface truncate">Táo Envy Size L</p>
+<p class="text-[10px] font-semibold text-on-surface-variant">154 đơn</p>
+</div>
+<div class="w-12 h-1 bg-slate-100 rounded-full overflow-hidden">
+<div class="bg-secondary h-full w-[60%]"></div>
+</div>
+</div>
+</div>
+<button class="w-full mt-8 py-2.5 text-xs font-bold text-primary bg-rose-50/50 hover:bg-rose-50 rounded-xl transition-all">Xem chi tiết</button>
+</div>
+<!-- Thông báo -->
+<div class="bg-surface rounded-2xl p-6 shadow-soft border border-outline relative">
+<div class="flex justify-between items-center mb-6">
+<h3 class="text-md font-bold text-on-surface">Thông báo</h3>
+<button class="bg-[#3b3a5e] text-white p-1.5 rounded-lg hover:opacity-90 transition-all">
+<span class="material-symbols-outlined text-[18px]">add</span>
+</button>
+</div>
+<div class="space-y-4">
+<div class="flex gap-3">
+<div class="w-2 h-2 mt-1.5 rounded-full bg-error flex-shrink-0"></div>
+<div>
+<p class="text-xs font-bold text-on-surface leading-tight">Chính sách hoàn trả mới có hiệu lực.</p>
+<span class="text-[10px] text-on-surface-variant">10 phút trước</span>
+</div>
+</div>
+<div class="flex gap-3">
+<div class="w-2 h-2 mt-1.5 rounded-full bg-secondary flex-shrink-0"></div>
+<div>
+<p class="text-xs font-bold text-on-surface leading-tight">Sao lưu hệ thống hoàn tất.</p>
+<span class="text-[10px] text-on-surface-variant">2 giờ trước</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Inventory Alerts Section -->
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+<!-- Sản phẩm sắp hết hạn -->
+<div class="bg-surface rounded-2xl p-8 shadow-soft border border-outline">
+<div class="flex items-center justify-between mb-6">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary text-[22px]" data-icon="timer">timer</span>
+<h3 class="text-lg font-bold text-on-surface">Sắp hết hạn</h3>
+</div>
+<button class="text-xs font-bold text-primary hover:underline">Tất cả</button>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left">
+<thead>
+<tr class="text-[10px] text-on-surface-variant border-b border-outline uppercase tracking-widest font-bold">
+<th class="pb-4 pr-4">Sản phẩm</th>
+<th class="pb-4 pr-4">Số lượng</th>
+<th class="pb-4 text-right">Hạn dùng</th>
+</tr>
+</thead>
+<tbody class="text-[13px] font-medium divide-y divide-slate-50">
+<tr>
+<td class="py-4 pr-4 text-on-surface font-semibold">Sữa tươi thanh trùng 1L</td>
+<td class="py-4 pr-4 text-on-surface-variant">15 hộp</td>
+<td class="py-4 text-right text-error font-bold tabular-nums">20/05/2024</td>
+</tr>
+<tr>
+<td class="py-4 pr-4 text-on-surface font-semibold">Sữa chua Hy Lạp</td>
+<td class="py-4 pr-4 text-on-surface-variant">24 hũ</td>
+<td class="py-4 text-right text-error font-bold tabular-nums">22/05/2024</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<!-- Sản phẩm sắp hết hàng -->
+<div class="bg-surface rounded-2xl p-8 shadow-soft border border-outline">
+<div class="flex items-center justify-between mb-6">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-[#3b3a5e] text-[22px]" data-icon="inventory">inventory</span>
+<h3 class="text-lg font-bold text-on-surface">Sắp hết hàng</h3>
+</div>
+<button class="text-xs font-bold text-primary hover:underline">Tất cả</button>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left">
+<thead>
+<tr class="text-[10px] text-on-surface-variant border-b border-outline uppercase tracking-widest font-bold">
+<th class="pb-4 pr-4">Sản phẩm</th>
+<th class="pb-4 pr-4">Tồn kho</th>
+<th class="pb-4 text-right">Trạng thái</th>
+</tr>
+</thead>
+<tbody class="text-[13px] font-medium divide-y divide-slate-50">
+<tr>
+<td class="py-4 pr-4 text-on-surface font-semibold">Gạo ST25 5kg</td>
+<td class="py-4 pr-4 text-on-surface-variant">3 túi</td>
+<td class="py-4 text-right">
+<span class="px-2.5 py-1 rounded-lg bg-red-50 text-error text-[10px] font-bold uppercase tracking-tight">Cần nhập</span>
+</td>
+</tr>
+<tr>
+<td class="py-4 pr-4 text-on-surface font-semibold">Dầu ăn Neptune 1L</td>
+<td class="py-4 pr-4 text-on-surface-variant">8 chai</td>
+<td class="py-4 text-right">
+<span class="px-2.5 py-1 rounded-lg bg-orange-50 text-orange-600 text-[10px] font-bold uppercase tracking-tight">Mức thấp</span>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</main>
+</body></html>
