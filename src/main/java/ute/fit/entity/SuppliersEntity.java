@@ -19,7 +19,7 @@ public class SuppliersEntity {
     @Column(name = "SupplierID")
     private Integer supplierID;
 
-    @Column(name = "Name", nullable = false, length = 255)
+    @Column(name = "Name", nullable = false, length = 255,columnDefinition = "NVARCHAR(255)")
     private String name;
 
     @Column(name = "Phone", nullable = false, length = 20)

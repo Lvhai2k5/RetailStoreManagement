@@ -16,7 +16,7 @@ public class ProductsEntity {
     @Column(name = "ProductID", length = 100)
     private String productID; // Ví dụ: "StingDo", "HaoHaoChuaCay"
 
-    @Column(name = "Name", nullable = false, length = 255)
+    @Column(name = "Name", nullable = false, length = 255,columnDefinition = "NVARCHAR(255)")
     private String name;
 
     @Column(name = "DefaultSellingPrice", precision = 18, scale = 2)
