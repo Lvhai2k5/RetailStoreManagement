@@ -10,18 +10,17 @@ import java.util.Map;
 @NoArgsConstructor
 @AllArgsConstructor
 public class RevenueReportDTO {
-    // KPI chính
-    private BigDecimal totalRevenue;    // Tính từ OrdersEntity.totalAmount
-    private BigDecimal totalRefund;     // Tính từ ReturnsEntity.refundAmount
-    private BigDecimal netRevenue;      // Doanh thu thuần (Revenue - Refund)
-    private Long totalOrders;           // Tổng số đơn hàng thành công
+    private BigDecimal totalRevenue;    
+    private BigDecimal totalRefund;     
+    private BigDecimal netRevenue;      
+    private Long totalOrders;           
 
-    // Dữ liệu biểu đồ
-    private Map<String, Long> statusDistribution; // Biểu đồ tròn: Pending, Paid, Cancelled
-    private List<DailyRevenueDTO> dailyRevenue;    // Biểu đồ đường: Doanh thu theo ngày
-
-    // Top sản phẩm
-    private List<ProductSalesDTO> topProducts; // Top 5 sản phẩm
+    private Map<String, Long> statusDistribution; 
+    private List<DailyRevenueDTO> dailyRevenue;    
+    private List<ProductSalesDTO> topProducts; 
+    
+    // Thêm danh sách đơn hàng để xuất Excel
+    private List<OrderExportDetail> orders; 
 
     @Data
     @AllArgsConstructor
@@ -34,7 +33,17 @@ public class RevenueReportDTO {
     @AllArgsConstructor
     public static class ProductSalesDTO {
         private String productName;
-        private Long quantity;      // Tổng OrderDetailsEntity.quantity
-        private BigDecimal revenue; // Tổng quantity * unitPrice
+        private Long quantity;      
+        private BigDecimal revenue; 
+    }
+
+    @Data
+    @AllArgsConstructor
+    public static class OrderExportDetail {
+        private Integer orderId;
+        private String date;
+        private BigDecimal totalAmount;
+        private BigDecimal profit;
+        private String note; // "Đã hủy", "Trả hàng", hoặc để trống
     }
 }

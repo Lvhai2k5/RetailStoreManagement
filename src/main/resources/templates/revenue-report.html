@@ -33,32 +33,49 @@
                 </div>
                 
                 <div class="flex flex-col gap-4 w-full xl:w-auto">
-                    <form th:action="@{/admin/revenue}" method="get" class="flex flex-wrap items-center gap-3">
-                        <div class="flex items-center bg-white border border-slate-200 rounded-2xl p-1 shadow-sm">
-                            <button type="submit" name="range" value="week" th:classappend="${currentRange == 'week' ? 'bg-rose-100 text-rose-600' : 'text-slate-500'}" class="px-5 py-2 text-sm font-bold rounded-xl transition-all">Tuần này</button>
-                            <button type="submit" name="range" value="month" th:classappend="${currentRange == 'month' ? 'bg-rose-100 text-rose-600' : 'text-slate-500'}" class="px-5 py-2 text-sm font-bold rounded-xl transition-all">Tháng này</button>
-                            <button type="submit" name="range" value="year" th:classappend="${currentRange == 'year' ? 'bg-rose-100 text-rose-600' : 'text-slate-500'}" class="px-5 py-2 text-sm font-bold rounded-xl transition-all text-nowrap">Năm nay</button>
-                        </div>
+					<form th:action="@{/revenue}" method="get" id="revenueForm"
+						class="flex flex-wrap items-center gap-3">
+						<div
+							class="flex items-center bg-white border border-slate-200 rounded-2xl p-1 shadow-sm">
+							<button type="button" onclick="updateDateRange('week')"
+								th:classappend="${currentRange == 'week' ? 'bg-rose-100 text-rose-600' : 'text-slate-500'}"
+								class="px-5 py-2 text-sm font-bold rounded-xl transition-all">Tuần này</button>
+							<button type="button" onclick="updateDateRange('month')"
+								th:classappend="${currentRange == 'month' ? 'bg-rose-100 text-rose-600' : 'text-slate-500'}"
+								class="px-5 py-2 text-sm font-bold rounded-xl transition-all">Tháng này</button>
+							<button type="button" onclick="updateDateRange('year')"
+								th:classappend="${currentRange == 'year' ? 'bg-rose-100 text-rose-600' : 'text-slate-500'}"
+								class="px-5 py-2 text-sm font-bold rounded-xl transition-all text-nowrap">Năm nay</button>
+							<button type="button" id="btnCustom"
+								th:classappend="${currentRange == 'custom' ? 'bg-rose-100 text-rose-600' : 'text-slate-500'}"
+								class="px-5 py-2 text-sm font-bold rounded-xl transition-all">Tùy chọn</button>
+						</div>
 
-                        <div class="flex items-center gap-2 bg-white border border-slate-200 rounded-2xl px-4 py-2 shadow-sm">
-                            <span class="material-symbols-outlined text-slate-400 text-sm font-bold">calendar_month</span>
-                            <input type="date" name="startDate" th:value="${startDate}" class="border-none text-xs font-bold focus:ring-0 p-0 w-28 bg-transparent">
-                            <span class="text-slate-300">-</span>
-                            <input type="date" name="endDate" th:value="${endDate}" class="border-none text-xs font-bold focus:ring-0 p-0 w-28 bg-transparent">
-                            <button type="submit" class="text-rose-500 hover:scale-110 transition-transform">
-                                <span class="material-symbols-outlined font-bold">search</span>
-                            </button>
-                        </div>
-                    </form>
+						<div
+							class="flex items-center gap-2 bg-white border border-slate-200 rounded-2xl px-4 py-2 shadow-sm">
+							<span
+								class="material-symbols-outlined text-slate-400 text-sm font-bold">calendar_month</span>
+							<input type="date" id="startDate" name="startDate"
+								th:value="${startDate}"
+								class="border-none text-xs font-bold focus:ring-0 p-0 w-28 bg-transparent">
+							<span class="text-slate-300">-</span> <input type="date"
+								id="endDate" name="endDate" th:value="${endDate}"
+								class="border-none text-xs font-bold focus:ring-0 p-0 w-28 bg-transparent">
+							<input type="hidden" id="rangeInput" name="range"
+								th:value="${currentRange}">
+							<button type="submit"
+								class="text-rose-500 hover:scale-110 transition-transform">
+								<span class="material-symbols-outlined font-bold">search</span>
+							</button>
+						</div>
+					</form>
 
-                    <div class="flex items-center gap-3">
-                        <button class="flex items-center gap-2 px-6 py-2.5 bg-[#45617c] text-white text-sm font-bold rounded-xl shadow-lg shadow-slate-200 hover:bg-[#344b61] transition-all">
-                            <span class="material-symbols-outlined text-lg">download</span> Xuất Excel
-                        </button>
-                        <button class="flex items-center gap-2 px-6 py-2.5 bg-white border border-slate-200 text-[#45617c] text-sm font-bold rounded-xl hover:bg-slate-50 transition-all">
-                            <span class="material-symbols-outlined text-lg">picture_as_pdf</span> PDF
-                        </button>
-                    </div>
+					<div class="flex items-center gap-3">
+						<button type="button" onclick="handleExportExcel()"
+							class="flex items-center gap-2 px-6 py-2.5 bg-[#45617c] text-white text-sm font-bold rounded-xl shadow-lg shadow-slate-200 hover:bg-[#344b61] transition-all">
+							<span class="material-symbols-outlined text-lg">download</span>Xuất Excel
+						</button>
+					</div>
                 </div>
             </div>
 
@@ -98,41 +115,6 @@
                     <div class="h-[300px] w-full flex justify-center"><canvas id="orderStatusChart"></canvas></div>
                 </div>
             </div>
-
-            <div class="bg-white rounded-[2rem] border border-slate-100 shadow-sm overflow-hidden mb-10">
-                <div class="px-10 py-8 border-b border-slate-50 flex justify-between items-center bg-slate-50/30">
-                    <h4 class="font-bold font-manrope">Top 5 sản phẩm bán chạy</h4>
-                    <a href="#" class="text-rose-500 text-sm font-bold hover:underline">Xem tất cả</a>
-                </div>
-                <div class="overflow-x-auto">
-                    <table class="w-full text-left">
-                        <thead class="bg-slate-50/50 text-[10px] text-slate-400 uppercase font-black tracking-widest">
-                            <tr>
-                                <th class="px-10 py-5">Sản phẩm</th>
-                                <th class="px-10 py-5 text-center">Số lượng</th>
-                                <th class="px-10 py-5 text-right">Doanh thu</th>
-                            </tr>
-                        </thead>
-                        <tbody class="divide-y divide-slate-50">
-                            <tr th:each="p : ${report.topProducts}" class="group hover:bg-slate-50/50 transition-all">
-                                <td class="px-10 py-6">
-                                    <div class="flex items-center gap-5">
-                                        <div class="w-12 h-12 rounded-2xl bg-slate-100 flex items-center justify-center text-rose-400 group-hover:scale-110 transition-transform">
-                                            <span class="material-symbols-outlined text-2xl">package_2</span>
-                                        </div>
-                                        <div>
-                                            <p class="text-sm font-black text-slate-700" th:text="${p.productName}">Tên Sản Phẩm</p>
-                                            <p class="text-[10px] text-slate-400 font-bold uppercase tracking-tight">Cửa hàng bán lẻ</p>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td class="px-10 py-6 text-center font-black text-slate-500" th:text="${p.quantity}">0</td>
-                                <td class="px-10 py-6 text-right font-black text-rose-500" 
-                                    th:text="${#numbers.formatDecimal(p.revenue, 0, 'COMMA', 0, 'POINT') + 'đ'}">0đ</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
             </div>
         </main>
     </div>
@@ -186,6 +168,58 @@
                 plugins: { legend: { position: 'bottom', labels: { usePointStyle: true, padding: 20 } } }
             }
         });
+        function updateDateRange(range) {
+            const now = new Date();
+            let start = new Date();
+            let end = new Date();
+
+            if (range === 'week') {
+                // Thứ 2 tuần này đến CN tuần này
+                const day = now.getDay();
+                const diffToMonday = now.getDate() - day + (day === 0 ? -6 : 1);
+                start = new Date(now.setDate(diffToMonday));
+                end = new Date(start);
+                end.setDate(start.getDate() + 6);
+            } else if (range === 'month') {
+                // Đầu tháng đến cuối tháng
+                start = new Date(now.getFullYear(), now.getMonth(), 1);
+                end = new Date(now.getFullYear(), now.getMonth() + 1, 0);
+            } else if (range === 'year') {
+                // Đầu năm đến cuối năm
+                start = new Date(now.getFullYear(), 0, 1);
+                end = new Date(now.getFullYear(), 11, 31);
+            }
+
+            // Format sang yyyy-mm-dd
+            const formatDate = (date) => date.toISOString().split('T')[0];
+
+            document.getElementById('startDate').value = formatDate(start);
+            document.getElementById('endDate').value = formatDate(end);
+            document.getElementById('rangeInput').value = range;
+            
+            // Submit form tự động
+            document.getElementById('revenueForm').submit();
+        }
+
+        // Lắng nghe thay đổi trên ô input date để chuyển sang "Tùy chọn"
+        document.querySelectorAll('input[type="date"]').forEach(input => {
+            input.addEventListener('change', () => {
+                document.getElementById('rangeInput').value = 'custom';
+                // Có thể đổi màu nút Tùy chọn tại đây bằng class
+            });
+        });
+        function handleExportExcel() {
+            // 1. Lấy giá trị hiện tại của các input lọc
+            const range = document.getElementById('rangeInput').value;
+            const startDate = document.getElementById('startDate').value;
+            const endDate = document.getElementById('endDate').value;
+
+            // 2. Tạo URL với query parameters khớp với Controller
+            const url = `/revenue/export/excel?range=${range}&startDate=${startDate}&endDate=${endDate}`;
+
+            // 3. Chuyển hướng trình duyệt để tải file
+            window.location.href = url;
+        }
     </script>
 </body>
 </html>

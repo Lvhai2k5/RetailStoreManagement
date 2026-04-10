@@ -7,9 +7,13 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import jakarta.servlet.http.HttpServletResponse;
 import ute.fit.dto.RevenueReportDTO;
 import ute.fit.service.IRevenueService;
+import ute.fit.utils.ExportUtils;
 
+import java.io.IOException;
 import java.time.LocalDate;
 
 @Controller
@@ -38,12 +42,17 @@ public class RevenueController {
         return "revenue-report"; // Trỏ tới file HTML của bạn
     }
 
-    // Endpoint chuẩn bị cho chức năng xuất Excel
     @GetMapping("/export/excel")
     public void exportToExcel(
             @RequestParam(value = "range", defaultValue = "month") String range,
             @RequestParam(value = "startDate", required = false) String startDate,
-            @RequestParam(value = "endDate", required = false) String endDate) {
-        // Logic gọi sang ExportUtils sẽ triển khai sau
+            @RequestParam(value = "endDate", required = false) String endDate,
+            HttpServletResponse response) throws IOException {
+        
+        // Lấy dữ liệu báo cáo đã qua xử lý lọc tại Service
+        RevenueReportDTO report = revenueService.getFullReport(range, startDate, endDate);
+        
+        // Xuất file Excel kèm thông tin mốc thời gian
+        ExportUtils.exportRevenueToExcel(response, report, startDate, endDate);
     }
 }

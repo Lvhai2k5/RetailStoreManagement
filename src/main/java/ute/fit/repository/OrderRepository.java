@@ -26,4 +26,11 @@ public interface OrderRepository extends JpaRepository<OrdersEntity, Integer> {
            "WHERE o.status = 'Paid' AND o.createdDate BETWEEN :start AND :end " +
            "GROUP BY CAST(o.createdDate AS date) ORDER BY CAST(o.createdDate AS date)")
     List<Object[]> getRevenueByDay(LocalDateTime start, LocalDateTime end);
+    
+    @Query("SELECT o.orderID, o.createdDate, o.totalAmount, o.status, " +
+    	       "(SELECT COUNT(r) FROM ReturnsEntity r WHERE r.order.orderID = o.orderID) " +
+    	       "FROM OrdersEntity o " +
+    	       "WHERE o.createdDate BETWEEN :start AND :end " +
+    	       "ORDER BY o.createdDate DESC")
+    	List<Object[]> getOrdersForExport(LocalDateTime start, LocalDateTime end);
 }
