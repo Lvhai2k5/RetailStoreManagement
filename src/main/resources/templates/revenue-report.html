@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="vi">
+<head>
+    <meta charset="utf-8"/>
+    <title>Báo cáo doanh thu - Merchant Core</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
+    <style>
+        body { font-family: 'Inter', sans-serif; height: 100vh; overflow: hidden; }
+        .font-manrope { font-family: 'Manrope', sans-serif; }
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 10px; }
+    </style>
+</head>
+<body class="bg-[#f8fafc] text-[#1e293b]">
+
+    <div th:replace="~{fragments/header :: header}"></div>
+
+    <div class="flex h-screen pt-16 overflow-hidden">
+        
+        <aside class="hidden lg:block w-64 h-full flex-shrink-0 border-r border-slate-100 bg-slate-50 overflow-y-auto">
+            <div th:replace="~{fragments/sidebar :: sidebar}"></div>
+        </aside>
+
+        <main class="flex-1 h-full overflow-y-auto p-8 custom-scrollbar">
+            
+            <div class="flex flex-col xl:flex-row justify-between items-start xl:items-center gap-6 mb-10">
+                <div>
+                    <h1 class="text-2xl font-extrabold font-manrope">Báo cáo doanh thu</h1>
+                    <p class="text-slate-400 text-sm">Phân tích hiệu quả kinh doanh cửa hàng</p>
+                </div>
+                
+                <div class="flex flex-col gap-4 w-full xl:w-auto">
+                    <form th:action="@{/admin/revenue}" method="get" class="flex flex-wrap items-center gap-3">
+                        <div class="flex items-center bg-white border border-slate-200 rounded-2xl p-1 shadow-sm">
+                            <button type="submit" name="range" value="week" th:classappend="${currentRange == 'week' ? 'bg-rose-100 text-rose-600' : 'text-slate-500'}" class="px-5 py-2 text-sm font-bold rounded-xl transition-all">Tuần này</button>
+                            <button type="submit" name="range" value="month" th:classappend="${currentRange == 'month' ? 'bg-rose-100 text-rose-600' : 'text-slate-500'}" class="px-5 py-2 text-sm font-bold rounded-xl transition-all">Tháng này</button>
+                            <button type="submit" name="range" value="year" th:classappend="${currentRange == 'year' ? 'bg-rose-100 text-rose-600' : 'text-slate-500'}" class="px-5 py-2 text-sm font-bold rounded-xl transition-all text-nowrap">Năm nay</button>
+                        </div>
+
+                        <div class="flex items-center gap-2 bg-white border border-slate-200 rounded-2xl px-4 py-2 shadow-sm">
+                            <span class="material-symbols-outlined text-slate-400 text-sm font-bold">calendar_month</span>
+                            <input type="date" name="startDate" th:value="${startDate}" class="border-none text-xs font-bold focus:ring-0 p-0 w-28 bg-transparent">
+                            <span class="text-slate-300">-</span>
+                            <input type="date" name="endDate" th:value="${endDate}" class="border-none text-xs font-bold focus:ring-0 p-0 w-28 bg-transparent">
+                            <button type="submit" class="text-rose-500 hover:scale-110 transition-transform">
+                                <span class="material-symbols-outlined font-bold">search</span>
+                            </button>
+                        </div>
+                    </form>
+
+                    <div class="flex items-center gap-3">
+                        <button class="flex items-center gap-2 px-6 py-2.5 bg-[#45617c] text-white text-sm font-bold rounded-xl shadow-lg shadow-slate-200 hover:bg-[#344b61] transition-all">
+                            <span class="material-symbols-outlined text-lg">download</span> Xuất Excel
+                        </button>
+                        <button class="flex items-center gap-2 px-6 py-2.5 bg-white border border-slate-200 text-[#45617c] text-sm font-bold rounded-xl hover:bg-slate-50 transition-all">
+                            <span class="material-symbols-outlined text-lg">picture_as_pdf</span> PDF
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-10">
+                <div class="bg-white p-8 rounded-[2rem] border border-slate-100 shadow-sm relative overflow-hidden group">
+                    <div class="w-12 h-12 bg-rose-50 rounded-2xl flex items-center justify-center text-rose-500 mb-6 group-hover:scale-110 transition-transform">
+                        <span class="material-symbols-outlined text-3xl">payments</span>
+                    </div>
+                    <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Tổng doanh thu</p>
+                    <h3 class="text-3xl font-black font-manrope mt-2" th:text="${#numbers.formatDecimal(report.totalRevenue, 0, 'COMMA', 0, 'POINT') + 'đ'}">0đ</h3>
+                </div>
+
+                <div class="bg-white p-8 rounded-[2rem] border border-slate-100 shadow-sm">
+                    <div class="w-12 h-12 bg-blue-50 rounded-2xl flex items-center justify-center text-blue-500 mb-6">
+                        <span class="material-symbols-outlined text-3xl">shopping_bag</span>
+                    </div>
+                    <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Số đơn hàng thành công</p>
+                    <h3 class="text-3xl font-black font-manrope mt-2" th:text="${report.totalOrders}">0</h3>
+                </div>
+
+                <div class="bg-white p-8 rounded-[2rem] border border-slate-100 shadow-sm">
+                    <div class="w-12 h-12 bg-emerald-50 rounded-2xl flex items-center justify-center text-emerald-500 mb-6">
+                        <span class="material-symbols-outlined text-3xl">query_stats</span>
+                    </div>
+                    <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Lợi nhuận ước tính</p>
+                    <h3 class="text-3xl font-black font-manrope mt-2" th:text="${#numbers.formatDecimal(report.netRevenue.multiply(0.25), 0, 'COMMA', 0, 'POINT') + 'đ'}">0đ</h3>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-10">
+                <div class="lg:col-span-2 bg-white p-8 rounded-[2rem] border border-slate-100 shadow-sm">
+                    <h4 class="font-bold font-manrope text-slate-700 mb-10">Biến động doanh thu</h4>
+                    <div class="h-[300px] w-full"><canvas id="revenueChart"></canvas></div>
+                </div>
+                <div class="bg-white p-8 rounded-[2rem] border border-slate-100 shadow-sm">
+                    <h4 class="font-bold font-manrope text-slate-700 mb-10 text-center">Trạng thái đơn hàng</h4>
+                    <div class="h-[300px] w-full flex justify-center"><canvas id="orderStatusChart"></canvas></div>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-[2rem] border border-slate-100 shadow-sm overflow-hidden mb-10">
+                <div class="px-10 py-8 border-b border-slate-50 flex justify-between items-center bg-slate-50/30">
+                    <h4 class="font-bold font-manrope">Top 5 sản phẩm bán chạy</h4>
+                    <a href="#" class="text-rose-500 text-sm font-bold hover:underline">Xem tất cả</a>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left">
+                        <thead class="bg-slate-50/50 text-[10px] text-slate-400 uppercase font-black tracking-widest">
+                            <tr>
+                                <th class="px-10 py-5">Sản phẩm</th>
+                                <th class="px-10 py-5 text-center">Số lượng</th>
+                                <th class="px-10 py-5 text-right">Doanh thu</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-50">
+                            <tr th:each="p : ${report.topProducts}" class="group hover:bg-slate-50/50 transition-all">
+                                <td class="px-10 py-6">
+                                    <div class="flex items-center gap-5">
+                                        <div class="w-12 h-12 rounded-2xl bg-slate-100 flex items-center justify-center text-rose-400 group-hover:scale-110 transition-transform">
+                                            <span class="material-symbols-outlined text-2xl">package_2</span>
+                                        </div>
+                                        <div>
+                                            <p class="text-sm font-black text-slate-700" th:text="${p.productName}">Tên Sản Phẩm</p>
+                                            <p class="text-[10px] text-slate-400 font-bold uppercase tracking-tight">Cửa hàng bán lẻ</p>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="px-10 py-6 text-center font-black text-slate-500" th:text="${p.quantity}">0</td>
+                                <td class="px-10 py-6 text-right font-black text-rose-500" 
+                                    th:text="${#numbers.formatDecimal(p.revenue, 0, 'COMMA', 0, 'POINT') + 'đ'}">0đ</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <div th:replace="~{fragments/footer :: footer}"></div>
+
+    <script th:inline="javascript">
+        // Cấu hình Chart.js An toàn (Responsive: true & AspectRatio: false)
+        Chart.defaults.font.family = 'Inter';
+        const dailyData = /*[[${report.dailyRevenue}]]*/ [];
+        
+        new Chart(document.getElementById('revenueChart'), {
+            type: 'bar',
+            data: {
+                labels: dailyData.map(d => d.date),
+                datasets: [{ 
+                    label: 'Doanh thu', 
+                    data: dailyData.map(d => d.value), 
+                    backgroundColor: '#d68e8e', 
+                    borderRadius: 10,
+                    barThickness: 30
+                }]
+            },
+            options: { 
+                responsive: true, 
+                maintainAspectRatio: false, 
+                plugins: { legend: { display: false } },
+                scales: { 
+                    y: { display: false }, 
+                    x: { grid: { display: false }, border: { display: false } } 
+                }
+            }
+        });
+
+        const statusData = /*[[${report.statusDistribution}]]*/ {};
+        new Chart(document.getElementById('orderStatusChart'), {
+            type: 'doughnut',
+            data: {
+                labels: Object.keys(statusData),
+                datasets: [{ 
+                    data: Object.values(statusData), 
+                    backgroundColor: ['#45617c', '#d68e8e', '#f1f5f9'],
+                    borderWidth: 0,
+                    hoverOffset: 15
+                }]
+            },
+            options: { 
+                responsive: true, 
+                maintainAspectRatio: false, 
+                cutout: '80%',
+                plugins: { legend: { position: 'bottom', labels: { usePointStyle: true, padding: 20 } } }
+            }
+        });
+    </script>
+</body>
+</html>
