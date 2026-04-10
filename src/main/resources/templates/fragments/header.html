@@ -1,6 +1,13 @@
-<div th:fragment="header">
-  <div class="header">
-    <h1>Dashboard</h1>
-    <div class="user">👤 Admin</div>
-  </div>
-</div>
+<header th:fragment="header" class="fixed top-0 w-full z-50 flex justify-between items-center px-8 h-16 bg-white border-b border-slate-100 font-manrope">
+    <div class="flex items-center gap-12">
+        <span class="text-xl font-bold text-rose-400">Merchant Core</span>
+
+    </div>
+    <div class="flex items-center gap-5 text-slate-400">
+        <span class="material-symbols-outlined cursor-pointer hover:text-rose-400 transition-colors">notifications</span>
+        <span class="material-symbols-outlined cursor-pointer hover:text-rose-400 transition-colors">settings</span>
+        <div class="w-8 h-8 rounded-full bg-slate-100 border border-slate-200 overflow-hidden">
+            <img src="https://ui-avatars.com/api/?name=Admin&background=fff1f2&color=fb7185" alt="Profile">
+        </div>
+    </div>
+</header>

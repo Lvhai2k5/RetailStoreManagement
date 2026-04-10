@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<script src="https://cdn.tailwindcss.com"></script>
+
+	<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700&display=swap"
+		rel="stylesheet">
+
+	<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+
+	<title>Danh sách sản phẩm</title>
+
+	<style>
+		body {
+			font-family: 'Manrope', sans-serif;
+		}
+	</style>
+
+</head>
+
+
+
+<body class="bg-gradient-to-br from-slate-100 to-slate-200">
+
+	<div th:replace="~{fragments/header :: header}"></div>
+	<div th:replace="~{fragments/sidebar :: sidebar}"></div>
+
+	<main class="ml-0 lg:ml-64 mt-16 p-8">
+
+		<!-- HEADER -->
+		<div class="flex justify-between items-center mb-6">
+
+			<h1 class="text-3xl font-bold text-slate-700">
+				Quản lý sản phẩm
+			</h1>
+
+			<a href="/product/create"
+				class="flex items-center gap-2 bg-rose-500 text-white px-5 py-2 rounded-xl shadow-lg hover:bg-rose-600 hover:scale-105 transition">
+
+				<span class="material-symbols-outlined">add</span>
+				Thêm sản phẩm
+
+			</a>
+
+		</div>
+
+
+		<!-- CARD -->
+		<div class="bg-white rounded-2xl shadow-xl border border-slate-100 overflow-hidden">
+
+			<table class="w-full text-sm">
+
+				<!-- HEADER TABLE -->
+				<thead class="bg-gradient-to-r from-rose-400 to-pink-400 text-white">
+
+					<tr>
+
+						<th class="p-4 font-semibold">ID</th>
+						<th class="p-4 font-semibold">Tên sản phẩm</th>
+						<th class="p-4 font-semibold">Loại</th>
+						<th class="p-4 font-semibold">Giá bán</th>
+						<th class="p-4 font-semibold">Trạng thái</th>
+						<th class="p-4 font-semibold">Ngày tạo</th>
+						<th class="p-4 text-center font-semibold">Hành động</th>
+
+					</tr>
+
+				</thead>
+
+
+				<tbody>
+
+					<tr th:each="p:${products}" class="border-b hover:bg-slate-50 transition">
+
+						<td class="p-4 font-medium text-slate-700" th:text="${p.productID}">
+						</td>
+
+						<td class="p-4 font-semibold text-slate-800" th:text="${p.name}">
+						</td>
+
+						<td class="p-4 text-slate-600" th:text="${p.productType.name}">
+						</td>
+
+						<td class="p-4 text-rose-500 font-bold"
+							th:text="${#numbers.formatDecimal(p.defaultSellingPrice,0,'COMMA',0,'POINT')} + ' đ'">
+						</td>
+
+
+						<td class="p-4">
+
+							<span th:if="${p.status == 'BUYING'}"
+								class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-xs font-semibold">
+								Đang bán
+							</span>
+
+							<span th:if="${p.status == 'HIDING'}"
+								class="bg-gray-200 text-gray-600 px-3 py-1 rounded-full text-xs font-semibold">
+								Ngừng bán
+							</span>
+
+						</td>
+
+
+						<td class="p-4 text-slate-600" th:text="${#temporals.format(p.createdDate,'dd/MM/yyyy')}">
+						</td>
+
+
+						<td class="p-4 flex justify-center gap-3">
+
+							<a th:href="@{'/product/detail/'+${p.productID}}"
+								class="flex items-center gap-1 text-blue-500 hover:text-blue-700">
+
+								<span class="material-symbols-outlined text-[18px]">visibility</span>
+							</a>
+
+							<a th:href="@{'/product/edit/'+${p.productID}}"
+								class="flex items-center gap-1 text-yellow-500 hover:text-yellow-700">
+
+								<span class="material-symbols-outlined text-[18px]">edit</span>
+							</a>
+
+							<a th:href="@{'/product/delete/'+${p.productID}}"
+								class="flex items-center gap-1 text-red-500 hover:text-red-700"
+								onclick="return confirm('Bạn chắc chắn muốn xóa?')">
+
+								<span class="material-symbols-outlined text-[18px]">delete</span>
+
+							</a>
+
+						</td>
+
+					</tr>
+
+				</tbody>
+
+			</table>
+
+		</div>
+
+	</main>
+
+	<div th:replace="~{fragments/footer :: footer}"></div>
+
+</body>
+
+</html>

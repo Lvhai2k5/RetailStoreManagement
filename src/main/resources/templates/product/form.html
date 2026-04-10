@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	    <title>Dashboard</title>
+
+	    <!-- Tailwind -->
+	    <script src="https://cdn.tailwindcss.com"></script>
+
+	    <!-- FIX ICON -->
+	    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+
+	</head>
+<body class="bg-slate-100">
+
+	<div th:replace="~{fragments/header :: header}"></div>
+	<div th:replace="~{fragments/sidebar :: sidebar}"></div>
+
+	<main class="ml-0 lg:ml-64 mt-16 p-6">
+
+		<div class="bg-white p-6 rounded-2xl shadow w-full max-w-lg mx-auto">
+
+			<h2 class="text-xl font-bold mb-4">Form sản phẩm</h2>
+
+			<form action="/product/save" method="post" class="space-y-4">
+
+				<input name="id" th:value="${product.productID}" placeholder="ID" class="w-full border p-2 rounded">
+
+				<input name="name" th:value="${product.name}" placeholder="Tên" class="w-full border p-2 rounded">
+
+				<input name="price" th:value="${product.defaultSellingPrice}" placeholder="Giá"
+					class="w-full border p-2 rounded">
+
+				<!--<input name="quantity" th:value="${product.quantity}" placeholder="Số lượng"
+					class="w-full border p-2 rounded">
+
+				<textarea name="description" th:text="${product.description}" placeholder="Mô tả"
+					class="w-full border p-2 rounded"></textarea>-->
+
+				<button class="bg-rose-400 text-white px-4 py-2 rounded-xl w-full">
+					Lưu
+				</button>
+
+			</form>
+
+		</div>
+
+	</main>
+
+	<div th:replace="~{fragments/footer :: footer}"></div>
+
+</body>
+
+</html>
