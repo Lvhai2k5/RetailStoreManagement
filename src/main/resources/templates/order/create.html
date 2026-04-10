@@ -44,7 +44,7 @@
 		<!-- CARD -->
 		<div class="max-w-4xl mx-auto bg-white p-8 rounded-3xl shadow-xl">
 
-			<form th:action="@{/order/save}" method="post" th:object="${order}" class="space-y-6">
+			<form th:action="@{/order/save}" method="post" th:object="${orderDTO}" class="space-y-6">
 
 				<!-- SEARCH AUTOCOMPLETE -->
 				<div class="relative">
@@ -101,8 +101,7 @@
 				    </span>
 				</div>
 
-				<!-- gửi về backend -->
-				<input type="hidden" name="totalAmount" id="totalInput">
+				<input type="hidden" th:field="*{totalAmount}" id="totalInput">
 				
 
 				<!-- PAYMENT -->

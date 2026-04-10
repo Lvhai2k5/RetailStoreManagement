@@ -5,6 +5,7 @@ import ute.fit.dto.OrderItemDTO;
 import ute.fit.entity.OrdersEntity;
 import ute.fit.entity.OrderDetailsEntity;
 import ute.fit.entity.ProductsEntity;
+import ute.fit.model.OrderStatus;
 import ute.fit.repository.OrderRepository;
 import ute.fit.repository.ProductRepository;
 
@@ -22,36 +23,75 @@ public class OrderService {
 
     private final OrderRepository orderRepo;
     private final ProductRepository productRepo;
+    
+    public OrdersEntity createOrder(OrderDTO dto){
 
-    @Transactional
-    public void createOrder(OrderDTO dto) {
-
-        // 1. tạo Order
         OrdersEntity order = new OrdersEntity();
-        order.setTotalAmount(dto.getTotalAmount());
+
+        order.setStatus(OrderStatus.Pending);
         order.setCreatedDate(LocalDateTime.now());
+        order.setTotalAmount(dto.getTotalAmount());
 
         List<OrderDetailsEntity> details = new ArrayList<>();
 
-        // 2. loop từng item
-        for (OrderItemDTO item : dto.getItems()) {
+        for(OrderItemDTO item : dto.getItems()){
 
-            ProductsEntity product = productRepo.findById(item.getProductID())
-                    .orElseThrow(() -> new RuntimeException("Không tìm thấy sản phẩm"));
+            ProductsEntity product = productRepo.findById(item.getProductID()).orElseThrow();
 
             OrderDetailsEntity detail = new OrderDetailsEntity();
             detail.setOrder(order);
             detail.setProduct(product);
             detail.setQuantity(item.getQuantity());
-
             detail.setUnitPrice(product.getDefaultSellingPrice());
 
             details.add(detail);
         }
 
-        order.setOrderDetails(details); 
+        order.setOrderDetails(details);
 
-        // 3. save (cascade)
+        return orderRepo.save(order);
+    }
+    
+    public void updatePayment(Integer orderId, String method){
+
+        OrdersEntity order = orderRepo.findById(orderId).orElseThrow();
+
+        order.setPaymentMethod(method);
+        order.setStatus(OrderStatus.Paid);
+        order.setPaidDate(LocalDateTime.now());
+
         orderRepo.save(order);
     }
+//    
+//    @Transactional
+//    public void createOrder(OrderDTO dto) {
+//
+//        // 1. tạo Order
+//        OrdersEntity order = new OrdersEntity();
+//        order.setTotalAmount(dto.getTotalAmount());
+//        order.setCreatedDate(LocalDateTime.now());
+//
+//        List<OrderDetailsEntity> details = new ArrayList<>();
+//
+//        // 2. loop từng item
+//        for (OrderItemDTO item : dto.getItems()) {
+//
+//            ProductsEntity product = productRepo.findById(item.getProductID())
+//                    .orElseThrow(() -> new RuntimeException("Không tìm thấy sản phẩm"));
+//
+//            OrderDetailsEntity detail = new OrderDetailsEntity();
+//            detail.setOrder(order);
+//            detail.setProduct(product);
+//            detail.setQuantity(item.getQuantity());
+//
+//            detail.setUnitPrice(product.getDefaultSellingPrice());
+//
+//            details.add(detail);
+//        }
+//
+//        order.setOrderDetails(details); 
+//
+//        // 3. save (cascade)
+//        orderRepo.save(order);
+//    }
 }
