@@ -11,6 +11,7 @@ import ute.fit.dto.ProductDTO;
 import ute.fit.entity.*;
 import ute.fit.model.OrderStatus;
 import ute.fit.repository.*;
+import ute.fit.service.OrderService;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -23,12 +24,9 @@ public class OrderController {
 
     @Autowired
     private ProductRepository productRepo;
-
+    
     @Autowired
-    private OrderRepository orderRepo;
-
-    @Autowired
-    private OrderDetailRepository orderDetailRepo;
+    private OrderService orderService;
 
     @GetMapping("/create")
     public String create(Model model){
@@ -48,32 +46,10 @@ public class OrderController {
     }
 
     @PostMapping("/save")
-    public String save(@ModelAttribute OrderDTO dto){
+    public String saveOrder(@ModelAttribute OrderDTO orderDTO) {
 
-        OrdersEntity order = new OrdersEntity();
-        order.setPaymentMethod(dto.getPaymentMethod());
-        order.setStatus(OrderStatus.Pending);
+        orderService.createOrder(orderDTO);
 
-        List<OrderDetailsEntity> details = new ArrayList<>();
-
-        for(OrderItemDTO item : dto.getItems()){
-            ProductsEntity product = productRepo.findById(item.getProductID()).orElse(null);
-
-            if(product != null){
-                OrderDetailsEntity d = new OrderDetailsEntity();
-                d.setOrder(order);
-                d.setProduct(product);
-                d.setQuantity(item.getQuantity());
-                d.setUnitPrice(product.getDefaultSellingPrice());
-
-                details.add(d);
-            }
-        }
-
-        order.setOrderDetails(details);
-
-        orderRepo.save(order);
-
-        return "redirect:/dashboard";
+        return "redirect:/dashboard"; 
     }
 }

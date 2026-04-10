@@ -1,15 +1,35 @@
 package ute.fit.dto;
 
-import java.util.ArrayList;
+import java.math.BigDecimal;
 import java.util.List;
 
-import lombok.Getter;
-import lombok.Setter;
-@Getter
-@Setter
 public class OrderDTO {
 
     private String paymentMethod;
+    private BigDecimal totalAmount;
+    private List<OrderItemDTO> items;
 
-    private List<OrderItemDTO> items = new ArrayList<>();
+    public String getPaymentMethod() {
+        return paymentMethod;
+    }
+
+    public void setPaymentMethod(String paymentMethod) {
+        this.paymentMethod = paymentMethod;
+    }
+
+    public BigDecimal getTotalAmount() {
+        return totalAmount;
+    }
+
+    public void setTotalAmount(BigDecimal totalAmount) {
+        this.totalAmount = totalAmount;
+    }
+
+    public List<OrderItemDTO> getItems() {
+        return items;
+    }
+
+    public void setItems(List<OrderItemDTO> items) {
+        this.items = items;
+    }
 }
