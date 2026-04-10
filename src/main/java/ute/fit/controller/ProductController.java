@@ -30,7 +30,7 @@ public class ProductController {
     @GetMapping("/product/create")
     public String create(Model model){
         model.addAttribute("product", new ProductsEntity());
-        model.addAttribute("productTypes", productTypeRepo.findAll()); // ✅ QUAN TRỌNG
+        model.addAttribute("productTypes", productTypeRepo.findAll()); 
         return "product/create";
     }
 
@@ -44,7 +44,7 @@ public class ProductController {
                     .findById(p.getProductType().getProductTypeID())
                     .orElse(null);
 
-            p.setProductType(type); // ✅ GÁN LẠI ENTITY TỪ DB
+            p.setProductType(type); // khúc này gán lại enti từ db nha Vũ hải đừng quên dùm cái
         }
 
         repo.save(p);
@@ -55,7 +55,7 @@ public class ProductController {
     public String edit(@PathVariable String id, Model model){
 
         model.addAttribute("product", repo.findById(id).orElse(new ProductsEntity()));
-        model.addAttribute("productTypes", productTypeRepo.findAll()); // ⚠️ QUAN TRỌNG
+        model.addAttribute("productTypes", productTypeRepo.findAll()); 
 
         return "product/form";
     }
