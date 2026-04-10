@@ -28,10 +28,10 @@ public class ProductController {
     }
 
     @GetMapping("/product/create")
-    public String create(Model model, HttpServletRequest request){
+    public String create(Model model){
         model.addAttribute("product", new ProductsEntity());
-        model.addAttribute("currentPath", request.getRequestURI());
-        return "product/form";
+        model.addAttribute("productTypes", productTypeRepo.findAll()); // ✅ QUAN TRỌNG
+        return "product/create";
     }
 
     @PostMapping("/product/save")
