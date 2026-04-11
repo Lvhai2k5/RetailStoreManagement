@@ -1,0 +1,460 @@
+<!doctype html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Danh sách đơn hàng trả - Merchant Core</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+      rel="stylesheet"
+    />
+    <script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              primary: "#cd8484",
+              secondary: "#45617c",
+              background: "#f8fafc",
+              surface: "#ffffff",
+              "on-surface": "#0f172a",
+              "on-surface-variant": "#64748b",
+              outline: "#e2e8f0",
+              error: "#ef4444",
+              success: "#10b981",
+              warning: "#f59e0b",
+            },
+            fontFamily: {
+              headline: ["Manrope", "sans-serif"],
+              body: ["Inter", "sans-serif"],
+              label: ["Inter", "sans-serif"],
+            },
+            borderRadius: {
+              DEFAULT: "0.375rem",
+              lg: "0.5rem",
+              xl: "0.75rem",
+              "2xl": "1rem",
+              full: "9999px",
+            },
+            boxShadow: {
+              soft: "0 2px 15px -3px rgba(0, 0, 0, 0.07), 0 4px 6px -2px rgba(0, 0, 0, 0.05)",
+              elevated:
+                "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)",
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      body {
+        font-family: "Inter", sans-serif;
+      }
+      h1,
+      h2,
+      h3,
+      h4,
+      .font-headline {
+        font-family: "Manrope", sans-serif;
+      }
+      .material-symbols-outlined {
+        font-variation-settings:
+          "FILL" 0,
+          "wght" 400,
+          "GRAD" 0,
+          "opsz" 24;
+      }
+      .glass {
+        background: rgba(255, 255, 255, 0.7);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+      }
+    </style>
+  </head>
+  <body class="bg-background text-on-surface antialiased">
+    <div th:replace="~{fragments/header :: header}"></div>
+    <div th:replace="~{fragments/sidebar :: sidebar}"></div>
+    <main class="ml-0 lg:ml-64 mt-16 p-8">
+      <div class="max-w-7xl mx-auto">
+        <div class="mb-10 flex justify-between items-end">
+          <div>
+            <nav
+              class="flex items-center gap-2 text-xs text-on-surface-variant/70 mb-3 font-bold uppercase tracking-widest"
+            >
+              <a class="hover:text-primary transition-colors" href="/dashboard"
+                >Trang chủ</a
+              >
+              <span class="material-symbols-outlined text-[12px]"
+                >chevron_right</span
+              >
+              <span class="text-on-surface-variant">Quản lý trả hàng</span>
+            </nav>
+            <h2 class="text-3xl font-extrabold text-on-surface tracking-tight">
+              Danh sách đơn hàng trả
+            </h2>
+            <p class="text-on-surface-variant font-medium mt-1">
+              Quản lý và xử lý các yêu cầu hoàn trả sản phẩm từ khách hàng.
+            </p>
+          </div>
+          <div class="flex gap-4">
+            <button
+              class="flex items-center gap-2 px-5 py-3 bg-white border border-outline rounded-xl text-on-surface font-bold text-[13px] hover:bg-slate-50 transition-all shadow-soft"
+            >
+              <span class="material-symbols-outlined text-[20px]"
+                >file_download</span
+              >
+              Xuất báo cáo
+            </button>
+            <a
+              th:href="@{/return/create}"
+              class="flex items-center gap-2 px-6 py-3 bg-primary text-white rounded-xl font-bold text-[13px] hover:shadow-elevated hover:brightness-110 transition-all active:scale-95"
+            >
+              <span class="material-symbols-outlined text-[20px]">add</span>
+              Tạo yêu cầu mới
+            </a>
+          </div>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-10">
+          <div
+            class="bg-surface p-7 rounded-2xl shadow-soft border border-indigo-50/50 flex flex-col justify-between transition-all hover:shadow-elevated hover:-translate-y-1"
+          >
+            <div class="flex justify-between items-start mb-4">
+              <p
+                class="text-on-surface-variant text-[13px] font-semibold uppercase tracking-wider"
+              >
+                Đang chờ xử lý
+              </p>
+              <div class="p-3 bg-amber-50 text-warning rounded-2xl">
+                <span class="material-symbols-outlined text-[24px]"
+                  >pending_actions</span
+                >
+              </div>
+            </div>
+            <div>
+              <h3
+                class="text-3xl font-black text-on-surface"
+                th:text="${pendingCount}"
+              >
+                12
+              </h3>
+              <p class="text-[11px] text-warning font-bold mt-1">
+                Cần xử lý ngay
+              </p>
+            </div>
+          </div>
+          <div
+            class="bg-surface p-7 rounded-2xl shadow-soft border border-indigo-50/50 flex flex-col justify-between transition-all hover:shadow-elevated hover:-translate-y-1"
+          >
+            <div class="flex justify-between items-start mb-4">
+              <p
+                class="text-on-surface-variant text-[13px] font-semibold uppercase tracking-wider"
+              >
+                Đã hoàn tất
+              </p>
+              <div class="p-3 bg-emerald-50 text-success rounded-2xl">
+                <span class="material-symbols-outlined text-[24px]"
+                  >check_circle</span
+                >
+              </div>
+            </div>
+            <div>
+              <h3
+                class="text-3xl font-black text-on-surface"
+                th:text="${completedCount}"
+              >
+                45
+              </h3>
+              <p class="text-[11px] text-success font-bold mt-1">
+                +8% so với hôm qua
+              </p>
+            </div>
+          </div>
+          <div
+            class="bg-surface p-7 rounded-2xl shadow-soft border border-indigo-50/50 flex flex-col justify-between transition-all hover:shadow-elevated hover:-translate-y-1"
+          >
+            <div class="flex justify-between items-start mb-4">
+              <p
+                class="text-on-surface-variant text-[13px] font-semibold uppercase tracking-wider"
+              >
+                Tổng giá trị trả
+              </p>
+              <div class="p-3 bg-primary/10 text-primary rounded-2xl">
+                <span class="material-symbols-outlined text-[24px]"
+                  >payments</span
+                >
+              </div>
+            </div>
+            <div>
+              <h3
+                class="text-3xl font-black text-on-surface"
+                th:text="${totalRefund}"
+              >
+                8.4M ₫
+              </h3>
+              <p class="text-[11px] text-on-surface-variant/70 font-bold mt-1">
+                Trong 30 ngày qua
+              </p>
+            </div>
+          </div>
+          <div
+            class="bg-surface p-7 rounded-2xl shadow-soft border border-indigo-50/50 flex flex-col justify-between transition-all hover:shadow-elevated hover:-translate-y-1"
+          >
+            <div class="flex justify-between items-start mb-4">
+              <p
+                class="text-on-surface-variant text-[13px] font-semibold uppercase tracking-wider"
+              >
+                Tỷ lệ trả hàng
+              </p>
+              <div class="p-3 bg-slate-50 text-on-surface-variant rounded-2xl">
+                <span class="material-symbols-outlined text-[24px]"
+                  >trending_up</span
+                >
+              </div>
+            </div>
+            <div>
+              <h3
+                class="text-3xl font-black text-on-surface"
+                th:text="${returnRate} + '%'"
+              >
+                2.4%
+              </h3>
+              <p class="text-[11px] text-error font-bold mt-1">
+                +0.2% từ tháng trước
+              </p>
+            </div>
+          </div>
+        </div>
+        <div
+          class="bg-surface rounded-2xl shadow-soft border border-indigo-50/50 overflow-hidden"
+        >
+          <div
+            class="px-8 py-6 border-b border-slate-100 flex flex-wrap items-center justify-between gap-6 bg-slate-50/30"
+          >
+            <div class="flex items-center gap-2">
+              <div
+                class="flex bg-white border border-outline rounded-xl p-1 shadow-sm"
+              >
+                <button
+                  class="px-5 py-2 text-[12px] font-black bg-primary text-white rounded-lg transition-all"
+                >
+                  Tất cả
+                </button>
+                <button
+                  class="px-5 py-2 text-[12px] font-bold text-on-surface-variant hover:text-primary hover:bg-slate-50 transition-all rounded-lg"
+                >
+                  Chờ xử lý
+                </button>
+                <button
+                  class="px-5 py-2 text-[12px] font-bold text-on-surface-variant hover:text-primary hover:bg-slate-50 transition-all rounded-lg"
+                >
+                  Đã hoàn tất
+                </button>
+              </div>
+            </div>
+            <div class="flex items-center gap-4">
+              <div
+                class="flex items-center gap-2 text-[12px] text-on-surface-variant font-bold uppercase tracking-wider"
+              >
+                Lọc theo ngày
+              </div>
+              <select
+                class="bg-white border border-outline text-sm rounded-xl px-5 py-2 font-bold text-on-surface focus:ring-4 focus:ring-primary/5 transition-all outline-none min-w-[180px]"
+              >
+                <option>7 ngày</option>
+                <option>30 ngày</option>
+                <option>Năm nay</option>
+              </select>
+            </div>
+          </div>
+          <div class="overflow-x-auto">
+            <table class="w-full text-left">
+              <thead>
+                <tr
+                  class="bg-slate-50 text-[12px] uppercase tracking-wider text-on-surface-variant"
+                >
+                  <th class="px-8 py-4 font-semibold">Mã phiếu</th>
+                  <th class="px-8 py-4 font-semibold">Đơn hàng</th>
+                  <th class="px-8 py-4 font-semibold">Ngày trả</th>
+                  <th class="px-8 py-4 font-semibold">Trạng thái</th>
+                  <th class="px-8 py-4 font-semibold">Tổng hoàn</th>
+                  <th class="px-8 py-4 font-semibold">Hành động</th>
+                </tr>
+              </thead>
+              <tbody class="text-[13px] font-medium divide-y divide-slate-50">
+                <tr th:if="${#lists.isEmpty(returns)}">
+                  <td
+                    class="px-8 py-6 text-center text-on-surface-variant"
+                    colspan="6"
+                  >
+                    Chưa có phiếu trả hàng nào.
+                  </td>
+                </tr>
+                <tr th:each="returnItem : ${returns}">
+                  <td
+                    class="px-8 py-6"
+                    th:text="${'PH-' + returnItem.returnId}"
+                  >
+                    PH-001
+                  </td>
+                  <td class="px-8 py-6" th:text="${'DH-' + returnItem.orderId}">
+                    DH-001
+                  </td>
+                  <td class="px-8 py-6">
+                    <span
+                      th:text="${#temporals.format(returnItem.returnDate, 'dd/MM/yyyy HH:mm')}"
+                      >22/03/2025 14:30</span
+                    >
+                  </td>
+                  <td class="px-8 py-6">
+                    <span
+                      class="rounded-full px-3 py-1 text-[11px] font-bold"
+                      th:classappend="${returnItem.orderStatus == 'Paid'} ? ' bg-emerald-100 text-emerald-700' : ' bg-amber-100 text-amber-700'"
+                      th:text="${returnItem.orderStatus == 'Paid'} ? 'Đã hoàn tất' : 'Chờ xử lý'"
+                      >Đã hoàn tất</span
+                    >
+                  </td>
+                  <td class="px-8 py-6" th:text="${returnItem.refundAmount}">
+                    380000
+                  </td>
+                  <td class="px-8 py-6">
+                    <a
+                      th:href="@{|/return/detail/${returnItem.returnId}|}"
+                      class="inline-flex items-center gap-2 rounded-full border border-outline px-4 py-2 text-[13px] font-bold text-primary hover:bg-slate-50 transition-all"
+                    >
+                      <span class="material-symbols-outlined text-[18px]"
+                        >visibility</span
+                      >
+                      Xem
+                    </a>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div
+            class="px-8 py-6 bg-slate-50/30 border-t border-slate-100 flex items-center justify-between"
+          >
+            <p
+              class="text-[11px] text-on-surface-variant font-bold uppercase tracking-wider"
+            >
+              Hiển thị <span th:text="${currentPage * pageSize + 1}">1</span> -
+              <span th:text="${currentPage * pageSize + returns.size()}"
+                >5</span
+              >
+              của <span th:text="${totalElements}">24</span> phiếu trả hàng
+            </p>
+            <div class="flex items-center gap-2">
+              <a
+                th:if="${currentPage > 0}"
+                th:href="@{'/return?page=' + ${currentPage - 1} + '&size=' + ${pageSize}}"
+                class="w-10 h-10 flex items-center justify-center rounded-xl border border-outline text-on-surface font-bold text-[13px] hover:bg-white transition-all"
+              >
+                <span class="material-symbols-outlined">chevron_left</span>
+              </a>
+              <span
+                th:if="${currentPage == 0}"
+                class="w-10 h-10 flex items-center justify-center rounded-xl border border-outline text-on-surface-variant/40 font-bold text-[13px]"
+              >
+                <span class="material-symbols-outlined">chevron_left</span>
+              </span>
+
+              <span
+                th:each="pageNum : ${#numbers.sequence(0, totalPages - 1)}"
+                th:if="${pageNum >= currentPage - 2 and pageNum <= currentPage + 2}"
+              >
+                <a
+                  th:if="${pageNum != currentPage}"
+                  th:href="@{'/return?page=' + ${pageNum} + '&size=' + ${pageSize}}"
+                  class="w-10 h-10 flex items-center justify-center rounded-xl border border-outline text-on-surface font-bold text-[13px] hover:bg-white transition-all"
+                  th:text="${pageNum + 1}"
+                ></a>
+                <span
+                  th:if="${pageNum == currentPage}"
+                  class="w-10 h-10 flex items-center justify-center rounded-xl bg-primary text-white text-[13px] font-black shadow-sm"
+                  th:text="${pageNum + 1}"
+                ></span>
+              </span>
+
+              <a
+                th:if="${currentPage < totalPages - 1}"
+                th:href="@{'/return?page=' + ${currentPage + 1} + '&size=' + ${pageSize}}"
+                class="w-10 h-10 flex items-center justify-center rounded-xl border border-outline text-on-surface hover:bg-white transition-all"
+              >
+                <span class="material-symbols-outlined">chevron_right</span>
+              </a>
+              <span
+                th:if="${currentPage >= totalPages - 1}"
+                class="w-10 h-10 flex items-center justify-center rounded-xl border border-outline text-on-surface-variant/40"
+              >
+                <span class="material-symbols-outlined">chevron_right</span>
+              </span>
+            </div>
+          </div>
+        </div>
+        <div class="mt-10 grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div
+            class="p-8 rounded-2xl bg-gradient-to-br from-secondary to-slate-800 text-white relative overflow-hidden shadow-elevated group"
+          >
+            <div class="relative z-10">
+              <h3 class="text-xl font-black mb-3">Quy trình hoàn trả mới</h3>
+              <p
+                class="text-sm text-slate-200/80 max-w-sm mb-6 leading-relaxed"
+              >
+                Tạo phiếu trả hàng chi tiết, kiểm tra số lượng, lý do và xử lý
+                hoàn tiền cho khách hàng.
+              </p>
+              <a
+                href="#"
+                class="inline-flex items-center gap-2 rounded-full border border-white/20 px-5 py-3 text-sm font-bold uppercase tracking-[0.16em] transition-all hover:bg-white/10"
+              >
+                Khởi tạo yêu cầu mới
+                <span class="material-symbols-outlined">arrow_forward</span>
+              </a>
+            </div>
+            <span
+              class="material-symbols-outlined absolute -right-6 -bottom-6 text-[140px] opacity-10 rotate-12 group-hover:rotate-0 transition-transform duration-700"
+              >info</span
+            >
+          </div>
+          <div
+            class="p-8 rounded-2xl border-2 border-dashed border-outline flex items-center justify-center group hover:border-primary/50 transition-all cursor-pointer bg-white/40"
+          >
+            <div class="text-center">
+              <div
+                class="w-14 h-14 rounded-2xl bg-slate-100 flex items-center justify-center mx-auto mb-4 group-hover:bg-primary/10 transition-all"
+              >
+                <span class="material-symbols-outlined text-[24px] text-primary"
+                  >inventory_2</span
+                >
+              </div>
+              <p class="text-[15px] font-black text-on-surface">
+                Tối ưu dòng trả hàng
+              </p>
+              <p
+                class="text-[11px] text-on-surface-variant font-bold mt-1 uppercase tracking-wider"
+              >
+                Theo dõi toàn bộ lịch sử
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+    <div th:replace="~{fragments/footer :: footer}"></div>
+    <button
+      class="fixed bottom-10 right-10 w-16 h-16 rounded-2xl bg-primary text-white shadow-elevated flex items-center justify-center hover:scale-105 hover:brightness-110 active:scale-95 transition-all z-50 ring-8 ring-primary/10"
+    >
+      <span
+        class="material-symbols-outlined text-3xl"
+        style="font-variation-settings: &quot;FILL&quot; 1"
+        >add</span
+      >
+    </button>
+  </body>
+</html>
