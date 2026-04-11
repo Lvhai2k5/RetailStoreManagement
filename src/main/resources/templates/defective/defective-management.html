@@ -1,0 +1,118 @@
+﻿<!DOCTYPE html>
+<html class="light" lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Quản lý Hàng lỗi & Hết hạn - Merchant Core</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<style>
+body { font-family: 'Inter', sans-serif; }
+h1, h2, h3 { font-family: 'Manrope', sans-serif; }
+.material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+</style>
+</head>
+<body class="bg-slate-50 text-slate-800">
+<main class="max-w-7xl mx-auto p-6 space-y-6">
+    <div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
+        <div>
+            <h1 class="text-3xl font-extrabold">Quản lý Hàng lỗi & Hết hạn</h1>
+            <p class="text-slate-500 mt-1">Theo dõi, kiểm soát chất lượng và xử lý hàng hóa không đạt tiêu chuẩn.</p>
+        </div>
+        <div class="flex items-center gap-3">
+            <form th:action="@{/defective/expire-all}" method="post">
+                <button type="submit" class="flex items-center gap-2 px-5 py-2.5 border border-slate-300 text-slate-700 font-semibold rounded-lg hover:bg-slate-100 transition-colors">
+                    <span class="material-symbols-outlined text-xl">delete_sweep</span>
+                    Xử lý tất cả lô đã hết hạn
+                </button>
+            </form>
+            <a th:href="@{/defective/handle}" class="flex items-center gap-2 px-6 py-2.5 bg-[#cd8484] text-white font-bold rounded-lg hover:bg-[#b87171] shadow-lg shadow-[#cd8484]/20 transition-all">
+                <span class="material-symbols-outlined text-xl">report_problem</span>
+                Báo hàng lỗi
+            </a>
+        </div>
+    </div>
+
+    <div th:if="${successMessage}" class="rounded-lg bg-green-100 text-green-700 px-4 py-3 text-sm" th:text="${successMessage}"></div>
+    <div th:if="${errorMessage}" class="rounded-lg bg-red-100 text-red-700 px-4 py-3 text-sm" th:text="${errorMessage}"></div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm"><p class="text-sm text-slate-500">Tổng lô</p><p class="text-2xl font-extrabold mt-2" th:text="${totalBatches}">0</p></div>
+        <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm"><p class="text-sm text-slate-500">Sắp hết hạn (<=7 ngày)</p><p class="text-2xl font-extrabold mt-2 text-amber-600" th:text="${expiringSoonBatches}">0</p></div>
+        <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm"><p class="text-sm text-slate-500">Đã hết hạn</p><p class="text-2xl font-extrabold mt-2 text-red-600" th:text="${expiredBatches}">0</p></div>
+        <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm"><p class="text-sm text-slate-500">Tổng số lượng lỗi</p><p class="text-2xl font-extrabold mt-2" th:text="${totalDefectiveQuantity}">0</p></div>
+    </div>
+
+    <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+        <form th:action="@{/defective}" method="get" class="p-6 border-b border-slate-100 bg-slate-50/70 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-3">
+            <input type="date" name="fromDate" th:value="${fromDate}" class="text-sm rounded-lg border-slate-200"/>
+            <input type="date" name="toDate" th:value="${toDate}" class="text-sm rounded-lg border-slate-200"/>
+            <select name="expiryStatus" class="text-sm rounded-lg border-slate-200">
+                <option value="ALL" th:selected="${expiryStatus == 'ALL'}">Tất cả trạng thái</option>
+                <option value="VALID" th:selected="${expiryStatus == 'VALID'}">Còn hạn</option>
+                <option value="EXPIRING" th:selected="${expiryStatus == 'EXPIRING'}">Sắp hết hạn</option>
+                <option value="EXPIRED" th:selected="${expiryStatus == 'EXPIRED'}">Đã hết hạn</option>
+            </select>
+            <select name="reason" class="text-sm rounded-lg border-slate-200">
+                <option value="ALL" th:selected="${reason == 'ALL'}">Tất cả lý do</option>
+                <option th:each="r : ${reasonOptions}" th:value="${r}" th:text="${r}" th:selected="${reason == r}"></option>
+            </select>
+            <div class="flex gap-2">
+                <input type="text" name="keyword" th:value="${keyword}" placeholder="BatchID/Tên sản phẩm" class="w-full text-sm rounded-lg border-slate-200"/>
+                <button type="submit" class="px-4 rounded-lg bg-slate-800 text-white text-sm">Lọc</button>
+            </div>
+        </form>
+
+        <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse">
+                <thead>
+                    <tr class="bg-slate-50 border-b border-slate-200">
+                        <th class="px-4 py-3 text-xs font-bold uppercase">Batch</th>
+                        <th class="px-4 py-3 text-xs font-bold uppercase">Sản phẩm</th>
+                        <th class="px-4 py-3 text-xs font-bold uppercase">SL bán được</th>
+                        <th class="px-4 py-3 text-xs font-bold uppercase">SL lỗi</th>
+                        <th class="px-4 py-3 text-xs font-bold uppercase">Ngày nhập/HSD</th>
+                        <th class="px-4 py-3 text-xs font-bold uppercase">Ngày lỗi gần nhất</th>
+                        <th class="px-4 py-3 text-xs font-bold uppercase">Trạng thái</th>
+                        <th class="px-4 py-3 text-xs font-bold uppercase">Lý do gần nhất</th>
+                        <th class="px-4 py-3 text-xs font-bold uppercase text-right">Thao tác</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:if="${#lists.isEmpty(rows)}">
+                        <td colspan="9" class="px-4 py-8 text-center text-slate-400">Không có dữ liệu phù hợp</td>
+                    </tr>
+                    <tr th:each="r : ${rows}" class="border-b border-slate-100 hover:bg-slate-50">
+                        <td class="px-4 py-3 text-sm font-semibold" th:text="${r['BatchID']}">0</td>
+                        <td class="px-4 py-3 text-sm">
+                            <div class="font-semibold" th:text="${r['ProductName']}">Tên SP</div>
+                            <div class="text-xs text-slate-400" th:text="${r['ProductID']}">ID</div>
+                        </td>
+                        <td class="px-4 py-3 text-sm font-bold" th:text="${r['SellableStock']}">0</td>
+                        <td class="px-4 py-3 text-sm text-rose-600 font-bold" th:text="${r['DefectiveQuantity']}">0</td>
+                        <td class="px-4 py-3 text-xs">
+                            <div th:text="${r['ImportDateText']}">01/01/2026</div>
+                            <div class="font-semibold" th:text="${r['ExpiryDateText']}">01/02/2026</div>
+                        </td>
+                        <td class="px-4 py-3 text-xs text-slate-600" th:text="${r['LastDefectiveDateText']} ?: '-'">-</td>
+                        <td class="px-4 py-3 text-xs">
+                            <span th:if="${r['ExpiryStatus'] == 'EXPIRED'}" class="px-2 py-1 rounded-full bg-red-100 text-red-700 font-semibold">Đã hết hạn</span>
+                            <span th:if="${r['ExpiryStatus'] == 'EXPIRING'}" class="px-2 py-1 rounded-full bg-amber-100 text-amber-700 font-semibold">Sắp hết hạn</span>
+                            <span th:if="${r['ExpiryStatus'] == 'VALID'}" class="px-2 py-1 rounded-full bg-green-100 text-green-700 font-semibold">Còn hạn</span>
+                            <span th:if="${r['ExpiryStatus'] == 'NO_EXPIRY'}" class="px-2 py-1 rounded-full bg-slate-100 text-slate-700 font-semibold">Không HSD</span>
+                        </td>
+                        <td class="px-4 py-3 text-xs text-slate-600" th:text="${r['LastReason']} ?: '-'">-</td>
+                        <td class="px-4 py-3 text-right">
+                            <a th:href="@{/defective/handle(batchId=${r['BatchID']})}" class="inline-flex items-center px-3 py-1.5 rounded-lg border border-slate-200 hover:bg-slate-100 text-xs font-semibold">
+                                Xử lý
+                            </a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</main>
+</body>
+</html>
