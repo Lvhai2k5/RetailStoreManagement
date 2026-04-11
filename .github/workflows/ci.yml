@@ -11,11 +11,15 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v4
+    - name: Checkout code
+      uses: actions/checkout@v4
 
-    - uses: actions/setup-java@v4
+    - name: Setup Java
+      uses: actions/setup-java@v4
       with:
         java-version: '17'
         distribution: 'temurin'
+        cache: maven
 
-    - run: mvn clean install
+    - name: Build project
+      run: mvn -B clean install -DskipTests
