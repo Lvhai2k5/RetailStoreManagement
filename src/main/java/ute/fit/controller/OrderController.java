@@ -13,12 +13,15 @@ import ute.fit.dto.ProductDTO;
 import ute.fit.entity.*;
 import ute.fit.model.OrderStatus;
 import ute.fit.repository.*;
+import ute.fit.service.IInventoryService;
 import ute.fit.service.OrderService;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/order")
@@ -29,6 +32,7 @@ public class OrderController {
 
     @Autowired
     private OrderService orderService;
+
 
     // LIST
     @GetMapping("/listorder")
@@ -73,7 +77,6 @@ public class OrderController {
         return "redirect:/order/listorder";
     }
 
-    // ================= CREATE =================
     @GetMapping("/create")
     public String create(Model model){
 
@@ -127,5 +130,19 @@ public class OrderController {
         session.removeAttribute("orderId");
 
         return "redirect:/dashboard";
+    }
+    @PostMapping("/check-stock")
+    @ResponseBody
+    public Map<String, Object> checkStock(@RequestBody Map<String, Object> req) {
+
+        String productID = (String) req.get("productID");
+        int qty = (int) req.get("quantity");
+
+        boolean ok = orderService.checkStock(productID, qty);
+
+        Map<String, Object> res = new HashMap<>();
+        res.put("ok", ok);
+
+        return res;
     }
 }
