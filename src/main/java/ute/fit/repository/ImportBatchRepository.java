@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import ute.fit.entity.ImportBatchesEntity;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Map;
 import org.springframework.data.repository.query.Param;
 
@@ -37,4 +38,11 @@ public interface ImportBatchRepository extends JpaRepository<ImportBatchesEntity
 
     @Query("SELECT COUNT(b) FROM ImportBatchesEntity b WHERE b.expiryDate BETWEEN :now AND :nextWeek")
     long countExpiringSoon(@Param("now") LocalDateTime now, @Param("nextWeek") LocalDateTime nextWeek);
+
+    @Query("""
+SELECT b FROM ImportBatchesEntity b
+WHERE b.product.productID = :productID
+ORDER BY b.batchNumber
+""")
+    List<ImportBatchesEntity> findByProductID(@Param("productID") String productID);
 }

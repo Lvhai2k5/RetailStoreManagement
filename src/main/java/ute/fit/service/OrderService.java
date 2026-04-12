@@ -2,16 +2,14 @@ package ute.fit.service;
 
 import ute.fit.dto.OrderDTO;
 import ute.fit.dto.OrderItemDTO;
-import ute.fit.entity.OrdersEntity;
-import ute.fit.entity.OrderDetailsEntity;
-import ute.fit.entity.ProductsEntity;
+import ute.fit.entity.*;
 import ute.fit.model.OrderStatus;
-import ute.fit.repository.OrderDetailRepository;
-import ute.fit.repository.OrderRepository;
-import ute.fit.repository.ProductRepository;
+import ute.fit.model.TransactionType;
+import ute.fit.repository.*;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
@@ -27,49 +25,107 @@ public class OrderService {
     private final ProductRepository productRepo;
     private final OrderDetailRepository orderDetailRepo;
     private final OrderJdbcRepository orderJdbcRepo;
+    private final JdbcTemplate jdbcTemplate;
+    private final ImportBatchRepository importBatchRepo;
+    private final InventoryTransactionRepository inventoryRepo;
+    private final SaleAllocationRepository saleAllocationRepo;
 
-    // ================= CREATE =================
-    @Transactional
-    public OrdersEntity createOrder(OrderDTO dto) {
+@Transactional
+public OrdersEntity createOrder(OrderDTO dto) {
 
-        try {
-            // 🔥 1. CREATE ORDER (SQL)
-            Integer orderId = orderJdbcRepo.createOrder(false);
+    // =========================
+    // 1. CREATE ORDER (CHƯA SAVE)
+    // =========================
+    OrdersEntity order = new OrdersEntity();
+    order.setStatus(OrderStatus.Pending);
+    order.setCreatedDate(LocalDateTime.now());
+    order.setTotalAmount(dto.getTotalAmount());
 
-            BigDecimal total = BigDecimal.ZERO;
+    List<OrderDetailsEntity> details = new ArrayList<>();
 
-            // 🔥 2. ADD ITEMS (SQL → tự tạo Allocation + Inventory)
-            for (OrderItemDTO item : dto.getItems()) {
+    // =========================
+    // 2. BUILD ORDER DETAILS
+    // =========================
+    for (OrderItemDTO item : dto.getItems()) {
 
-                ProductsEntity product = productRepo
-                        .findById(item.getProductID())
-                        .orElseThrow(() -> new RuntimeException("Product not found"));
+        ProductsEntity product = productRepo.findById(item.getProductID())
+                .orElseThrow(() -> new RuntimeException("Product not found"));
 
-                BigDecimal price = product.getDefaultSellingPrice();
+        OrderDetailsEntity detail = new OrderDetailsEntity();
+        detail.setOrder(order);
+        detail.setProduct(product);
+        detail.setQuantity(item.getQuantity());
+        detail.setUnitPrice(product.getDefaultSellingPrice());
 
-                total = total.add(
-                        price.multiply(BigDecimal.valueOf(item.getQuantity()))
-                );
+        details.add(detail);
+    }
 
-                // 👉 CALL PROC_AddOrderItem
-                orderJdbcRepo.addOrderItem(
-                        orderId,
-                        item.getProductID(),
-                        item.getQuantity()
-                );
-            }
+    order.setOrderDetails(details);
 
-            // 🔥 3. UPDATE TOTAL
-            orderJdbcRepo.updateTotal(orderId, total);
+    // =====================================
+    // 3. SAVE ORDER + DETAILS (IMPORTANT)
+    // =====================================
+    order = orderRepo.save(order);
 
-            // 🔥 4. RETURN ENTITY
-            return orderRepo.findById(orderId)
-                    .orElseThrow(() -> new RuntimeException("Order not found"));
+    // =====================================
+    // 4. FIFO STOCK ALLOCATION
+    // =====================================
+    for (OrderDetailsEntity detail : order.getOrderDetails()) {
 
-        } catch (Exception e) {
-            throw new RuntimeException("Create order failed: " + e.getMessage());
+        int remain = detail.getQuantity();
+
+        List<ImportBatchesEntity> batches =
+                importBatchRepo.findByProductID(detail.getProduct().getProductID());
+
+        for (ImportBatchesEntity batch : batches) {
+
+            if (remain <= 0) break;
+
+            int stock = inventoryRepo.sumStockByBatch(batch.getBatchID());
+
+            if (stock <= 0) continue;
+
+            int take = Math.min(stock, remain);
+
+            // =========================
+            // 5. SALE ALLOCATION
+            // =========================
+            SaleAllocationsEntity sa = new SaleAllocationsEntity();
+            sa.setOrderDetail(detail);   // OK vì detail đã persist
+            sa.setBatch(batch);
+            sa.setQuantity(take);
+
+            saleAllocationRepo.save(sa);
+
+            // =========================
+            // 6. INVENTORY TRANSACTION
+            // =========================
+            InventoryTransactionsEntity it = new InventoryTransactionsEntity();
+            it.setBatch(batch);
+            it.setQuantityChange(-take);
+            it.setTransactionType(TransactionType.SALE);
+            it.setIsSellable(true);
+            it.setReferenceID(order.getOrderID()); // OK vì order đã save
+
+            inventoryRepo.save(it);
+
+            remain -= take;
+        }
+
+        // =========================
+        // 7. CHECK STOCK FAIL
+        // =========================
+        if (remain > 0) {
+            throw new RuntimeException(
+                    "Không đủ tồn kho cho sản phẩm: " +
+                            detail.getProduct().getName()
+            );
         }
     }
+
+    return order;
+}
+
 
     // ================= LIST =================
     public List<OrdersEntity> getAllOrders() {
@@ -82,7 +138,7 @@ public class OrderService {
 
         OrdersEntity order = orderRepo.findById(id).orElseThrow();
 
-        order.setStatus(OrderStatus.Cancelled); // chuẩn DB
+        order.setStatus(OrderStatus.Cancelled);
         orderRepo.save(order);
     }
 
@@ -161,4 +217,18 @@ public class OrderService {
         order.setTotalAmount(total);
         orderRepo.save(order);
     }
+    public boolean checkStock(String productID, int qty) {
+
+        String sql = """
+        SELECT ISNULL(SUM(it.QuantityChange),0)
+        FROM InventoryTransactions it
+        JOIN ImportBatches b ON it.BatchID = b.BatchID
+        WHERE b.ProductID = ? AND it.IsSellable = 1
+    """;
+
+        Integer stock = jdbcTemplate.queryForObject(sql, Integer.class, productID);
+
+        return stock != null && stock >= qty;
+    }
+
 }
