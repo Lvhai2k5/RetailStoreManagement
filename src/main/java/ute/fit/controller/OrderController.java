@@ -30,6 +30,49 @@ public class OrderController {
     @Autowired
     private OrderService orderService;
 
+    // LIST
+    @GetMapping("/listorder")
+    public String list(Model model){
+        model.addAttribute("orders", orderService.getAllOrders());
+        return "order/list";
+    }
+
+    @GetMapping("/remove/{id}")
+    public String removeDetail(@PathVariable Integer id){
+
+        orderService.removeDetail(id);
+
+        return "redirect:/order/listorder";
+    }
+
+    // DELETE
+    @GetMapping("/delete/{id}")
+    public String delete(@PathVariable Integer id){
+        orderService.deleteOrder(id);
+        return "redirect:/order/listorder";
+    }
+
+    // EDIT PAGE
+    @GetMapping("/detail/{id}")
+    public String detail(@PathVariable Integer id, Model model){
+        model.addAttribute("order", orderService.getById(id));
+        return "order/detail";
+    }
+
+    @GetMapping("/edit/{id}")
+    public String edit(@PathVariable Integer id, Model model){
+        model.addAttribute("order", orderService.getById(id));
+        return "order/edit";
+    }
+
+    @PostMapping("/update")
+    public String update(@RequestParam Integer detailId,
+                         @RequestParam Integer quantity){
+
+        orderService.updateOrderDetail(detailId, quantity);
+        return "redirect:/order/listorder";
+    }
+
     // ================= CREATE =================
     @GetMapping("/create")
     public String create(Model model){
@@ -86,56 +129,3 @@ public class OrderController {
         return "redirect:/dashboard";
     }
 }
-
-//
-//@Controller
-//@RequestMapping("/order")
-//public class OrderController {
-//
-//    @Autowired
-//    private ProductRepository productRepo;
-//    
-//    @Autowired
-//    private OrderService orderService;
-//
-//    @GetMapping("/create")
-//    public String create(Model model){
-//
-//        List<ProductDTO> list = productRepo.findAll().stream().map(p -> {
-//            ProductDTO dto = new ProductDTO();
-//            dto.setProductID(p.getProductID());
-//            dto.setName(p.getName());
-//            dto.setPrice(p.getDefaultSellingPrice());
-//            return dto;
-//        }).toList();
-//
-//        model.addAttribute("orderDTO", new OrderDTO());
-//        model.addAttribute("products", list);
-//
-//        return "order/create";
-//    }
-//    
-//    @PostMapping("/payment")
-//    public String goToPayment(@ModelAttribute OrderDTO orderDTO, HttpSession session) {
-//        session.setAttribute("cart", orderDTO);
-//        return "order/payment";
-//    }
-//
-//    @PostMapping("/save")
-//    public String saveOrder(HttpSession session) {
-//        OrderDTO orderDTO = (OrderDTO) session.getAttribute("cart");
-//
-//        orderService.createOrder(orderDTO);
-//
-//        session.removeAttribute("cart");
-//
-//        return "redirect:/payment";
-//    }
-////    @PostMapping("/save")
-////    public String saveOrder(@ModelAttribute OrderDTO orderDTO) {
-////
-////        orderService.createOrder(orderDTO);
-////
-////        return "redirect:/payment"; 
-////    }
-//}

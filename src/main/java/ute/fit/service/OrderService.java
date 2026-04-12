@@ -6,6 +6,7 @@ import ute.fit.entity.OrdersEntity;
 import ute.fit.entity.OrderDetailsEntity;
 import ute.fit.entity.ProductsEntity;
 import ute.fit.model.OrderStatus;
+import ute.fit.repository.OrderDetailRepository;
 import ute.fit.repository.OrderRepository;
 import ute.fit.repository.ProductRepository;
 
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,36 +25,100 @@ public class OrderService {
 
     private final OrderRepository orderRepo;
     private final ProductRepository productRepo;
-    
-    public OrdersEntity createOrder(OrderDTO dto){
+    private final OrderDetailRepository orderDetailRepo;
+    private final OrderJdbcRepository orderJdbcRepo;
 
-        OrdersEntity order = new OrdersEntity();
+    // ================= CREATE =================
+    @Transactional
+    public OrdersEntity createOrder(OrderDTO dto) {
 
-        order.setStatus(OrderStatus.Pending);
-        order.setCreatedDate(LocalDateTime.now());
-        order.setTotalAmount(dto.getTotalAmount());
+        try {
+            // 🔥 1. CREATE ORDER (SQL)
+            Integer orderId = orderJdbcRepo.createOrder(false);
 
-        List<OrderDetailsEntity> details = new ArrayList<>();
+            BigDecimal total = BigDecimal.ZERO;
 
-        for(OrderItemDTO item : dto.getItems()){
+            // 🔥 2. ADD ITEMS (SQL → tự tạo Allocation + Inventory)
+            for (OrderItemDTO item : dto.getItems()) {
 
-            ProductsEntity product = productRepo.findById(item.getProductID()).orElseThrow();
+                ProductsEntity product = productRepo
+                        .findById(item.getProductID())
+                        .orElseThrow(() -> new RuntimeException("Product not found"));
 
-            OrderDetailsEntity detail = new OrderDetailsEntity();
-            detail.setOrder(order);
-            detail.setProduct(product);
-            detail.setQuantity(item.getQuantity());
-            detail.setUnitPrice(product.getDefaultSellingPrice());
+                BigDecimal price = product.getDefaultSellingPrice();
 
-            details.add(detail);
+                total = total.add(
+                        price.multiply(BigDecimal.valueOf(item.getQuantity()))
+                );
+
+                // 👉 CALL PROC_AddOrderItem
+                orderJdbcRepo.addOrderItem(
+                        orderId,
+                        item.getProductID(),
+                        item.getQuantity()
+                );
+            }
+
+            // 🔥 3. UPDATE TOTAL
+            orderJdbcRepo.updateTotal(orderId, total);
+
+            // 🔥 4. RETURN ENTITY
+            return orderRepo.findById(orderId)
+                    .orElseThrow(() -> new RuntimeException("Order not found"));
+
+        } catch (Exception e) {
+            throw new RuntimeException("Create order failed: " + e.getMessage());
+        }
+    }
+
+    // ================= LIST =================
+    public List<OrdersEntity> getAllOrders() {
+        return orderRepo.findAll(); // hoặc filter nếu cần
+    }
+
+    // ================= DELETE (SOFT) =================
+    @Transactional
+    public void deleteOrder(Integer id) {
+
+        OrdersEntity order = orderRepo.findById(id).orElseThrow();
+
+        order.setStatus(OrderStatus.Cancelled); // chuẩn DB
+        orderRepo.save(order);
+    }
+
+    // ================= UPDATE DETAIL =================
+    @Transactional
+    public void updateOrderDetail(Integer detailId, Integer quantity){
+
+        OrderDetailsEntity detail = orderDetailRepo
+                .findById(detailId)
+                .orElseThrow();
+
+        OrdersEntity order = detail.getOrder();
+
+        // ❗ chỉ cho sửa khi Pending
+        if(order.getStatus() != OrderStatus.Pending){
+            throw new RuntimeException("Chỉ sửa được đơn Pending");
         }
 
-        order.setOrderDetails(details);
+        // update quantity
+        detail.setQuantity(quantity);
+        orderDetailRepo.save(detail);
 
-        return orderRepo.save(order);
+        // 🔥 update lại TOTAL ORDER
+        BigDecimal total = order.getOrderDetails()
+                .stream()
+                .map(d -> d.getUnitPrice()
+                        .multiply(BigDecimal.valueOf(d.getQuantity())))
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+        order.setTotalAmount(total);
+        orderRepo.save(order);
     }
-    
-    public void updatePayment(Integer orderId, String method){
+
+    // ================= PAYMENT =================
+    @Transactional
+    public void updatePayment(Integer orderId, String method) {
 
         OrdersEntity order = orderRepo.findById(orderId).orElseThrow();
 
@@ -62,36 +128,37 @@ public class OrderService {
 
         orderRepo.save(order);
     }
-//    
-//    @Transactional
-//    public void createOrder(OrderDTO dto) {
-//
-//        // 1. tạo Order
-//        OrdersEntity order = new OrdersEntity();
-//        order.setTotalAmount(dto.getTotalAmount());
-//        order.setCreatedDate(LocalDateTime.now());
-//
-//        List<OrderDetailsEntity> details = new ArrayList<>();
-//
-//        // 2. loop từng item
-//        for (OrderItemDTO item : dto.getItems()) {
-//
-//            ProductsEntity product = productRepo.findById(item.getProductID())
-//                    .orElseThrow(() -> new RuntimeException("Không tìm thấy sản phẩm"));
-//
-//            OrderDetailsEntity detail = new OrderDetailsEntity();
-//            detail.setOrder(order);
-//            detail.setProduct(product);
-//            detail.setQuantity(item.getQuantity());
-//
-//            detail.setUnitPrice(product.getDefaultSellingPrice());
-//
-//            details.add(detail);
-//        }
-//
-//        order.setOrderDetails(details); 
-//
-//        // 3. save (cascade)
-//        orderRepo.save(order);
-//    }
+
+    public OrdersEntity getById(Integer id) {
+        return orderRepo.findById(id)
+                .orElseThrow(() -> new RuntimeException("Không tìm thấy đơn hàng với ID: " + id));
+    }
+
+    @Transactional
+    public void removeDetail(Integer detailId){
+
+        OrderDetailsEntity detail = orderDetailRepo
+                .findById(detailId)
+                .orElseThrow();
+
+        OrdersEntity order = detail.getOrder();
+
+        // ❗ chỉ cho xóa khi Pending
+        if(order.getStatus() != OrderStatus.Pending){
+            throw new RuntimeException("Chỉ xóa được đơn Pending");
+        }
+
+        orderDetailRepo.delete(detail);
+
+        // 🔥 cập nhật lại total
+        BigDecimal total = order.getOrderDetails()
+                .stream()
+                .filter(d -> d.getOrderDetailID() != detailId)
+                .map(d -> d.getUnitPrice()
+                        .multiply(BigDecimal.valueOf(d.getQuantity())))
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+        order.setTotalAmount(total);
+        orderRepo.save(order);
+    }
 }

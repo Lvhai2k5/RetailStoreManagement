@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Chỉnh sửa đơn hàng</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-slate-100">
+
+<div class="ml-0 lg:ml-64 mt-20 p-6">
+
+    <h1 class="text-2xl font-bold mb-6 text-slate-700">
+        ✏️ Chỉnh sửa đơn hàng
+    </h1>
+
+    <!-- STATUS -->
+    <div th:if="${order.status.name() != 'Pending'}"
+         class="bg-red-100 text-red-600 p-4 rounded-lg mb-4">
+        Đơn hàng đã thanh toán - chỉ xem!
+    </div>
+
+    <div class="bg-white rounded-2xl shadow p-6">
+
+        <table class="w-full text-sm">
+
+            <thead class="bg-slate-100">
+            <tr>
+                <th class="p-3 text-left">Sản phẩm</th>
+                <th class="p-3 text-center">Số lượng</th>
+                <th class="p-3 text-right">Đơn giá</th>
+                <th class="p-3 text-right">Thành tiền</th>
+                <th class="p-3 text-center">Action</th>
+            </tr>
+            </thead>
+
+            <tbody>
+            <tr th:each="d : ${order.orderDetails}" class="border-t">
+
+                <td class="p-3 font-medium"
+                    th:text="${d.product.name}"></td>
+
+                <!-- QUANTITY -->
+                <td class="p-3 text-center">
+                    <input type="number"
+                           min="1"
+                           th:value="${d.quantity}"
+                           th:attr="data-price=${d.unitPrice}"
+                           class="qty w-20 border rounded px-2 py-1 text-center"
+                           th:disabled="${order.status.name() != 'Pending'}">
+                </td>
+
+                <!-- PRICE -->
+                <td class="p-3 text-right price"
+                    th:text="${d.unitPrice}"></td>
+
+                <!-- SUBTOTAL -->
+                <td class="p-3 text-right subtotal font-semibold"></td>
+
+                <!-- ACTION -->
+                <td class="p-3 text-center">
+
+                    <!-- UPDATE -->
+                    <form th:action="@{/order/update}" method="post" class="inline">
+
+                        <input type="hidden" name="detailId"
+                               th:value="${d.orderDetailID}" />
+
+                        <!-- FIX QUAN TRỌNG -->
+                        <input type="hidden" name="quantity"
+                               th:value="${d.quantity}"
+                               class="hiddenQty">
+
+                        <button type="submit"
+                                class="bg-blue-500 text-white px-3 py-1 rounded"
+                                th:disabled="${order.status.name() != 'Pending'}">
+                            Lưu
+                        </button>
+                    </form>
+
+                    <!-- DELETE -->
+                    <a th:href="@{/order/remove/{id}(id=${d.orderDetailID})}"
+                       onclick="return confirm('Xóa sản phẩm này?')"
+                       class="bg-red-500 text-white px-3 py-1 rounded ml-2"
+                       th:classappend="${order.status.name() != 'Pending'} ? 'opacity-50 pointer-events-none' : ''">
+                        Xóa
+                    </a>
+
+                </td>
+            </tr>
+            </tbody>
+
+        </table>
+
+        <!-- TOTAL -->
+        <div class="text-right mt-6">
+            <p class="text-lg text-slate-600">
+                Tổng tiền:
+                <span id="total" class="font-bold text-xl text-rose-500"></span>
+            </p>
+        </div>
+
+        <!-- BACK -->
+        <div class="mt-6">
+            <a href="/order/listorder"
+               class="bg-gray-500 text-white px-4 py-2 rounded-lg">
+                ← Quay lại
+            </a>
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+
+    function updateTotal() {
+        let total = 0;
+
+        document.querySelectorAll("tbody tr").forEach(row => {
+
+            let qtyInput = row.querySelector(".qty");
+            let subtotalCell = row.querySelector(".subtotal");
+
+            if (!qtyInput) return;
+
+            let qty = parseInt(qtyInput.value) || 0;
+            let price = parseFloat(qtyInput.dataset.price) || 0;
+
+            let subtotal = qty * price;
+
+            subtotalCell.innerText = subtotal.toLocaleString();
+            total += subtotal;
+        });
+
+        document.getElementById("total").innerText = total.toLocaleString();
+    }
+
+    // INIT
+    updateTotal();
+
+    // CHANGE EVENT
+    document.querySelectorAll(".qty").forEach(input => {
+        input.addEventListener("input", function () {
+
+            let form = input.closest("tr").querySelector("form");
+
+            // FIX: luôn update hidden quantity
+            form.querySelector(".hiddenQty").value = input.value;
+
+            updateTotal();
+        });
+    });
+
+</script>
+
+</body>
+</html>

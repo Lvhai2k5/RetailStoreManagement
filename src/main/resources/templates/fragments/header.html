@@ -1,13 +1,84 @@
-<header th:fragment="header" class="fixed top-0 w-full z-50 flex justify-between items-center px-8 h-16 bg-white border-b border-slate-100 font-manrope">
+<header th:fragment="header"
+        class="fixed top-0 w-full z-50 flex justify-between items-center px-8 h-16
+               bg-white/80 backdrop-blur-lg border-b border-slate-200 shadow-sm font-manrope">
+
+    <!-- LEFT -->
     <div class="flex items-center gap-12">
-        <span class="text-xl font-bold text-rose-400">Merchant Core</span>
+
+        <!-- LOGO -->
+        <span class="text-xl font-bold bg-gradient-to-r from-rose-400 to-pink-500
+                     bg-clip-text text-transparent tracking-wide">
+            Retail Store
+        </span>
+
+        <!-- CLOCK -->
+        <div class="flex items-center gap-2 px-3 py-1 rounded-full
+                    bg-slate-100 border border-slate-200 shadow-sm">
+
+            <span class="material-symbols-outlined text-[18px] text-slate-400">
+                schedule
+            </span>
+
+            <span id="clock" class="text-sm font-semibold text-slate-600">
+                00:00:00
+            </span>
+        </div>
 
     </div>
-    <div class="flex items-center gap-5 text-slate-400">
-        <span class="material-symbols-outlined cursor-pointer hover:text-rose-400 transition-colors">notifications</span>
-        <span class="material-symbols-outlined cursor-pointer hover:text-rose-400 transition-colors">settings</span>
-        <div class="w-8 h-8 rounded-full bg-slate-100 border border-slate-200 overflow-hidden">
-            <img src="https://ui-avatars.com/api/?name=Admin&background=fff1f2&color=fb7185" alt="Profile">
+
+    <!-- RIGHT -->
+    <div class="flex items-center gap-6 text-slate-500">
+
+        <!-- ICON BUTTON -->
+        <div class="relative group cursor-pointer">
+            <span class="material-symbols-outlined text-[22px]
+                         hover:text-rose-400 transition">
+                notifications
+            </span>
+
+            <!-- DOT -->
+            <span class="absolute top-0 right-0 w-2 h-2 bg-rose-500 rounded-full animate-ping"></span>
+            <span class="absolute top-0 right-0 w-2 h-2 bg-rose-500 rounded-full"></span>
         </div>
+
+        <span class="material-symbols-outlined text-[22px]
+                     hover:text-rose-400 transition cursor-pointer">
+            settings
+        </span>
+
+        <!-- USER -->
+        <div class="flex items-center gap-3 cursor-pointer group">
+
+            <div class="w-9 h-9 rounded-full bg-slate-100 border border-slate-200
+                        overflow-hidden shadow-sm group-hover:scale-105 transition">
+
+                <img src="https://ui-avatars.com/api/?name=Admin&background=fff1f2&color=fb7185"
+                     alt="Profile">
+            </div>
+
+            <!-- NAME -->
+            <span class="hidden md:block text-sm font-medium text-slate-600 group-hover:text-rose-400 transition">
+                Admin
+            </span>
+        </div>
+
     </div>
+
+    <!-- SCRIPT -->
+    <script>
+        function updateClock() {
+            const now = new Date();
+
+            let hours = now.getHours().toString().padStart(2, '0');
+            let minutes = now.getMinutes().toString().padStart(2, '0');
+            let seconds = now.getSeconds().toString().padStart(2, '0');
+
+            document.getElementById("clock").innerText =
+                hours + ":" + minutes + ":" + seconds;
+        }
+
+        setInterval(updateClock, 1000);
+        updateClock();
+    </script>
+
 </header>
