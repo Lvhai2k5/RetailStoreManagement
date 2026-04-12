@@ -1,21 +1,38 @@
-name: Java CI with Maven
+name: Spring Boot CI
 
 on:
-  push:
-    branches: [ "main", "examiner" ]
   pull_request:
-    branches: [ "main", "examiner" ]
+    branches: [ examiner, main ]
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
+    # 1. Lấy code
     - uses: actions/checkout@v4
 
-    - uses: actions/setup-java@v4
+    # 2. Cài Java
+    - name: Setup JDK 17
+      uses: actions/setup-java@v4
       with:
-        java-version: '17'
         distribution: 'temurin'
+        java-version: '17'
 
-    - run: mvn clean install
+    # 3. Check Maven tồn tại
+    - name: Check pom.xml
+      run: |
+        test -f pom.xml
+        echo "pom.xml exists"
+
+    # 4. Build project
+    - name: Build project
+      run: mvn clean compile
+
+    # 5. Run test
+    - name: Run test
+      run: mvn test
+
+    # 6. Success
+    - name: CI success
+      run: echo "Build successful"
