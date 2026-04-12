@@ -11,4 +11,6 @@ public interface IInventoryService {
     Page<Map<String, Object>> getInventoryList(String keyword, String statusFilter, Pageable pageable);
     
     Map<String, Object> getBatchTraceDetails(Integer batchId);
+
+
 }
