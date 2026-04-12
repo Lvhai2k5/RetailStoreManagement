@@ -1,0 +1,48 @@
+<aside th:fragment="sidebar" class="hidden lg:flex flex-col fixed left-0 top-16 h-[calc(100vh-64px)] w-64 p-6 bg-slate-50 border-r border-slate-100 font-manrope">
+    <div class="mb-10 px-2">
+        <h2 class="font-bold text-rose-400 text-lg">Tạp Hóa Core</h2>
+        <p class="text-[10px] text-slate-400 uppercase tracking-widest font-bold">Quản trị hệ thống</p>
+    </div>
+    
+    <nav class="flex flex-col gap-2 flex-grow">
+        <a th:href="@{/dashboard}" class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:bg-white hover:shadow-sm rounded-xl transition-all">
+            <span class="material-symbols-outlined">dashboard</span>
+            <span class="text-sm font-semibold">Tổng quan</span>
+        </a>
+        <a th:href="@{/revenue}" class="flex items-center gap-3 px-4 py-3 bg-white shadow-sm text-rose-500 rounded-xl font-bold border border-rose-50">
+            <span class="material-symbols-outlined">analytics</span>
+            <span class="text-sm">Báo cáo doanh thu</span>
+        </a>
+        <a th:href="@{/admin/orders}" class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:bg-white hover:shadow-sm rounded-xl transition-all">
+            <span class="material-symbols-outlined">receipt_long</span>
+            <span class="text-sm font-semibold">Đơn hàng</span>
+        </a>
+        <a th:href="@{/inventory}" class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:bg-white hover:shadow-sm rounded-xl transition-all">
+            <span class="material-symbols-outlined">inventory_2</span>
+            <span class="text-sm font-semibold">Kho hàng</span>
+		<a th:href="@{/listproduct}"
+			   th:classappend="${currentPath != null and currentPath.startsWith('/listproduct')} 
+			   ? 'bg-white shadow-sm text-rose-500 border border-rose-50 font-bold' 
+			   : 'text-slate-500'"
+			   class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all 
+			          hover:bg-white hover:shadow-sm hover:scale-[1.02]">
+
+			    <span class="material-symbols-outlined text-[20px]">
+			        inventory
+			    </span>
+
+			    <span class="text-sm font-semibold">
+			        Danh sách sản phẩm
+			    </span>
+			</a>
+		
+    </nav>
+
+	<a href="/order/create"
+	   class="mt-auto w-full py-4 bg-[#8b4d4d] text-white rounded-2xl font-bold flex items-center justify-center gap-2 shadow-lg shadow-rose-100 hover:opacity-90 transition-opacity">
+
+	    <span class="material-symbols-outlined text-lg">add_circle</span>
+	    Tạo đơn mới
+
+	</a>
+</aside>

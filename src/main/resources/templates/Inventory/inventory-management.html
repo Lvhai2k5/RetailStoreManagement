@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="vi">
+<head>
+    <meta charset="utf-8"/>
+    <title>Quản lý Tồn kho - LogiTrack Pro</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
+    <style>
+        body { font-family: 'Inter', sans-serif; height: 100vh; overflow: hidden; }
+        .font-manrope { font-family: 'Manrope', sans-serif; }
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 10px; }
+    </style>
+</head>
+<body class="bg-[#f8fafc] text-[#1e293b]">
+
+    <div th:replace="~{fragments/header :: header}"></div>
+
+    <div class="flex h-screen pt-16 overflow-hidden">
+        
+        <aside class="hidden lg:block w-64 h-full flex-shrink-0 border-r border-slate-100 bg-slate-50 overflow-y-auto">
+            <div th:replace="~{fragments/sidebar :: sidebar}"></div>
+        </aside>
+
+        <main class="flex-1 h-full overflow-y-auto p-8 custom-scrollbar relative">
+            
+            <div class="flex flex-col xl:flex-row justify-between items-start xl:items-center gap-6 mb-10">
+                <div>
+                    <h1 class="text-2xl font-extrabold font-manrope">Quản lý Lô hàng Tồn kho</h1>
+                    <p class="text-slate-400 text-sm mt-1">Kiểm soát dòng đời và chất lượng tồn kho thực tế</p>
+                </div>
+                
+                <form th:action="@{/inventory}" method="get" class="flex flex-wrap items-center gap-3 w-full xl:w-auto">
+                    <div class="flex items-center bg-white border border-slate-200 rounded-2xl px-4 py-2 shadow-sm focus-within:border-[#45617c] transition-all h-11 w-full sm:w-64">
+                        <span class="material-symbols-outlined text-slate-400 text-[18px] mr-2">search</span>
+                        <input type="text" id="liveSearchInput" name="keyword" th:value="${keyword}" placeholder="Gõ để tìm nhanh tại trang..." autocomplete="off" class="border-none bg-transparent p-0 text-sm font-bold text-slate-700 w-full focus:ring-0 placeholder:text-slate-400 outline-none">
+                    </div>
+
+                    <select name="status" class="text-sm font-bold border-slate-200 rounded-2xl bg-white focus:ring-0 focus:border-[#45617c] outline-none h-11 shadow-sm cursor-pointer">
+                        <option value="" th:selected="${currentStatus == null or currentStatus == ''}">Tất cả trạng thái</option>
+                        <option value="AVAILABLE" th:selected="${currentStatus == 'AVAILABLE'}">Sẵn sàng</option>
+                        <option value="NEAR_EXPIRY" th:selected="${currentStatus == 'NEAR_EXPIRY'}">Sắp hết hạn</option>
+                        <option value="EXPIRED" th:selected="${currentStatus == 'EXPIRED'}">Đã hết hạn</option>
+                        <option value="OUT_OF_STOCK" th:selected="${currentStatus == 'OUT_OF_STOCK'}">Hết tồn kho</option>
+                    </select>
+
+                    <button type="submit" class="bg-[#45617c] text-white hover:bg-[#344b61] px-5 rounded-2xl transition-all shadow-sm h-11 font-bold text-sm flex items-center">
+                        Lọc DB
+                    </button>
+                    
+                    <a th:href="@{/inventory}" th:if="${keyword != null or currentStatus != null}" class="text-xs font-bold text-slate-400 hover:text-rose-500 underline ml-2 transition-all">
+                        Xóa bộ lọc
+                    </a>
+                </form>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-10">
+                <div class="bg-white p-6 rounded-[2rem] border border-slate-100 shadow-sm">
+                    <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Tổng số lô</p>
+                    <h3 class="text-3xl font-black font-manrope mt-2" th:text="${stats.totalBatches}">0</h3>
+                </div>
+                <div class="bg-white p-6 rounded-[2rem] border border-slate-100 shadow-sm">
+                    <p class="text-[10px] font-black text-amber-500 uppercase tracking-widest">Sắp hết hạn</p>
+                    <h3 class="text-3xl font-black font-manrope mt-2 text-amber-500" th:text="${stats.expiringSoonCount}">0</h3>
+                </div>
+                <div class="bg-white p-6 rounded-[2rem] border border-slate-100 shadow-sm">
+                    <p class="text-[10px] font-black text-rose-500 uppercase tracking-widest">Đã hết hạn</p>
+                    <h3 class="text-3xl font-black font-manrope mt-2 text-rose-500" th:text="${stats.expiredCount}">0</h3>
+                </div>
+                <div class="bg-white p-6 rounded-[2rem] border border-slate-100 shadow-sm">
+                    <p class="text-[10px] font-black text-[#08658b] uppercase tracking-widest">Giá trị tồn</p>
+                    <h3 class="text-3xl font-black font-manrope mt-2 text-[#08658b]" 
+                        th:text="${#numbers.formatDecimal(stats.totalValue, 0, 'COMMA', 0, 'POINT') + 'đ'}">0đ</h3>
+                </div>
+            </div>
+
+            <div class="flex items-center gap-4 mb-4 bg-white p-3 rounded-xl border border-slate-100 shadow-sm w-fit">
+                <span class="text-xs font-black text-slate-500 uppercase tracking-widest mr-2">Chú thích:</span>
+                <div class="flex items-center gap-1.5 text-xs font-bold text-slate-700">
+                    <div class="w-4 h-4 bg-amber-50 border border-amber-200 rounded shadow-sm"></div> Sắp hết hạn (7 ngày)
+                </div>
+                <div class="flex items-center gap-1.5 text-xs font-bold text-slate-700">
+                    <div class="w-4 h-4 bg-rose-50 border border-rose-200 rounded shadow-sm"></div> Đã hết hạn
+                </div>
+            </div>
+
+            <div class="bg-white rounded-[2rem] border border-slate-100 shadow-sm overflow-hidden mb-10">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left">
+                        <thead class="bg-slate-50/50 text-[10px] text-slate-400 uppercase font-black tracking-widest">
+                            <tr>
+                                <th class="px-8 py-5">Mã lô / SP</th>
+                                <th class="px-8 py-5">Sản phẩm</th>
+                                <th class="px-8 py-5 text-center">Tồn thực tế</th>
+                                <th class="px-8 py-5">Giá Nhập/Bán</th>
+                                <th class="px-8 py-5">Hạn dùng</th>
+                                <th class="px-8 py-5">Trạng thái</th>
+                                <th class="px-8 py-5 text-right">Thao tác</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-50">
+                            <tr th:if="${batchPage.content.isEmpty()}">
+                                <td colspan="7" class="px-8 py-10 text-center text-slate-400 font-bold text-sm">
+                                    Không tìm thấy lô hàng nào phù hợp.
+                                </td>
+                            </tr>
+                            
+                            <tr th:each="batch : ${batchPage.content}" 
+                                th:classappend="${batch.status == 'EXPIRED' ? 'bg-rose-50 hover:bg-rose-100' : (batch.status == 'NEAR_EXPIRY' ? 'bg-amber-50 hover:bg-amber-100' : 'bg-white hover:bg-slate-50')}"
+                                class="batch-row transition-all cursor-pointer"
+                                th:data-id="${batch.batchID}"
+                                th:data-name="${batch.productName}"
+                                th:data-supplier="${batch.supplierName}"
+                                th:data-importdate="${#temporals.format(batch.importDate, 'dd/MM/yyyy HH:mm')}"
+                                th:data-stock="${batch.availableQty}"
+                                th:data-importqty="${batch.importQty}"
+                                th:data-importprice="${#numbers.formatDecimal(batch.importPrice, 0, 'COMMA', 0, 'POINT')}"
+                                th:data-sellprice="${#numbers.formatDecimal(batch.sellingPrice, 0, 'COMMA', 0, 'POINT')}"
+                                th:data-status="${batch.status}"
+                                onclick="openProductModal(this)">
+                                
+                                <td class="px-8 py-6">
+                                    <p class="text-xs font-black text-slate-700" th:text="${'BAT-' + batch.batchID}"></p>
+                                    <p class="text-[10px] text-slate-400 font-bold" th:text="${batch.productID}"></p>
+                                </td>
+                                <td class="px-8 py-6 text-xs font-bold text-slate-600" th:text="${batch.productName}"></td>
+                                <td class="px-8 py-6 text-center">
+                                    <div class="text-sm font-black" 
+                                         th:classappend="${batch.availableQty > 0 ? 'text-emerald-600' : 'text-slate-700'}"
+                                         th:text="${batch.availableQty}"></div>
+                                    <div class="text-[10px] font-bold text-slate-400" th:text="${'/' + batch.importQty + ' nhập'}"></div>
+                                </td>
+                                <td class="px-8 py-6">
+                                    <p class="text-[10px] text-slate-400 font-bold" th:text="${'N: ' + #numbers.formatDecimal(batch.importPrice, 0, 'COMMA', 0, 'POINT')}"></p>
+                                    <p class="text-xs font-black text-rose-500" th:text="${'B: ' + #numbers.formatDecimal(batch.sellingPrice, 0, 'COMMA', 0, 'POINT')}"></p>
+                                </td>
+                                <td class="px-8 py-6 text-xs font-bold" 
+                                    th:classappend="${batch.status == 'EXPIRED' ? 'text-rose-500' : 'text-slate-600'}"
+                                    th:text="${batch.expiryDate != null ? #temporals.format(batch.expiryDate, 'dd/MM/yyyy') : 'N/A'}"></td>
+                                <td class="px-8 py-6">
+                                    <span th:if="${batch.status == 'AVAILABLE'}" class="px-3 py-1 bg-emerald-100 text-emerald-700 rounded-xl text-[10px] font-black uppercase">Sẵn sàng</span>
+                                    <span th:if="${batch.status == 'NEAR_EXPIRY'}" class="px-3 py-1 bg-amber-200 text-amber-800 rounded-xl text-[10px] font-black uppercase">Sắp hết hạn</span>
+                                    <span th:if="${batch.status == 'EXPIRED'}" class="px-3 py-1 bg-rose-200 text-rose-800 rounded-xl text-[10px] font-black uppercase">Hết hạn</span>
+                                    <span th:if="${batch.status == 'OUT_OF_STOCK'}" class="px-3 py-1 bg-slate-200 text-slate-600 rounded-xl text-[10px] font-black uppercase">Hết hàng</span>
+                                </td>
+                                <td class="px-8 py-6 text-right">
+                                    <a th:href="@{/inventory/trace/{id}(id=${batch.batchID})}" title="Truy vết lịch sử" class="inline-flex p-2 bg-white rounded-xl border border-slate-200 text-slate-400 hover:text-rose-500 hover:border-rose-200 transition-all shadow-sm" onclick="event.stopPropagation();">
+                                        <span class="material-symbols-outlined text-lg">history</span>
+                                    </a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div class="px-8 py-6 border-t border-slate-50 bg-slate-50/20 flex items-center justify-between" th:if="${batchPage.totalPages > 0}">
+                    <span class="text-xs text-slate-400 font-bold uppercase tracking-widest" 
+                          th:text="'Trang ' + (${batchPage.number} + 1) + ' / ' + ${batchPage.totalPages}"></span>
+                    
+                    <div class="flex items-center gap-2">
+                        <a th:href="@{/inventory(page=${batchPage.number - 1}, keyword=${keyword}, status=${currentStatus})}" 
+                           th:if="${batchPage.hasPrevious()}"
+                           class="p-2 rounded-xl border border-slate-200 hover:bg-white transition-all text-slate-500 cursor-pointer">
+                            <span class="material-symbols-outlined text-sm">chevron_left</span>
+                        </a>
+                        <a th:href="@{/inventory(page=${batchPage.number + 1}, keyword=${keyword}, status=${currentStatus})}" 
+                           th:if="${batchPage.hasNext()}"
+                           class="p-2 rounded-xl border border-slate-200 hover:bg-white transition-all text-slate-500 cursor-pointer">
+                            <span class="material-symbols-outlined text-sm">chevron_right</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="productModal" class="hidden fixed inset-0 z-[9999] flex items-center justify-center backdrop-blur-sm bg-slate-900/40 p-4 transition-all">
+                <div class="bg-white rounded-[2rem] shadow-2xl p-8 w-full max-w-md border border-slate-100 relative transform transition-all scale-95 opacity-0" id="modalContent">
+                    <button onclick="closeProductModal()" class="absolute top-6 right-6 text-slate-400 hover:text-rose-500 transition-colors">
+                        <span class="material-symbols-outlined">close</span>
+                    </button>
+                    
+                    <div class="flex items-center gap-4 mb-6">
+                        <div class="w-14 h-14 bg-[#08658b]/10 text-[#08658b] rounded-2xl flex items-center justify-center">
+                            <span class="material-symbols-outlined text-3xl">inventory_2</span>
+                        </div>
+                        <div>
+                            <h2 class="text-lg font-black font-manrope text-slate-800" id="m_productName">Tên sản phẩm</h2>
+                            <p class="text-xs font-bold text-slate-400 mt-1">Mã Lô: BAT-<span id="m_batchId"></span></p>
+                        </div>
+                    </div>
+                    
+                    <div class="space-y-4 bg-slate-50 rounded-2xl p-5 border border-slate-100">
+                        <div class="flex justify-between items-center">
+                            <span class="text-xs font-bold text-slate-500">Trạng thái</span>
+                            <span id="m_status" class="px-3 py-1 rounded-xl text-[10px] font-black uppercase tracking-widest"></span>
+                        </div>
+                        
+                        <div class="flex justify-between items-center pt-3 border-t border-slate-200">
+                            <span class="text-xs font-bold text-slate-500">Nhà cung cấp</span>
+                            <span id="m_supplier" class="text-xs font-bold text-slate-800 max-w-[200px] truncate text-right"></span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-xs font-bold text-slate-500">Ngày nhập</span>
+                            <span id="m_importDate" class="text-sm font-black text-[#08658b]"></span>
+                        </div>
+                        
+                        <div class="flex justify-between items-center pt-3 border-t border-slate-200">
+                            <span class="text-xs font-bold text-slate-500">Số lượng nhập kho</span>
+                            <span id="m_importQty" class="text-sm font-black text-slate-700"></span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-xs font-bold text-slate-500">Tồn kho hiện tại</span>
+                            <span id="m_stockQty" class="text-sm font-black text-emerald-600"></span>
+                        </div>
+                        <div class="flex justify-between items-center pt-3 border-t border-slate-200">
+                            <span class="text-xs font-bold text-slate-500">Giá nhập</span>
+                            <span id="m_importPrice" class="text-sm font-bold text-slate-400"></span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-xs font-bold text-slate-500">Giá bán ra</span>
+                            <span id="m_sellPrice" class="text-base font-black text-rose-500"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <script>
+        // JS Xử lý Tìm kiếm trực tiếp
+        const searchInput = document.getElementById('liveSearchInput');
+        const tableRows = document.querySelectorAll('.batch-row');
+
+        searchInput.addEventListener('input', function(e) {
+            const searchTerm = e.target.value.toLowerCase().trim();
+            tableRows.forEach(row => {
+                const rowText = row.textContent.toLowerCase();
+                if(rowText.includes(searchTerm)) {
+                    row.style.display = ''; 
+                } else {
+                    row.style.display = 'none'; 
+                }
+            });
+        });
+
+        // JS Mở Modal
+        const modal = document.getElementById('productModal');
+        const modalContent = document.getElementById('modalContent');
+
+        function openProductModal(rowElement) {
+            try {
+                // Lấy dữ liệu
+                const id = rowElement.getAttribute('data-id');
+                const name = rowElement.getAttribute('data-name');
+                const supplier = rowElement.getAttribute('data-supplier');
+                const importDate = rowElement.getAttribute('data-importdate');
+                const stock = rowElement.getAttribute('data-stock');
+                const importQty = rowElement.getAttribute('data-importqty');
+                const importPrice = rowElement.getAttribute('data-importprice');
+                const sellPrice = rowElement.getAttribute('data-sellprice');
+                const status = rowElement.getAttribute('data-status');
+
+                // Gán dữ liệu
+                document.getElementById('m_batchId').textContent = id;
+                document.getElementById('m_productName').textContent = name;
+                document.getElementById('m_supplier').textContent = supplier || 'N/A';
+                document.getElementById('m_importDate').textContent = importDate || 'N/A';
+                document.getElementById('m_stockQty').textContent = stock;
+                document.getElementById('m_importQty').textContent = importQty;
+                document.getElementById('m_importPrice').textContent = importPrice + ' đ';
+                document.getElementById('m_sellPrice').textContent = sellPrice + ' đ';
+
+                // Trạng thái
+                const statusBadge = document.getElementById('m_status');
+                statusBadge.className = 'px-3 py-1 rounded-xl text-[10px] font-black uppercase tracking-widest ';
+                
+                if(status === 'EXPIRED') {
+                    statusBadge.textContent = 'Đã hết hạn';
+                    statusBadge.classList.add('bg-rose-100', 'text-rose-600');
+                } else if(status === 'NEAR_EXPIRY') {
+                    statusBadge.textContent = 'Sắp hết hạn';
+                    statusBadge.classList.add('bg-amber-100', 'text-amber-600');
+                } else if(status === 'OUT_OF_STOCK') {
+                    statusBadge.textContent = 'Hết hàng';
+                    statusBadge.classList.add('bg-slate-200', 'text-slate-600');
+                } else {
+                    statusBadge.textContent = 'Sẵn sàng';
+                    statusBadge.classList.add('bg-emerald-100', 'text-emerald-600');
+                }
+
+                // Hiển thị mượt mà
+                modal.classList.remove('hidden');
+                setTimeout(() => {
+                    modalContent.classList.remove('scale-95', 'opacity-0');
+                    modalContent.classList.add('scale-100', 'opacity-100');
+                }, 10);
+            } catch (error) {
+                console.error("Lỗi khi mở modal: ", error);
+            }
+        }
+
+        function closeProductModal() {
+            modalContent.classList.remove('scale-100', 'opacity-100');
+            modalContent.classList.add('scale-95', 'opacity-0');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 200); 
+        }
+    </script>
+</body>
+</html>
