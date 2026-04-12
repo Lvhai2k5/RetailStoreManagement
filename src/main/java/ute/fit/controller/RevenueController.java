@@ -10,8 +10,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import ute.fit.dto.RevenueReportDTO;
 import ute.fit.service.IRevenueService;
 
-import java.time.LocalDate;
-
 @Controller
 @RequestMapping("/revenue")
 @RequiredArgsConstructor
