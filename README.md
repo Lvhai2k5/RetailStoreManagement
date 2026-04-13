@@ -26,4 +26,4 @@ Hệ thống giúp:
 - Jira quản lý thời gian cho dự án và công việc
 
 
-Mong nhận được góp ý và phàn hồi qua Gmail: lehai332k5@gmail
+Mong nhận được góp ý và phàn hồi qua Gmail: lehai332k5@gmail.com
