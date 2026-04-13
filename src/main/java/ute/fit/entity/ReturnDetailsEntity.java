@@ -24,7 +24,7 @@ public class ReturnDetailsEntity {
     @Column(name = "RefundUnitPrice", precision = 18, scale = 2, nullable = false)
     private BigDecimal refundUnitPrice;
 
-    @Column(name = "Reason", length = 255)
+    @Column(name = "Reason", length = 255, columnDefinition = "NVARCHAR(255)")
     private String reason;
 
     @ManyToOne(fetch = FetchType.LAZY)
