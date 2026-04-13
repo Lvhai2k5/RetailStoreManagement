@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 import ute.fit.entity.ImportBatchesEntity;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Map;
 
 @Repository
@@ -42,4 +43,10 @@ public interface ImportBatchRepository extends JpaRepository<ImportBatchesEntity
     // THÊM MỚI: Truy vấn MAX BatchNumber theo ProductID để tạo Batch tự tăng giống FN_GetNextBatchNumber
     @Query("SELECT COALESCE(MAX(b.batchNumber), 0) FROM ImportBatchesEntity b WHERE b.product.productID = :productId")
     Integer findMaxBatchNumberByProductId(@Param("productId") String productId);
+    @Query("""
+SELECT b FROM ImportBatchesEntity b
+WHERE b.product.productID = :productID
+ORDER BY b.batchNumber
+""")
+    List<ImportBatchesEntity> findByProductID(@Param("productID") String productID);
 }

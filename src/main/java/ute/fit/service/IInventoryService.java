@@ -22,4 +22,6 @@ public interface IInventoryService {
     List<Map<String, Object>> getProductTypeOptions();
     Map<String, Object> getBatchForEdit(Integer batchId);
     void updateBatch(Integer batchId, Integer supplierId, Integer quantity, Double importPrice, Double sellingPrice, String expiryDate);
+
+
 }

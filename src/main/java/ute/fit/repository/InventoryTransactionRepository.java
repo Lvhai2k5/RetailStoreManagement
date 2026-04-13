@@ -15,4 +15,24 @@ public interface InventoryTransactionRepository extends JpaRepository<InventoryT
 
     @Query("SELECT t FROM InventoryTransactionsEntity t WHERE t.batch.batchID = :batchId ORDER BY t.transactionDate DESC")
     List<InventoryTransactionsEntity> findByBatchId(@Param("batchId") Integer batchId);
+    @Query("""
+SELECT COALESCE(SUM(
+    CASE 
+        WHEN t.transactionType IN ('IMPORT', 'CANCEL_RESERVE') THEN t.quantityChange 
+        WHEN t.transactionType IN ('SALE', 'RESERVE') THEN -t.quantityChange 
+        ELSE 0 
+    END), 0)
+FROM InventoryTransactionsEntity t
+JOIN t.batch b
+WHERE b.product.productID = :productID
+""")
+    Integer getAvailableStock(@Param("productID") int productID);
+    @Query("""
+    SELECT COALESCE(SUM(i.quantityChange), 0)
+    FROM InventoryTransactionsEntity i
+    WHERE i.batch.batchID = :batchID
+      AND i.isSellable = true
+""")
+    int sumStockByBatch(@Param("batchID") int batchID);
+
 }
