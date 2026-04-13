@@ -10,6 +10,7 @@ import ute.fit.entity.ProductTypesMarkupEntity;
 import ute.fit.entity.ProductsEntity;
 import ute.fit.repository.ProductRepository;
 import ute.fit.repository.ProductTypeRepository;
+import ute.fit.service.ProductService;
 
 @Controller
 public class ProductController {
@@ -19,6 +20,9 @@ public class ProductController {
     
     @Autowired
     ProductTypeRepository productTypeRepo;
+
+    @Autowired
+    ProductService productService;
 
     @GetMapping("/listproduct")
     public String list(Model model, HttpServletRequest request){
@@ -30,7 +34,7 @@ public class ProductController {
     @GetMapping("/product/create")
     public String create(Model model){
         model.addAttribute("product", new ProductsEntity());
-        model.addAttribute("productTypes", productTypeRepo.findAll()); // ✅ QUAN TRỌNG
+        model.addAttribute("productTypes", productTypeRepo.findAll()); 
         return "product/create";
     }
 
@@ -44,7 +48,7 @@ public class ProductController {
                     .findById(p.getProductType().getProductTypeID())
                     .orElse(null);
 
-            p.setProductType(type); // ✅ GÁN LẠI ENTITY TỪ DB
+            p.setProductType(type); // khúc này gán lại enti từ db nha Vũ hải đừng quên dùm cái
         }
 
         repo.save(p);
@@ -55,7 +59,7 @@ public class ProductController {
     public String edit(@PathVariable String id, Model model){
 
         model.addAttribute("product", repo.findById(id).orElse(new ProductsEntity()));
-        model.addAttribute("productTypes", productTypeRepo.findAll()); // ⚠️ QUAN TRỌNG
+        model.addAttribute("productTypes", productTypeRepo.findAll()); 
 
         return "product/form";
     }
@@ -70,5 +74,10 @@ public class ProductController {
         model.addAttribute("product", repo.findById(id).orElse(null));
         model.addAttribute("currentPath", request.getRequestURI());
         return "product/detail";
+    }
+    @GetMapping("/product/max-stock/{id}")
+    @ResponseBody
+    public int getMaxStock(@PathVariable String id){
+        return productService.getMaxStock(id);
     }
 }

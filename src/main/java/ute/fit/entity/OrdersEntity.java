@@ -42,7 +42,7 @@ public class OrdersEntity {
     @Column(name = "PaidDate")
     private LocalDateTime paidDate;
 
-    @OneToMany(mappedBy = "order", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "order", fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     private List<OrderDetailsEntity> orderDetails;
 
     // Quan hệ với bảng trả hàng (nếu cần quản lý từ phía Order)

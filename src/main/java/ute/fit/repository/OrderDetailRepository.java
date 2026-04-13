@@ -18,4 +18,6 @@ public interface OrderDetailRepository extends JpaRepository<OrderDetailsEntity,
            "AND od.order.createdDate BETWEEN :start AND :end " +
            "GROUP BY od.product.name ORDER BY SUM(od.quantity) DESC")
     List<Object[]> getTop5Products(LocalDateTime start, LocalDateTime end, Pageable pageable);
+
+    List<OrderDetailsEntity> findByOrder_OrderID(Integer orderId);
 }

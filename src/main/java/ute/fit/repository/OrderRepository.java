@@ -29,3 +29,5 @@ public interface OrderRepository extends JpaRepository<OrdersEntity, Integer> {
 
     List<OrdersEntity> findByStatus(ute.fit.model.OrderStatus status);
 }
+    List<OrdersEntity> findByStatusNot(String status);
+}

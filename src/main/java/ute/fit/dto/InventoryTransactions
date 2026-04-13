@@ -1,0 +1,23 @@
+package ute.fit.dto;
+
+import java.time.LocalDateTime;
+import jakarta.persistence.*;
+import lombok.*;
+import ute.fit.model.TransactionType;
+
+@Entity
+@Table(name = "InventoryTransactions")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+public class InventoryTransactionsDTO {
+    private Integer transactionID;
+    private Integer quantityChange;
+    private TransactionType transactionType;
+    private Boolean isSellable = true;
+    private Integer referenceID;
+    private LocalDateTime transactionDate = LocalDateTime.now();
+    private ImportBatchesEntity batch;
+}
