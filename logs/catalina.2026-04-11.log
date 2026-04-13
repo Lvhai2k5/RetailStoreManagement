@@ -1,0 +1,40 @@
+11-Apr-2026 11:50:40.153 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Server version name:   Apache Tomcat/10.1.54
+11-Apr-2026 11:50:40.164 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Server built:          Mar 30 2026 22:31:53 UTC
+11-Apr-2026 11:50:40.165 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Server version number: 10.1.54.0
+11-Apr-2026 11:50:40.165 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log OS Name:               Windows 11
+11-Apr-2026 11:50:40.166 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log OS Version:            10.0
+11-Apr-2026 11:50:40.166 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Architecture:          amd64
+11-Apr-2026 11:50:40.166 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Java Home:             C:\Program Files\Eclipse Adoptium\jdk-17.0.17.10-hotspot
+11-Apr-2026 11:50:40.166 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log JVM Version:           17.0.17+10
+11-Apr-2026 11:50:40.166 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log JVM Vendor:            Eclipse Adoptium
+11-Apr-2026 11:50:40.168 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log CATALINA_BASE:         D:\KY2_Y3\CONGCUQUANLY\Sprint2\RetailStoreManagement
+11-Apr-2026 11:50:40.168 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log CATALINA_HOME:         C:\New folder\apache-tomcat-10.1.54-windows-x64\apache-tomcat-10.1.54
+11-Apr-2026 11:50:40.203 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: --add-opens=java.base/java.lang=ALL-UNNAMED
+11-Apr-2026 11:50:40.204 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: --add-opens=java.base/java.io=ALL-UNNAMED
+11-Apr-2026 11:50:40.205 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: --add-opens=java.base/java.util=ALL-UNNAMED
+11-Apr-2026 11:50:40.205 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: --add-opens=java.base/java.util.concurrent=ALL-UNNAMED
+11-Apr-2026 11:50:40.207 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: --add-opens=java.rmi/sun.rmi.transport=ALL-UNNAMED
+11-Apr-2026 11:50:40.207 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Dcatalina.home=C:\New folder\apache-tomcat-10.1.54-windows-x64\apache-tomcat-10.1.54
+11-Apr-2026 11:50:40.208 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Dcatalina.base=D:\KY2_Y3\CONGCUQUANLY\Sprint2\RetailStoreManagement
+11-Apr-2026 11:50:40.209 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djava.io.tmpdir=D:\KY2_Y3\CONGCUQUANLY\Sprint2\RetailStoreManagement\temp
+11-Apr-2026 11:50:40.209 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djava.util.logging.config.file=D:\KY2_Y3\CONGCUQUANLY\Sprint2\RetailStoreManagement\conf\logging.properties
+11-Apr-2026 11:50:40.209 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djava.util.logging.manager=org.apache.juli.ClassLoaderLogManager
+11-Apr-2026 11:50:40.210 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -javaagent:C:\Program Files\JetBrains\IntelliJ IDEA 2026.1\lib\idea_rt.jar=50222
+11-Apr-2026 11:50:40.211 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Dfile.encoding=UTF-8
+11-Apr-2026 11:50:40.221 INFO [main] org.apache.catalina.core.AprLifecycleListener.lifecycleEvent Loaded Apache Tomcat Native library [2.0.14] using APR version [1.7.6].
+11-Apr-2026 11:50:40.254 INFO [main] org.apache.catalina.core.AprLifecycleListener.initializeSSL OpenSSL successfully initialized [OpenSSL 3.5.5 27 Jan 2026]
+11-Apr-2026 11:50:40.783 INFO [main] org.apache.coyote.AbstractProtocol.init Initializing ProtocolHandler ["http-nio-8080"]
+11-Apr-2026 11:50:40.836 INFO [main] org.apache.catalina.startup.Catalina.load Server initialization in [1148] milliseconds
+11-Apr-2026 11:50:40.965 INFO [main] org.apache.catalina.core.StandardService.startInternal Starting service [Catalina]
+11-Apr-2026 11:50:40.966 INFO [main] org.apache.catalina.core.StandardEngine.startInternal Starting Servlet engine: [Apache Tomcat/10.1.54]
+11-Apr-2026 11:50:40.992 INFO [main] org.apache.catalina.startup.HostConfig.deployDescriptor Deploying deployment descriptor [D:\KY2_Y3\CONGCUQUANLY\Sprint2\RetailStoreManagement\conf\Catalina\localhost\RetailStoreManagement_Team.xml]
+11-Apr-2026 11:50:42.103 WARNING [main] org.apache.tomcat.util.descriptor.web.WebXml.setVersion Unknown version string [6.1]. Default version will be used.
+11-Apr-2026 11:50:42.176 WARNING [main] org.apache.tomcat.util.descriptor.web.WebXml.setVersion Unknown version string [6.1]. Default version will be used.
+11-Apr-2026 11:50:48.217 INFO [main] org.apache.jasper.servlet.TldScanner.scanJars At least one JAR was scanned for TLDs yet contained no TLDs. Enable debug logging for this logger for a complete list of JARs that were scanned but no TLDs were found in them. Skipping unneeded JARs during scanning can improve startup time and JSP compilation time.
+11-Apr-2026 11:50:48.628 INFO [main] org.apache.catalina.startup.HostConfig.deployDescriptor Deployment of deployment descriptor [D:\KY2_Y3\CONGCUQUANLY\Sprint2\RetailStoreManagement\conf\Catalina\localhost\RetailStoreManagement_Team.xml] has finished in [7,635] ms
+11-Apr-2026 11:50:48.641 INFO [main] org.apache.coyote.AbstractProtocol.start Starting ProtocolHandler ["http-nio-8080"]
+11-Apr-2026 11:50:48.763 INFO [main] org.apache.catalina.startup.Catalina.start Server startup in [7924] milliseconds
+11-Apr-2026 11:51:44.667 INFO [Thread-1] org.apache.coyote.AbstractProtocol.pause Pausing ProtocolHandler ["http-nio-8080"]
+11-Apr-2026 11:51:44.991 INFO [Thread-1] org.apache.catalina.core.StandardService.stopInternal Stopping service [Catalina]
+11-Apr-2026 11:51:45.017 INFO [Thread-1] org.apache.coyote.AbstractProtocol.stop Stopping ProtocolHandler ["http-nio-8080"]
+11-Apr-2026 11:51:45.029 INFO [Thread-1] org.apache.coyote.AbstractProtocol.destroy Destroying ProtocolHandler ["http-nio-8080"]

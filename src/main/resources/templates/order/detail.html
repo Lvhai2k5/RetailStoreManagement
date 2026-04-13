@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Chi tiết đơn hàng</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+
+</head>
+
+<body class="bg-slate-100">
+
+<div th:replace="~{fragments/header :: header}"></div>
+<div th:replace="~{fragments/sidebar :: sidebar}"></div>
+
+<div class="ml-0 lg:ml-64 mt-20 p-6">
+
+  <h1 class="text-2xl font-bold mb-6 text-slate-700">
+    👁 Chi tiết đơn hàng
+  </h1>
+
+  <div class="bg-white rounded-2xl shadow p-6 space-y-6">
+
+    <!-- HEADER -->
+    <div class="flex justify-between">
+
+      <div>
+        <p class="text-sm text-slate-400">Order ID</p>
+        <p class="font-bold text-lg" th:text="${order.orderID}"></p>
+      </div>
+
+      <span class="px-3 py-1 rounded-full text-xs font-semibold"
+            th:classappend="${order.status.name() == 'Pending'} ? 'bg-yellow-100 text-yellow-600' :
+                                   (${order.status.name() == 'Paid'} ? 'bg-green-100 text-green-600' :
+                                   'bg-red-100 text-red-600')"
+            th:text="${order.status}">
+            </span>
+
+    </div>
+
+    <!-- INFO -->
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+
+      <div>
+        <p class="text-slate-400">Tổng tiền</p>
+        <p class="font-bold" th:text="${order.totalAmount}"></p>
+      </div>
+
+      <div>
+        <p class="text-slate-400">Thanh toán</p>
+        <p th:text="${order.paymentMethod}"></p>
+      </div>
+
+      <div>
+        <p class="text-slate-400">Ngày tạo</p>
+        <p th:text="${#temporals.format(order.createdDate, 'dd/MM/yyyy HH:mm')}"></p>
+      </div>
+
+      <div>
+        <p class="text-slate-400">Ngày trả</p>
+        <p th:text="${order.paidDate != null ? #temporals.format(order.paidDate, 'dd/MM/yyyy HH:mm') : '-'}"></p>
+      </div>
+
+    </div>
+
+    <!-- TABLE -->
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm border rounded-xl overflow-hidden">
+
+        <thead class="bg-slate-100 text-slate-600">
+        <tr>
+          <th class="p-3 text-left">Sản phẩm</th>
+          <th class="p-3 text-center">Số lượng</th>
+          <th class="p-3 text-right">Giá</th>
+          <th class="p-3 text-right">Thành tiền</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        <tr th:each="d : ${order.orderDetails}"
+            class="border-t hover:bg-slate-50">
+
+          <td class="p-3 font-medium"
+              th:text="${d.product.name}"></td>
+
+          <td class="p-3 text-center"
+              th:text="${d.quantity}"></td>
+
+          <td class="p-3 text-right"
+              th:text="${d.unitPrice}"></td>
+
+          <td class="p-3 text-right font-semibold text-green-600"
+              th:text="${d.quantity * d.unitPrice}"></td>
+        </tr>
+        </tbody>
+
+      </table>
+    </div>
+
+    <!-- BACK -->
+    <div class="text-right">
+      <a th:href="@{/order/listorder}"
+         class="px-5 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600">
+        ← Quay lại
+      </a>
+    </div>
+
+  </div>
+
+</div>
+
+</body>
+</html>

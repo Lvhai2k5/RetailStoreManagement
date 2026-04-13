@@ -1,0 +1,275 @@
+<!doctype html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Chi tiết trả hàng - Merchant Core</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+      rel="stylesheet"
+    />
+    <script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              primary: "#cd8484",
+              secondary: "#45617c",
+              background: "#f8fafc",
+              surface: "#ffffff",
+              "on-surface": "#0f172a",
+              "on-surface-variant": "#64748b",
+              outline: "#e2e8f0",
+              error: "#ef4444",
+              success: "#10b981",
+              warning: "#f59e0b",
+            },
+            fontFamily: {
+              headline: ["Manrope", "sans-serif"],
+              body: ["Inter", "sans-serif"],
+              label: ["Inter", "sans-serif"],
+            },
+            borderRadius: {
+              DEFAULT: "0.375rem",
+              lg: "0.5rem",
+              xl: "0.75rem",
+              "2xl": "1rem",
+              full: "9999px",
+            },
+            boxShadow: {
+              soft: "0 2px 15px -3px rgba(0, 0, 0, 0.07), 0 4px 6px -2px rgba(0, 0, 0, 0.05)",
+              elevated:
+                "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)",
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      body {
+        font-family: "Inter", sans-serif;
+      }
+      h1,
+      h2,
+      h3,
+      h4,
+      .font-headline {
+        font-family: "Manrope", sans-serif;
+      }
+      .material-symbols-outlined {
+        font-variation-settings:
+          "FILL" 0,
+          "wght" 400,
+          "GRAD" 0,
+          "opsz" 24;
+      }
+      .glass {
+        background: rgba(255, 255, 255, 0.7);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+      }
+    </style>
+  </head>
+  <body class="bg-background text-on-surface antialiased">
+    <div th:replace="~{fragments/header :: header}"></div>
+    <div th:replace="~{fragments/sidebar :: sidebar}"></div>
+    <main class="ml-0 lg:ml-64 mt-16 p-8">
+      <div class="max-w-7xl mx-auto">
+        <div class="mb-10 flex justify-between items-end">
+          <div>
+            <nav
+              class="flex items-center gap-2 text-xs text-on-surface-variant/70 mb-3 font-bold uppercase tracking-widest"
+            >
+              <a class="hover:text-primary transition-colors" href="/dashboard"
+                >Trang chủ</a
+              >
+              <span class="material-symbols-outlined text-[12px]"
+                >chevron_right</span
+              >
+              <a class="hover:text-primary transition-colors" href="/return"
+                >Quản lý trả hàng</a
+              >
+              <span class="material-symbols-outlined text-[12px]"
+                >chevron_right</span
+              >
+              <span class="text-on-surface-variant">Chi tiết trả hàng</span>
+            </nav>
+            <h2 class="text-3xl font-extrabold text-on-surface tracking-tight">
+              Chi tiết phiếu trả hàng
+            </h2>
+            <p class="text-on-surface-variant font-medium mt-1">
+              Xem chi tiết sản phẩm trả, số lượng hoàn và lý do trả.
+            </p>
+          </div>
+          <div class="flex gap-4">
+            <a
+              href="/return"
+              class="flex items-center gap-2 px-5 py-3 bg-white border border-outline rounded-xl text-on-surface font-bold text-[13px] hover:bg-slate-50 transition-all shadow-soft"
+            >
+              <span class="material-symbols-outlined text-[20px]"
+                >arrow_back</span
+              >
+              Quay lại danh sách
+            </a>
+            <button
+              class="flex items-center gap-2 px-6 py-3 bg-primary text-white rounded-xl font-bold text-[13px] hover:shadow-elevated hover:brightness-110 transition-all active:scale-95"
+            >
+              <span class="material-symbols-outlined text-[20px]">print</span>
+              In phiếu
+            </button>
+          </div>
+        </div>
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-10">
+          <div
+            class="bg-surface p-7 rounded-2xl shadow-soft border border-indigo-50/50"
+          >
+            <p
+              class="text-xs uppercase tracking-widest text-on-surface-variant font-bold mb-2"
+            >
+              Thông tin phiếu trả
+            </p>
+            <div class="space-y-3 text-sm text-on-surface-variant">
+              <div class="flex justify-between gap-4">
+                <span>Mã phiếu</span>
+                <span
+                  class="font-bold text-on-surface"
+                  th:text="${'PH-' + returnInfo.returnId}"
+                  >PH-001</span
+                >
+              </div>
+              <div class="flex justify-between gap-4">
+                <span>Đơn hàng</span>
+                <span
+                  class="font-bold text-on-surface"
+                  th:text="${'DH-' + returnInfo.orderId}"
+                  >DH-001</span
+                >
+              </div>
+              <div class="flex justify-between gap-4">
+                <span>Ngày trả</span>
+                <span
+                  class="font-bold text-on-surface"
+                  th:text="${#temporals.format(returnInfo.returnDate, 'dd/MM/yyyy HH:mm')}"
+                  >12/04/2026 10:12</span
+                >
+              </div>
+              <div class="flex justify-between gap-4">
+                <span>Trạng thái đơn</span>
+                <span
+                  class="font-bold text-on-surface"
+                  th:text="${returnInfo.orderStatus}"
+                  >Paid</span
+                >
+              </div>
+              <div class="flex justify-between gap-4">
+                <span>Phương thức</span>
+                <span
+                  class="font-bold text-on-surface"
+                  th:text="${returnInfo.paymentMethod}"
+                  >Cash</span
+                >
+              </div>
+            </div>
+          </div>
+          <div
+            class="bg-surface p-7 rounded-2xl shadow-soft border border-indigo-50/50"
+          >
+            <p
+              class="text-xs uppercase tracking-widest text-on-surface-variant font-bold mb-2"
+            >
+              Tổng số lượng trả
+            </p>
+            <h3
+              class="text-4xl font-black text-on-surface"
+              th:text="${returnInfo.totalItems}"
+            >
+              3
+            </h3>
+            <p class="text-[13px] text-on-surface-variant mt-2">
+              Tổng tiền hoàn trả
+            </p>
+            <p
+              class="text-3xl font-black text-on-surface mt-4"
+              th:text="${returnInfo.refundAmount}"
+            >
+              1.2M ₫
+            </p>
+          </div>
+          <div
+            class="bg-gradient-to-br from-secondary to-slate-800 p-7 rounded-2xl text-white shadow-elevated relative overflow-hidden"
+          >
+            <h3 class="text-xl font-black mb-3">Lý do và hoàn tiền</h3>
+            <p class="text-sm text-slate-200/80 leading-relaxed">
+              Kiểm tra các sản phẩm đã trả, lý do trả và số tiền hoàn cho từng
+              dòng hàng.
+            </p>
+            <span
+              class="material-symbols-outlined absolute -right-6 -bottom-6 text-[140px] opacity-10 rotate-12"
+              >inventory_2</span
+            >
+          </div>
+        </div>
+        <div
+          class="bg-surface rounded-2xl shadow-soft border border-indigo-50/50 overflow-hidden"
+        >
+          <div class="px-8 py-6 border-b border-slate-100 bg-slate-50/30">
+            <h3 class="text-xl font-black text-on-surface">
+              Chi tiết sản phẩm trả
+            </h3>
+            <p class="text-sm text-on-surface-variant mt-2">
+              Danh sách các mặt hàng được trả và số tiền hoàn tương ứng.
+            </p>
+          </div>
+          <div class="overflow-x-auto">
+            <table class="w-full text-left">
+              <thead>
+                <tr
+                  class="bg-slate-50 text-[12px] uppercase tracking-wider text-on-surface-variant"
+                >
+                  <th class="px-8 py-4 font-semibold">Sản phẩm</th>
+                  <th class="px-8 py-4 font-semibold">Số lượng</th>
+                  <th class="px-8 py-4 font-semibold">Giá hoàn</th>
+                  <th class="px-8 py-4 font-semibold">Tổng hoàn</th>
+                  <th class="px-8 py-4 font-semibold">Lý do</th>
+                </tr>
+              </thead>
+              <tbody class="text-[13px] font-medium divide-y divide-slate-50">
+                <tr th:if="${#lists.isEmpty(returnInfo.details)}">
+                  <td
+                    class="px-8 py-6 text-center text-on-surface-variant"
+                    colspan="5"
+                  >
+                    Không có chi tiết trả hàng.
+                  </td>
+                </tr>
+                <tr th:each="line : ${returnInfo.details}">
+                  <td class="px-8 py-6" th:text="${line.productName}">
+                    Mì Hảo Hảo
+                  </td>
+                  <td class="px-8 py-6" th:text="${line.quantity}">2</td>
+                  <td class="px-8 py-6" th:text="${line.refundUnitPrice}">
+                    25.000
+                  </td>
+                  <td class="px-8 py-6" th:text="${line.refundTotal}">
+                    50.000
+                  </td>
+                  <td class="px-8 py-6" th:text="${line.reason}">
+                    Sản phẩm lỗi
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </main>
+    <div th:replace="~{fragments/footer :: footer}"></div>
+  </body>
+</html>

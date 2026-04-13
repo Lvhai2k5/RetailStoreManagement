@@ -14,8 +14,10 @@ import ute.fit.entity.OrderDetailsEntity;
 public interface OrderDetailRepository extends JpaRepository<OrderDetailsEntity, Integer> {
     // Top 5 sản phẩm bán chạy nhất
     @Query("SELECT od.product.name, SUM(od.quantity), SUM(od.quantity * od.unitPrice) " +
-           "FROM OrderDetailsEntity od WHERE od.order.status = 'Paid' " +
+           "FROM OrderDetailsEntity od WHERE od.order.status = ute.fit.model.OrderStatus.Paid " +
            "AND od.order.createdDate BETWEEN :start AND :end " +
            "GROUP BY od.product.name ORDER BY SUM(od.quantity) DESC")
     List<Object[]> getTop5Products(LocalDateTime start, LocalDateTime end, Pageable pageable);
+
+    List<OrderDetailsEntity> findByOrder_OrderID(Integer orderId);
 }

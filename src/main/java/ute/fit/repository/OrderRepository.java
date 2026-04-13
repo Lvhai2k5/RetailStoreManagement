@@ -23,7 +23,11 @@ public interface OrderRepository extends JpaRepository<OrdersEntity, Integer> {
 
     // Lấy doanh thu theo ngày để vẽ biểu đồ đường
     @Query("SELECT CAST(o.createdDate AS date), SUM(o.totalAmount) FROM OrdersEntity o " +
-           "WHERE o.status = 'Paid' AND o.createdDate BETWEEN :start AND :end " +
+           "WHERE o.status = ute.fit.model.OrderStatus.Paid AND o.createdDate BETWEEN :start AND :end " +
            "GROUP BY CAST(o.createdDate AS date) ORDER BY CAST(o.createdDate AS date)")
     List<Object[]> getRevenueByDay(LocalDateTime start, LocalDateTime end);
+
+    List<OrdersEntity> findByStatus(ute.fit.model.OrderStatus status);
+}
+    List<OrdersEntity> findByStatusNot(String status);
 }
