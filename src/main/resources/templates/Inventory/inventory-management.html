@@ -65,20 +65,20 @@
             <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
                 <div class="bg-white p-6 rounded-[2rem] border border-slate-100 shadow-sm">
                     <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Tổng số lô</p>
-                    <h3 class="text-3xl font-black font-manrope mt-2" th:text="${stats.totalBatches}">0</h3>
+                    <h3 class="text-3xl font-black font-manrope mt-2" th:text="${stats?.totalBatches ?: 0}">0</h3>
                 </div>
                 <div class="bg-white p-6 rounded-[2rem] border border-slate-100 shadow-sm">
                     <p class="text-[10px] font-black text-amber-500 uppercase tracking-widest">Sắp hết hàng</p>
-                    <h3 class="text-3xl font-black font-manrope mt-2 text-amber-500" th:text="${stats.lowStockCount}">0</h3>
+                    <h3 class="text-3xl font-black font-manrope mt-2 text-amber-500" th:text="${stats?.lowStockCount ?: 0}">0</h3>
                 </div>
                 <div class="bg-white p-6 rounded-[2rem] border border-slate-100 shadow-sm">
                     <p class="text-[10px] font-black text-rose-500 uppercase tracking-widest">Sắp hết hạn</p>
-                    <h3 class="text-3xl font-black font-manrope mt-2 text-rose-500" th:text="${stats.expiringSoonCount}">0</h3>
+                    <h3 class="text-3xl font-black font-manrope mt-2 text-rose-500" th:text="${stats?.expiringSoonCount ?: 0}">0</h3>
                 </div>
                 <div class="bg-white p-6 rounded-[2rem] border border-slate-100 shadow-sm">
                     <p class="text-[10px] font-black text-[#08658b] uppercase tracking-widest">Giá trị tồn</p>
                     <h3 class="text-3xl font-black font-manrope mt-2 text-[#08658b]" 
-                        th:text="${#numbers.formatDecimal(stats.totalValue, 0, 'COMMA', 0, 'POINT') + 'đ'}">0đ</h3>
+                        th:text="${stats?.totalValue != null ? #numbers.formatDecimal(stats.totalValue, 0, 'COMMA', 0, 'POINT') + 'đ' : '0đ'}">0đ</h3>
                 </div>
             </div>
 
@@ -114,9 +114,9 @@
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-slate-50">
-                            <tr th:if="${batchPage.content.isEmpty()}">
+                            <tr th:if="${batchPage == null or batchPage.isEmpty()}">
                                 <td colspan="7" class="px-8 py-10 text-center text-slate-400 font-bold text-sm">
-                                    Không tìm thấy lô hàng nào phù hợp.
+                                    Hiện tại kho hàng đang trống. Hãy nhập lô hàng đầu tiên!
                                 </td>
                             </tr>
                             
@@ -169,7 +169,7 @@
                     </table>
                 </div>
                 
-                <div class="px-8 py-6 border-t border-slate-50 bg-slate-50/20 flex items-center justify-between" th:if="${batchPage.totalPages > 0}">
+                <div class="px-8 py-6 border-t border-slate-50 bg-slate-50/20 flex items-center justify-between" th:if="${batchPage != null and batchPage.totalPages > 0}">
                     <span class="text-xs text-slate-400 font-bold uppercase tracking-widest" 
                           th:text="'Trang ' + (${batchPage.number} + 1) + ' / ' + ${batchPage.totalPages}"></span>
                     <div class="flex items-center gap-2">
