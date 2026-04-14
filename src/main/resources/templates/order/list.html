@@ -61,6 +61,14 @@
 
             <!-- ACTION -->
             <div class="flex gap-2">
+                <!-- PAYMENT ONLY PENDING -->
+                <a th:if="${order.status.name() == 'Pending'}"
+                   th:href="@{/order/payment/{id}(id=${order.orderID})}"
+                   class="flex items-center gap-1 px-3 py-2 bg-green-500 text-white rounded-lg text-sm hover:bg-green-600">
+
+                    <span class="material-symbols-outlined text-[18px]">payments</span>
+                    Payment
+                </a>
 
                 <!-- VIEW DETAIL -->
                 <a th:href="@{/order/detail/{id}(id=${order.orderID})}"

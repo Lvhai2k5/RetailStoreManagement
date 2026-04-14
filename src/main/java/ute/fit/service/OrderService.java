@@ -30,6 +30,16 @@ public class OrderService {
     private final InventoryTransactionRepository inventoryRepo;
     private final SaleAllocationRepository saleAllocationRepo;
 
+    public void payOrder(Integer orderId, String method) {
+        OrdersEntity order = orderRepo.findById(orderId).orElseThrow();
+
+        order.setPaymentMethod(method);
+        order.setStatus(OrderStatus.Paid);
+        order.setPaidDate(LocalDateTime.now());
+
+        orderRepo.save(order);
+    }
+
 @Transactional
 public OrdersEntity createOrder(OrderDTO dto) {
 

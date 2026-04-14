@@ -1,80 +1,208 @@
+<!--<header th:fragment="header"-->
+<!--        class="fixed top-0 w-full z-50 h-16-->
+<!--               bg-gradient-to-r from-white/80 via-white/70 to-white/80-->
+<!--               backdrop-blur-xl border-b border-slate-200 shadow-sm font-manrope">-->
+
+<!--    <div class="flex justify-between items-center px-8 h-full">-->
+
+<!--        &lt;!&ndash; LEFT &ndash;&gt;-->
+<!--        <div class="flex items-center gap-10">-->
+
+<!--            &lt;!&ndash; LOGO &ndash;&gt;-->
+<!--            <div class="flex items-center gap-3">-->
+
+<!--                <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-rose-400 to-pink-500-->
+<!--                            shadow-lg shadow-rose-200 flex items-center justify-center">-->
+
+<!--                    <span class="text-white font-bold text-sm">RS</span>-->
+<!--                </div>-->
+
+<!--                <span class="text-xl font-extrabold bg-gradient-to-r from-rose-500 to-pink-500-->
+<!--                             bg-clip-text text-transparent tracking-wide">-->
+<!--                    Retail Store-->
+<!--                </span>-->
+
+<!--            </div>-->
+
+<!--            &lt;!&ndash; CLOCK &ndash;&gt;-->
+<!--            <div class="flex items-center gap-2 px-4 py-1.5 rounded-full-->
+<!--                        bg-white border border-slate-200 shadow-sm hover:shadow-md transition">-->
+
+<!--                <span class="material-symbols-outlined text-[18px] text-rose-400">-->
+<!--                    schedule-->
+<!--                </span>-->
+
+<!--                <span id="clock" class="text-sm font-bold text-slate-600 tracking-wide">-->
+<!--                    00:00:00-->
+<!--                </span>-->
+
+<!--            </div>-->
+
+<!--        </div>-->
+
+<!--        &lt;!&ndash; RIGHT &ndash;&gt;-->
+<!--        <div class="flex items-center gap-5">-->
+
+<!--            &lt;!&ndash; NOTIFICATION &ndash;&gt;-->
+<!--            <div class="relative group cursor-pointer">-->
+
+<!--                <span class="material-symbols-outlined text-[22px]-->
+<!--                             text-slate-500 group-hover:text-rose-500 transition">-->
+<!--                    notifications-->
+<!--                </span>-->
+
+<!--                &lt;!&ndash; BADGE &ndash;&gt;-->
+<!--                <span class="absolute -top-1 -right-1 w-2.5 h-2.5 bg-rose-500 rounded-full animate-ping"></span>-->
+<!--                <span class="absolute -top-1 -right-1 w-2.5 h-2.5 bg-rose-500 rounded-full"></span>-->
+
+<!--            </div>-->
+
+<!--            &lt;!&ndash; SETTINGS &ndash;&gt;-->
+<!--            <div class="group cursor-pointer">-->
+<!--                <span class="material-symbols-outlined text-[22px]-->
+<!--                             text-slate-500 group-hover:text-rose-500 transition">-->
+<!--                    settings-->
+<!--                </span>-->
+<!--            </div>-->
+
+<!--            &lt;!&ndash; USER &ndash;&gt;-->
+<!--            <div class="flex items-center gap-3 px-3 py-1.5 rounded-full-->
+<!--                        bg-white border border-slate-200 shadow-sm-->
+<!--                        hover:shadow-md transition cursor-pointer group">-->
+
+<!--                &lt;!&ndash; AVATAR &ndash;&gt;-->
+<!--                <div class="w-9 h-9 rounded-full overflow-hidden border border-rose-100">-->
+
+<!--                    <img src="https://ui-avatars.com/api/?name=Admin&background=ffe4e6&color=fb7185"-->
+<!--                         alt="Profile">-->
+<!--                </div>-->
+
+<!--                &lt;!&ndash; NAME &ndash;&gt;-->
+<!--                <div class="hidden md:flex flex-col leading-tight">-->
+
+<!--                    <span class="text-sm font-bold text-slate-600 group-hover:text-rose-500 transition">-->
+<!--                        Admin-->
+<!--                    </span>-->
+
+<!--                    <span class="text-[10px] text-slate-400">-->
+<!--                        Super Admin-->
+<!--                    </span>-->
+
+<!--                </div>-->
+
+<!--            </div>-->
+
+<!--        </div>-->
+
+<!--    </div>-->
+
+<!--    &lt;!&ndash; CLOCK SCRIPT &ndash;&gt;-->
+<!--    <script>-->
+<!--        function updateClock() {-->
+<!--            const now = new Date();-->
+
+<!--            const h = now.getHours().toString().padStart(2, '0');-->
+<!--            const m = now.getMinutes().toString().padStart(2, '0');-->
+<!--            const s = now.getSeconds().toString().padStart(2, '0');-->
+
+<!--            document.getElementById("clock").innerText = `${h}:${m}:${s}`;-->
+<!--        }-->
+
+<!--        setInterval(updateClock, 1000);-->
+<!--        updateClock();-->
+<!--    </script>-->
+
+<!--</header>-->
+
 <header th:fragment="header"
-        class="fixed top-0 w-full z-50 flex justify-between items-center px-8 h-16
-               bg-white/80 backdrop-blur-lg border-b border-slate-200 shadow-sm font-manrope">
+        class="fixed top-0 w-full z-50 h-16
+               bg-gradient-to-r from-white/80 via-white/70 to-white/80
+               backdrop-blur-xl border-b border-slate-200 shadow-sm font-manrope">
 
-    <!-- LEFT -->
-    <div class="flex items-center gap-12">
+    <div class="flex justify-between items-center px-8 h-full">
 
-        <!-- LOGO -->
-        <span class="text-xl font-bold bg-gradient-to-r from-rose-400 to-pink-500
-                     bg-clip-text text-transparent tracking-wide">
-            Retail Store
-        </span>
+        <!-- LEFT -->
+        <div class="flex items-center gap-10">
 
-        <!-- CLOCK -->
-        <div class="flex items-center gap-2 px-3 py-1 rounded-full
-                    bg-slate-100 border border-slate-200 shadow-sm">
+            <!-- LOGO -->
+            <div class="flex items-center gap-3">
 
-            <span class="material-symbols-outlined text-[18px] text-slate-400">
-                schedule
-            </span>
+                <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-rose-400 to-pink-500
+                            shadow-lg shadow-rose-200 flex items-center justify-center">
+                    <span class="text-white font-bold text-sm">RS</span>
+                </div>
 
-            <span id="clock" class="text-sm font-semibold text-slate-600">
-                00:00:00
-            </span>
-        </div>
+                <span class="text-xl font-extrabold bg-gradient-to-r from-rose-500 to-pink-500
+                             bg-clip-text text-transparent tracking-wide">
+                    Retail Store
+                </span>
 
-    </div>
-
-    <!-- RIGHT -->
-    <div class="flex items-center gap-6 text-slate-500">
-
-        <!-- ICON BUTTON -->
-        <div class="relative group cursor-pointer">
-            <span class="material-symbols-outlined text-[22px]
-                         hover:text-rose-400 transition">
-                notifications
-            </span>
-
-            <!-- DOT -->
-            <span class="absolute top-0 right-0 w-2 h-2 bg-rose-500 rounded-full animate-ping"></span>
-            <span class="absolute top-0 right-0 w-2 h-2 bg-rose-500 rounded-full"></span>
-        </div>
-
-        <span class="material-symbols-outlined text-[22px]
-                     hover:text-rose-400 transition cursor-pointer">
-            settings
-        </span>
-
-        <!-- USER -->
-        <div class="flex items-center gap-3 cursor-pointer group">
-
-            <div class="w-9 h-9 rounded-full bg-slate-100 border border-slate-200
-                        overflow-hidden shadow-sm group-hover:scale-105 transition">
-
-                <img src="https://ui-avatars.com/api/?name=Admin&background=fff1f2&color=fb7185"
-                     alt="Profile">
             </div>
 
-            <!-- NAME -->
-            <span class="hidden md:block text-sm font-medium text-slate-600 group-hover:text-rose-400 transition">
-                Admin
-            </span>
+            <!-- CLOCK -->
+            <div class="flex items-center gap-2 px-4 py-1.5 rounded-full
+                        bg-white border border-slate-200 shadow-sm hover:shadow-md transition">
+
+                <span class="material-symbols-outlined text-[18px] text-rose-400">
+                    schedule
+                </span>
+
+                <span id="clock" class="text-sm font-bold text-slate-600 tracking-wide">
+                    00:00:00
+                </span>
+
+            </div>
+
+        </div>
+
+        <!-- RIGHT -->
+        <div class="flex items-center gap-5">
+
+            <!-- USER -->
+            <div class="relative group cursor-pointer">
+
+                <!-- USER BOX -->
+                <div class="flex items-center gap-3 px-3 py-1.5 rounded-full
+                            bg-white border border-slate-200 shadow-sm
+                            hover:shadow-md transition">
+
+                    <!-- AVATAR SMALL -->
+                    <div class="w-9 h-9 rounded-full overflow-hidden border border-rose-100">
+                        <img src="/images/avatar.png" alt="Profile">
+                    </div>
+
+                    <!-- NAME -->
+                    <span class="text-sm font-bold text-slate-600 group-hover:text-rose-500 transition">
+                        Admin
+                    </span>
+
+                </div>
+
+                <!-- HOVER LARGE AVATAR -->
+                <div class="absolute right-0 mt-3 hidden group-hover:block
+                            bg-white border border-slate-200 shadow-xl rounded-xl p-3">
+
+                    <img src="/images/avatar.png"
+                         class="w-32 h-32 rounded-lg object-cover"
+                         alt="Large Profile">
+                </div>
+
+            </div>
+
         </div>
 
     </div>
 
-    <!-- SCRIPT -->
+    <!-- CLOCK SCRIPT -->
     <script>
         function updateClock() {
             const now = new Date();
 
-            let hours = now.getHours().toString().padStart(2, '0');
-            let minutes = now.getMinutes().toString().padStart(2, '0');
-            let seconds = now.getSeconds().toString().padStart(2, '0');
+            const h = now.getHours().toString().padStart(2, '0');
+            const m = now.getMinutes().toString().padStart(2, '0');
+            const s = now.getSeconds().toString().padStart(2, '0');
 
-            document.getElementById("clock").innerText =
-                hours + ":" + minutes + ":" + seconds;
+            document.getElementById("clock").innerText = `${h}:${m}:${s}`;
         }
 
         setInterval(updateClock, 1000);
