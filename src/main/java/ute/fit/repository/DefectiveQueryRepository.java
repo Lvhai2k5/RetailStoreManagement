@@ -22,17 +22,17 @@ public class DefectiveQueryRepository {
 
     public Map<String, Object> getDashboardStats() {
         String sql = """
-                SELECT
-                    COUNT(*) AS totalBatches,
-                    SUM(CASE WHEN b.ExpiryDate IS NOT NULL
-                              AND CAST(b.ExpiryDate AS date) BETWEEN CAST(GETDATE() AS date)
-                                  AND DATEADD(day, 7, CAST(GETDATE() AS date))
-                             THEN 1 ELSE 0 END) AS expiringSoonBatches,
-                    SUM(CASE WHEN b.ExpiryDate IS NOT NULL
-                              AND CAST(b.ExpiryDate AS date) < CAST(GETDATE() AS date)
-                             THEN 1 ELSE 0 END) AS expiredBatches,
-                    ISNULL((SELECT SUM(d.Quantity) FROM DefectiveProducts d), 0) AS totalDefectiveQuantity
-                FROM ImportBatches b
+                SELECT 
+    COUNT(*) AS totalBatches,
+    SUM(CASE WHEN b.ExpiryDate IS NOT NULL 
+              AND b.ExpiryDate BETWEEN CURDATE() AND DATE_ADD(CURDATE(), INTERVAL 7 DAY) 
+             THEN 1 ELSE 0 END) AS expiringSoonBatches,
+    SUM(CASE WHEN b.ExpiryDate IS NOT NULL 
+              AND b.ExpiryDate < CURDATE() 
+             THEN 1 ELSE 0 END) AS expiredBatches,
+    -- Dùng COALESCE thay cho ISNULL của SQL Server
+    COALESCE((SELECT SUM(d.Quantity) FROM DefectiveProducts d), 0) AS totalDefectiveQuantity
+FROM ImportBatches b
                 """;
         return jdbcTemplate.queryForMap(sql);
     }
