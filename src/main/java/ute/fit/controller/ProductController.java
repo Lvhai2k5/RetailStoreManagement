@@ -6,11 +6,16 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import ute.fit.entity.ProductPriceHistoryEntity;
 import ute.fit.entity.ProductTypesMarkupEntity;
 import ute.fit.entity.ProductsEntity;
+import ute.fit.repository.ProductPriceHistoryRepository;
 import ute.fit.repository.ProductRepository;
 import ute.fit.repository.ProductTypeRepository;
 import ute.fit.service.ProductService;
+
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 @Controller
 public class ProductController {
@@ -23,6 +28,10 @@ public class ProductController {
 
     @Autowired
     ProductService productService;
+
+    // TIÊM THÊM REPOSITORY LỊCH SỬ GIÁ VÀO ĐÂY
+    @Autowired
+    private ProductPriceHistoryRepository priceHistoryRepo;
 
     @GetMapping("/listproduct")
     public String list(Model model, HttpServletRequest request){
@@ -51,7 +60,23 @@ public class ProductController {
             p.setProductType(type); // khúc này gán lại enti từ db nha Vũ hải đừng quên dùm cái
         }
 
+        // 1. NẾU GIÁ NULL (Do bỏ nhập ở Form), GÁN MẶC ĐỊNH LÀ 0
+        if (p.getDefaultSellingPrice() == null) {
+            p.setDefaultSellingPrice(BigDecimal.ZERO);
+        }
+
+        // 2. LƯU SẢN PHẨM VÀO BẢNG Products
         repo.save(p);
+
+        // 3. TỰ ĐỘNG GHI LOG VÀO BẢNG LỊCH SỬ GIÁ
+        ProductPriceHistoryEntity history = new ProductPriceHistoryEntity();
+        history.setProduct(p);
+        history.setSellingPrice(p.getDefaultSellingPrice());
+        history.setChangeReason("Market changes"); // Loại thay đổi theo yêu cầu của bạn
+        history.setEffectiveDate(LocalDateTime.now());
+        
+        priceHistoryRepo.save(history);
+
         return "redirect:/listproduct";
     }
 
@@ -63,6 +88,7 @@ public class ProductController {
 
         return "product/form";
     }
+    
     @GetMapping("/product/delete/{id}")
     public String delete(@PathVariable String id){
         repo.deleteById(id);
@@ -75,6 +101,7 @@ public class ProductController {
         model.addAttribute("currentPath", request.getRequestURI());
         return "product/detail";
     }
+    
     @GetMapping("/product/max-stock/{id}")
     @ResponseBody
     public int getMaxStock(@PathVariable String id){

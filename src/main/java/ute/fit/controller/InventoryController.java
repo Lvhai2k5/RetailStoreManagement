@@ -6,11 +6,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.*;
 import ute.fit.service.IInventoryService;
 
 import java.util.Map;
@@ -18,21 +14,29 @@ import java.util.Map;
 @Controller
 public class InventoryController {
 
-    @Autowired private IInventoryService inventoryService;
+    @Autowired 
+    private IInventoryService inventoryService;
 
     @GetMapping("/inventory")
     public String showInventory(
             @RequestParam(required = false) String keyword,
             @RequestParam(required = false) String status,
+            @RequestParam(required = false) Integer productTypeId, // KHẮC PHỤC LỖI TẠI ĐÂY: Khai báo biến productTypeId
             @PageableDefault(size = 10) Pageable pageable, 
             Model model) {
         
+        // Gửi các thống kê tổng quan
         model.addAttribute("stats", inventoryService.getInventoryStats());
-        model.addAttribute("batchPage", inventoryService.getInventoryList(keyword, status, pageable));
+        
+        // Truyền thêm productTypeId vào service để lọc dữ liệu
+        model.addAttribute("batchPage", inventoryService.getInventoryList(keyword, status, productTypeId, pageable));
+        
+        // Đẩy các giá trị tìm kiếm hiện tại về UI để giữ trạng thái cho các ô Select/Input
         model.addAttribute("keyword", keyword);
         model.addAttribute("currentStatus", status);
+        model.addAttribute("currentProductType", productTypeId);
         
-        // Đẩy danh sách Sản phẩm, Nhà cung cấp và Loại sản phẩm sang HTML
+        // Đẩy danh sách tùy chọn cho các Modal và Thanh lọc
         model.addAttribute("products", inventoryService.getProductOptions());
         model.addAttribute("suppliers", inventoryService.getSupplierOptions());
         model.addAttribute("productTypes", inventoryService.getProductTypeOptions());
@@ -46,22 +50,20 @@ public class InventoryController {
         return "Inventory/batch-trace";
     }
 
- // Cập nhật lại @RequestParam trong hàm importNewBatch
     @PostMapping("/inventory/import")
     public String importNewBatch(
             @RequestParam String productId,
             @RequestParam Integer supplierId,
             @RequestParam Integer quantity,
-            @RequestParam Double totalImportValue, // Thay đổi ở đây
+            @RequestParam Double totalImportValue, 
             @RequestParam Double sellingPrice,
             @RequestParam(required = false) String expiryDate) {
         
+        // Thực hiện nhập kho dựa trên tổng giá trị lô hàng
         inventoryService.importNewBatch(productId, supplierId, quantity, totalImportValue, sellingPrice, expiryDate);
         return "redirect:/inventory"; 
     }
     
-    
-    // API xử lý AJAX Thêm Sản Phẩm Nhanh từ Drawer
     @PostMapping("/api/products/quick-add")
     @ResponseBody
     public ResponseEntity<?> quickAddProductAjax(
@@ -70,27 +72,20 @@ public class InventoryController {
             @RequestParam Integer productTypeId) {
         
         try {
-            // Gọi Service để lưu sản phẩm
+            // Lưu sản phẩm mới kèm theo loại hàng để áp dụng MarkupPercent sau này
             Map<String, Object> newProduct = inventoryService.quickAddProduct(productId, name, productTypeId);
-            
-            // Trả về JSON chứa thông tin sản phẩm vừa tạo thành công (HTTP 200)
             return ResponseEntity.ok(newProduct);
-            
         } catch (IllegalArgumentException e) {
-            // Nếu có lỗi (Ví dụ: trùng mã ProductID), trả về HTTP 400 Bad Request kèm câu thông báo lỗi
             return ResponseEntity.badRequest().body(Map.of("message", e.getMessage()));
         }
     }
     
-    
- // API 1: Lấy thông tin lô hàng cũ quăng lên Form
     @GetMapping("/api/inventory/batch/{id}")
     @ResponseBody
     public ResponseEntity<Map<String, Object>> getBatchForEditAjax(@PathVariable("id") Integer id) {
         return ResponseEntity.ok(inventoryService.getBatchForEdit(id));
     }
 
-    // API 2: Nhận dữ liệu sửa từ Form
     @PostMapping("/api/inventory/update")
     @ResponseBody
     public ResponseEntity<?> updateBatchAjax(
@@ -105,7 +100,6 @@ public class InventoryController {
             inventoryService.updateBatch(batchId, supplierId, quantity, importPrice, sellingPrice, expiryDate);
             return ResponseEntity.ok(Map.of("success", true));
         } catch (IllegalArgumentException e) {
-            // Bắt lỗi ráng buộc (Ví dụ: Số lượng nhỏ hơn số đã bán) trả về giao diện
             return ResponseEntity.badRequest().body(Map.of("message", e.getMessage()));
         }
     }

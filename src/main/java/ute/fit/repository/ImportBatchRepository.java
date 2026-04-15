@@ -108,4 +108,6 @@ public interface ImportBatchRepository extends JpaRepository<ImportBatchesEntity
         ORDER BY b.batchNumber
     """)
     List<ImportBatchesEntity> findByProductID(@Param("productID") String productID);
+    
+    List<ImportBatchesEntity> findTop2ByProduct_ProductIDOrderByBatchIDDesc(String productId);
 }

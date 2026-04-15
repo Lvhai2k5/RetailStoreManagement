@@ -19,7 +19,7 @@ public class ProductTypesMarkupEntity {
     @Column(name = "ProductTypeID") 
     private Integer productTypeID;
 
-    @Column(name = "Name", nullable = false,columnDefinition = "NVARCHAR(255)")
+    @Column(name = "Name", nullable = false, columnDefinition = "VARCHAR(255)")
     private String name;
 
     @Column(name = "MarkupPercent", precision = 5, scale = 2, nullable = false)
