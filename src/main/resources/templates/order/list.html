@@ -6,6 +6,8 @@
 
     <!-- Tailwind -->
     <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Font -->
     <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700&display=swap"
           rel="stylesheet">
 
@@ -28,159 +30,192 @@
         📦 Danh sách đơn hàng
     </h1>
 
-    <!-- LOOP ORDER -->
-    <div th:each="order : ${orders}"
-         class="bg-white rounded-2xl shadow p-5 mb-6 border border-slate-100 hover:shadow-lg transition">
+    <!-- SEARCH -->
+    <input type="text" id="searchOrder"
+           placeholder="🔍 Nhập mã đơn hàng..."
+           class="mb-6 px-4 py-2 border rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400">
 
-        <!-- HEADER -->
-        <div class="flex justify-between items-center mb-4">
+    <!-- LIST -->
+    <div id="orderContainer">
 
-            <div>
-                <p class="text-sm text-slate-400">
-                    Order ID:
-                    <span class="font-bold text-slate-700"
-                          th:text="${order.orderID}"></span>
-                </p>
+        <!-- LOOP ORDER -->
+        <div th:each="order : ${orders}"
+             th:attr="data-id=${order.orderID}"
+             class="order-item bg-white rounded-2xl shadow p-5 mb-6 border border-slate-100 hover:shadow-lg transition">
 
-                <!-- STATUS -->
-                <span th:if="${order.status.name() == 'Pending'}"
-                      class="px-3 py-1 text-xs bg-yellow-100 text-yellow-600 rounded-full font-semibold">
-                    Pending
-                </span>
+            <!-- HEADER -->
+            <div class="flex justify-between items-center mb-4">
 
-                <span th:if="${order.status.name() == 'Paid'}"
-                      class="px-3 py-1 text-xs bg-green-100 text-green-600 rounded-full font-semibold">
-                    Paid
-                </span>
+                <div>
+                    <p class="text-sm text-slate-400">
+                        Order ID:
+                        <span class="font-bold text-slate-700"
+                              th:text="${order.orderID}"></span>
+                    </p>
 
-                <span th:if="${order.status.name() == 'Cancelled'}"
-                      class="px-3 py-1 text-xs bg-red-100 text-red-600 rounded-full font-semibold">
-                    Cancelled
-                </span>
+                    <span th:if="${order.status.name() == 'Pending'}"
+                          class="px-3 py-1 text-xs bg-yellow-100 text-yellow-600 rounded-full font-semibold">
+                        Pending
+                    </span>
+
+                    <span th:if="${order.status.name() == 'Paid'}"
+                          class="px-3 py-1 text-xs bg-green-100 text-green-600 rounded-full font-semibold">
+                        Paid
+                    </span>
+
+                    <span th:if="${order.status.name() == 'Cancelled'}"
+                          class="px-3 py-1 text-xs bg-red-100 text-red-600 rounded-full font-semibold">
+                        Cancelled
+                    </span>
+                </div>
+
+                <div class="flex gap-2">
+
+                    <a th:if="${order.status.name() == 'Pending'}"
+                       th:href="@{/order/payment/{id}(id=${order.orderID})}"
+                       class="flex items-center gap-1 px-3 py-2 bg-green-500 text-white rounded-lg text-sm hover:bg-green-600">
+                        <span class="material-symbols-outlined text-[18px]">payments</span>
+                        Payment
+                    </a>
+
+                    <a th:href="@{/order/detail/{id}(id=${order.orderID})}"
+                       class="flex items-center gap-1 px-3 py-2 bg-slate-500 text-white rounded-lg text-sm hover:bg-slate-600">
+                        <span class="material-symbols-outlined text-[18px]">visibility</span>
+                        Chi tiết
+                    </a>
+
+                    <a th:if="${order.status.name() == 'Pending'}"
+                       th:href="@{/order/edit/{id}(id=${order.orderID})}"
+                       class="flex items-center gap-1 px-3 py-2 bg-blue-500 text-white rounded-lg text-sm hover:bg-blue-600">
+                        <span class="material-symbols-outlined text-[18px]">edit</span>
+                        Sửa
+                    </a>
+
+                    <button th:if="${order.status.name() != 'Pending'}"
+                            disabled
+                            class="flex items-center gap-1 px-3 py-2 bg-gray-300 text-white rounded-lg text-sm cursor-not-allowed">
+                        <span class="material-symbols-outlined text-[18px]">lock</span>
+                        Locked
+                    </button>
+
+                    <a th:if="${order.status.name() == 'Pending'}"
+                       th:href="@{/order/delete/{id}(id=${order.orderID})}"
+                       onclick="return confirm('Bạn có chắc muốn xóa đơn?')"
+                       class="flex items-center gap-1 px-3 py-2 bg-red-500 text-white rounded-lg text-sm hover:bg-red-600">
+                        <span class="material-symbols-outlined text-[18px]">delete</span>
+                        Xóa
+                    </a>
+
+                </div>
             </div>
 
-            <!-- ACTION -->
-            <div class="flex gap-2">
-                <!-- PAYMENT ONLY PENDING -->
-                <a th:if="${order.status.name() == 'Pending'}"
-                   th:href="@{/order/payment/{id}(id=${order.orderID})}"
-                   class="flex items-center gap-1 px-3 py-2 bg-green-500 text-white rounded-lg text-sm hover:bg-green-600">
+            <!-- INFO -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm mb-4">
 
-                    <span class="material-symbols-outlined text-[18px]">payments</span>
-                    Payment
-                </a>
+                <div>
+                    <p class="text-slate-400">Tổng tiền</p>
+                    <p class="font-bold text-green-600"
+                       th:text="${#numbers.formatDecimal(order.totalAmount, 0, 'COMMA', 0, 'POINT')} + ' ₫'">
+                    </p>
+                </div>
 
-                <!-- VIEW DETAIL -->
-                <a th:href="@{/order/detail/{id}(id=${order.orderID})}"
-                   class="flex items-center gap-1 px-3 py-2 bg-slate-500 text-white rounded-lg text-sm hover:bg-slate-600">
+                <div>
+                    <p class="text-slate-400">Thanh toán</p>
+                    <p class="font-semibold"
+                       th:text="${order.paymentMethod}"></p>
+                </div>
 
-                    <span class="material-symbols-outlined text-[18px]">visibility</span>
-                    Chi tiết
-                </a>
+                <div>
+                    <p class="text-slate-400">Ngày tạo</p>
+                    <p th:text="${#temporals.format(order.createdDate, 'dd/MM/yyyy HH:mm')}"></p>
+                </div>
 
-                <!-- EDIT ONLY PENDING -->
-                <a th:if="${order.status.name() == 'Pending'}"
-                   th:href="@{/order/edit/{id}(id=${order.orderID})}"
-                   class="flex items-center gap-1 px-3 py-2 bg-blue-500 text-white rounded-lg text-sm hover:bg-blue-600">
-
-                    <span class="material-symbols-outlined text-[18px]">edit</span>
-                    Sửa
-                </a>
-
-                <!-- LOCK -->
-                <button th:if="${order.status.name() != 'Pending'}"
-                        disabled
-                        class="flex items-center gap-1 px-3 py-2 bg-gray-300 text-white rounded-lg text-sm cursor-not-allowed">
-
-                    <span class="material-symbols-outlined text-[18px]">lock</span>
-                    Locked
-                </button>
-
-                <!-- DELETE ONLY PENDING -->
-                <a th:if="${order.status.name() == 'Pending'}"
-                   th:href="@{/order/delete/{id}(id=${order.orderID})}"
-                   onclick="return confirm('Bạn có chắc muốn xóa đơn?')"
-                   class="flex items-center gap-1 px-3 py-2 bg-red-500 text-white rounded-lg text-sm hover:bg-red-600">
-
-                    <span class="material-symbols-outlined text-[18px]">delete</span>
-                    Xóa
-                </a>
+                <div>
+                    <p class="text-slate-400">Ngày trả</p>
+                    <p th:text="${order.paidDate != null ? #temporals.format(order.paidDate, 'dd/MM/yyyy HH:mm') : '-'}"></p>
+                </div>
 
             </div>
-        </div>
 
-        <!-- INFO -->
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm mb-4">
-
-            <div>
-                <p class="text-slate-400">Tổng tiền</p>
-                <p class="font-bold text-green-600"
-                   th:text="${#numbers.formatDecimal(order.totalAmount, 0, 'COMMA', 0, 'POINT')} + ' ₫'">
-                </p>
-            </div>
-
-            <div>
-                <p class="text-slate-400">Thanh toán</p>
-                <p class="font-semibold"
-                   th:text="${order.paymentMethod}"></p>
-            </div>
-
-            <div>
-                <p class="text-slate-400">Ngày tạo</p>
-                <p th:text="${#temporals.format(order.createdDate, 'dd/MM/yyyy HH:mm')}"></p>
-            </div>
-
-            <div>
-                <p class="text-slate-400">Ngày trả</p>
-                <p th:text="${order.paidDate != null ? #temporals.format(order.paidDate, 'dd/MM/yyyy HH:mm') : '-'}"></p>
-            </div>
-
-        </div>
-
-        <!-- TABLE -->
-        <div class="overflow-x-auto">
-            <table class="w-full text-sm rounded-xl overflow-hidden shadow-sm">
-
-                <thead class="bg-slate-200 text-slate-700 uppercase text-xs">
-                <tr>
-                    <th class="p-3 text-left">Sản phẩm</th>
-                    <th class="p-3 text-center">Số lượng</th>
-                    <th class="p-3 text-right">Đơn giá</th>
-                    <th class="p-3 text-right">Thành tiền</th>
-                </tr>
-                </thead>
-
-                <tbody>
-                <tr th:each="d : ${order.orderDetails}"
-                    class="border-t hover:bg-slate-50 transition">
-
-                    <td class="p-3 font-medium text-slate-700">
-                        <div class="flex items-center gap-2">
-                            <span class="material-symbols-outlined text-slate-400">inventory_2</span>
-                            <span th:text="${d.product.name}"></span>
-                        </div>
-                    </td>
-
-                    <td class="p-3 text-center font-semibold"
-                        th:text="${d.quantity}"></td>
-
-                    <td class="p-3 text-right text-slate-600"
-                        th:text="${#numbers.formatDecimal(d.unitPrice, 0, 'COMMA', 0, 'POINT')} + ' ₫'">
-                    </td>
-
-                    <td class="p-3 text-right font-bold text-green-600"
-                        th:text="${#numbers.formatDecimal(d.unitPrice * d.quantity, 0, 'COMMA', 0, 'POINT')} + ' ₫'">
-                    </td>
-
-                </tr>
-                </tbody>
-
-            </table>
         </div>
 
     </div>
 
+    <!-- PAGINATION -->
+    <div id="pagination" class="flex justify-center mt-8 gap-2"></div>
+
 </div>
+
+<!-- SCRIPT -->
+<script>
+    const searchInput = document.getElementById("searchOrder");
+    const orders = document.querySelectorAll(".order-item");
+    const pagination = document.getElementById("pagination");
+
+    const itemsPerPage = 10;
+    let currentPage = 1;
+    let filteredOrders = [...orders];
+
+    function showPage(page) {
+        currentPage = page;
+
+        orders.forEach(order => order.style.display = "none");
+
+        const start = (page - 1) * itemsPerPage;
+        const end = start + itemsPerPage;
+
+        filteredOrders.slice(start, end).forEach(order => {
+            order.style.display = "block";
+        });
+
+        renderPagination();
+    }
+
+    function renderPagination() {
+        pagination.innerHTML = "";
+        const totalPages = Math.ceil(filteredOrders.length / itemsPerPage);
+
+        if (currentPage > 1) {
+            const prev = document.createElement("button");
+            prev.innerText = "Prev";
+            prev.className = "px-3 py-1 bg-slate-300 rounded hover:bg-slate-400";
+            prev.onclick = () => showPage(currentPage - 1);
+            pagination.appendChild(prev);
+        }
+
+        for (let i = 1; i <= totalPages; i++) {
+            const btn = document.createElement("button");
+            btn.innerText = i;
+
+            btn.className = "px-3 py-1 border rounded " +
+                (i === currentPage ? "bg-blue-500 text-white" : "bg-white hover:bg-blue-100");
+
+            btn.onclick = () => showPage(i);
+            pagination.appendChild(btn);
+        }
+
+        if (currentPage < totalPages) {
+            const next = document.createElement("button");
+            next.innerText = "Next";
+            next.className = "px-3 py-1 bg-slate-300 rounded hover:bg-slate-400";
+            next.onclick = () => showPage(currentPage + 1);
+            pagination.appendChild(next);
+        }
+    }
+
+    searchInput.addEventListener("keyup", function () {
+        const keyword = this.value.toLowerCase();
+
+        filteredOrders = [...orders].filter(order => {
+            const id = order.getAttribute("data-id").toLowerCase();
+            return id.includes(keyword);
+        });
+
+        showPage(1);
+    });
+
+    showPage(1);
+</script>
 
 </body>
 </html>
