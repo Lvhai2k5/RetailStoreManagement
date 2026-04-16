@@ -8,7 +8,7 @@
 	<script src="https://cdn.tailwindcss.com"></script>
 
 	<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700&display=swap"
-		rel="stylesheet">
+		  rel="stylesheet">
 
 	<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
 
@@ -19,132 +19,164 @@
 			font-family: 'Manrope', sans-serif;
 		}
 	</style>
-
 </head>
-
-
 
 <body class="bg-gradient-to-br from-slate-100 to-slate-200">
 
-	<div th:replace="~{fragments/header :: header}"></div>
-	<div th:replace="~{fragments/sidebar :: sidebar}"></div>
+<div th:replace="~{fragments/header :: header}"></div>
+<div th:replace="~{fragments/sidebar :: sidebar}"></div>
 
-	<main class="ml-0 lg:ml-64 mt-16 p-8">
+<main class="ml-0 lg:ml-64 mt-16 p-8">
 
-		<!-- HEADER -->
-		<div class="flex justify-between items-center mb-6">
+	<!-- HEADER -->
+	<div class="flex justify-between items-center mb-6">
 
-			<h1 class="text-3xl font-bold text-slate-700">
-				Quản lý sản phẩm
-			</h1>
+		<h1 class="text-3xl font-bold text-slate-700">
+			Quản lý sản phẩm
+		</h1>
 
-			<a href="/product/create"
-				class="flex items-center gap-2 bg-rose-500 text-white px-5 py-2 rounded-xl shadow-lg hover:bg-rose-600 hover:scale-105 transition">
+		<a href="/product/create"
+		   class="flex items-center gap-2 bg-rose-500 text-white px-5 py-2 rounded-xl shadow-lg hover:bg-rose-600 hover:scale-105 transition">
+			<span class="material-symbols-outlined">add</span>
+			Thêm sản phẩm
+		</a>
+	</div>
 
-				<span class="material-symbols-outlined">add</span>
-				Thêm sản phẩm
+	<!-- CARD -->
+	<div class="bg-white rounded-2xl shadow-xl border border-slate-100 overflow-hidden">
 
-			</a>
+		<table class="w-full text-sm">
 
-		</div>
+			<!-- HEADER TABLE -->
+			<thead class="bg-gradient-to-r from-rose-400 to-pink-400 text-white">
+			<tr>
+				<th class="p-4 font-semibold">ID</th>
+				<th class="p-4 font-semibold">Tên sản phẩm</th>
+				<th class="p-4 font-semibold">Loại</th>
+				<th class="p-4 font-semibold">Giá bán</th>
+				<th class="p-4 font-semibold">Trạng thái</th>
+				<th class="p-4 font-semibold">Ngày tạo</th>
+				<th class="p-4 text-center font-semibold">Hành động</th>
+			</tr>
+			</thead>
 
+			<!-- BODY -->
+			<tbody id="productTable">
+			<tr th:each="p:${products}" class="product-row border-b hover:bg-slate-50 transition">
 
-		<!-- CARD -->
-		<div class="bg-white rounded-2xl shadow-xl border border-slate-100 overflow-hidden">
+				<td class="p-4 font-medium text-slate-700" th:text="${p.productID}"></td>
 
-			<table class="w-full text-sm">
+				<td class="p-4 font-semibold text-slate-800" th:text="${p.name}"></td>
 
-				<!-- HEADER TABLE -->
-				<thead class="bg-gradient-to-r from-rose-400 to-pink-400 text-white">
+				<td class="p-4 text-slate-600" th:text="${p.productType.name}"></td>
 
-					<tr>
+				<td class="p-4 text-rose-500 font-bold"
+					th:text="${#numbers.formatDecimal(p.defaultSellingPrice,0,'COMMA',0,'POINT')} + ' đ'">
+				</td>
 
-						<th class="p-4 font-semibold">ID</th>
-						<th class="p-4 font-semibold">Tên sản phẩm</th>
-						<th class="p-4 font-semibold">Loại</th>
-						<th class="p-4 font-semibold">Giá bán</th>
-						<th class="p-4 font-semibold">Trạng thái</th>
-						<th class="p-4 font-semibold">Ngày tạo</th>
-						<th class="p-4 text-center font-semibold">Hành động</th>
+				<td class="p-4">
+					<span th:if="${p.status == 'BUYING'}"
+						  class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-xs font-semibold">
+						Đang bán
+					</span>
 
-					</tr>
+					<span th:if="${p.status == 'HIDING'}"
+						  class="bg-gray-200 text-gray-600 px-3 py-1 rounded-full text-xs font-semibold">
+						Ngừng bán
+					</span>
+				</td>
 
-				</thead>
+				<td class="p-4 text-slate-600"
+					th:text="${#temporals.format(p.createdDate,'dd/MM/yyyy')}">
+				</td>
 
+				<td class="p-4 flex justify-center gap-3">
 
-				<tbody>
+					<a th:href="@{'/product/detail/'+${p.productID}}"
+					   class="text-blue-500 hover:text-blue-700">
+						<span class="material-symbols-outlined text-[18px]">visibility</span>
+					</a>
 
-					<tr th:each="p:${products}" class="border-b hover:bg-slate-50 transition">
+					<a th:href="@{'/product/edit/'+${p.productID}}"
+					   class="text-yellow-500 hover:text-yellow-700">
+						<span class="material-symbols-outlined text-[18px]">edit</span>
+					</a>
 
-						<td class="p-4 font-medium text-slate-700" th:text="${p.productID}">
-						</td>
+				</td>
+			</tr>
+			</tbody>
 
-						<td class="p-4 font-semibold text-slate-800" th:text="${p.name}">
-						</td>
+		</table>
+	</div>
 
-						<td class="p-4 text-slate-600" th:text="${p.productType.name}">
-						</td>
+	<!-- PAGINATION -->
+	<div id="pagination" class="flex justify-center mt-6 gap-2"></div>
 
-						<td class="p-4 text-rose-500 font-bold"
-							th:text="${#numbers.formatDecimal(p.defaultSellingPrice,0,'COMMA',0,'POINT')} + ' đ'">
-						</td>
+</main>
 
+<div th:replace="~{fragments/footer :: footer}"></div>
 
-						<td class="p-4">
+<!-- SCRIPT -->
+<script>
+	const rows = document.querySelectorAll(".product-row");
+	const pagination = document.getElementById("pagination");
 
-							<span th:if="${p.status == 'BUYING'}"
-								class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-xs font-semibold">
-								Đang bán
-							</span>
+	const itemsPerPage = 5;
+	let currentPage = 1;
 
-							<span th:if="${p.status == 'HIDING'}"
-								class="bg-gray-200 text-gray-600 px-3 py-1 rounded-full text-xs font-semibold">
-								Ngừng bán
-							</span>
+	function showPage(page) {
+		currentPage = page;
 
-						</td>
+		rows.forEach(row => row.style.display = "none");
 
+		const start = (page - 1) * itemsPerPage;
+		const end = start + itemsPerPage;
 
-						<td class="p-4 text-slate-600" th:text="${#temporals.format(p.createdDate,'dd/MM/yyyy')}">
-						</td>
+		[...rows].slice(start, end).forEach(row => {
+			row.style.display = "table-row";
+		});
 
+		renderPagination();
+	}
 
-						<td class="p-4 flex justify-center gap-3">
+	function renderPagination() {
+		pagination.innerHTML = "";
+		const totalPages = Math.ceil(rows.length / itemsPerPage);
 
-							<a th:href="@{'/product/detail/'+${p.productID}}"
-								class="flex items-center gap-1 text-blue-500 hover:text-blue-700">
+		// Prev
+		if (currentPage > 1) {
+			const prev = document.createElement("button");
+			prev.innerText = "Prev";
+			prev.className = "px-3 py-1 bg-slate-300 rounded hover:bg-slate-400";
+			prev.onclick = () => showPage(currentPage - 1);
+			pagination.appendChild(prev);
+		}
 
-								<span class="material-symbols-outlined text-[18px]">visibility</span>
-							</a>
+		// Page number
+		for (let i = 1; i <= totalPages; i++) {
+			const btn = document.createElement("button");
+			btn.innerText = i;
 
-							<a th:href="@{'/product/edit/'+${p.productID}}"
-								class="flex items-center gap-1 text-yellow-500 hover:text-yellow-700">
+			btn.className = "px-3 py-1 border rounded " +
+					(i === currentPage ? "bg-rose-500 text-white" : "bg-white hover:bg-rose-100");
 
-								<span class="material-symbols-outlined text-[18px]">edit</span>
-							</a>
+			btn.onclick = () => showPage(i);
+			pagination.appendChild(btn);
+		}
 
-							<a th:href="@{'/product/delete/'+${p.productID}}"
-								class="flex items-center gap-1 text-red-500 hover:text-red-700"
-								onclick="return confirm('Bạn chắc chắn muốn xóa?')">
+		// Next
+		if (currentPage < totalPages) {
+			const next = document.createElement("button");
+			next.innerText = "Next";
+			next.className = "px-3 py-1 bg-slate-300 rounded hover:bg-slate-400";
+			next.onclick = () => showPage(currentPage + 1);
+			pagination.appendChild(next);
+		}
+	}
 
-								<span class="material-symbols-outlined text-[18px]">delete</span>
-
-							</a>
-
-						</td>
-
-					</tr>
-
-				</tbody>
-
-			</table>
-
-		</div>
-
-	</main>
-
-	<div th:replace="~{fragments/footer :: footer}"></div>
+	// INIT
+	showPage(1);
+</script>
 
 </body>
-
 </html>

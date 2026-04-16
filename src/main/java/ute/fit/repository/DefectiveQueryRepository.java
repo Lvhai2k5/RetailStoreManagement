@@ -1,13 +1,13 @@
 package ute.fit.repository;
 
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Map;
+
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
-
-import java.time.LocalDate;
-import java.util.List;
-import java.util.Map;
 
 @Repository
 public class DefectiveQueryRepository {
@@ -25,13 +25,12 @@ public class DefectiveQueryRepository {
                 SELECT
                     COUNT(*) AS totalBatches,
                     SUM(CASE WHEN b.ExpiryDate IS NOT NULL
-                              AND CAST(b.ExpiryDate AS date) BETWEEN CAST(GETDATE() AS date)
-                                  AND DATEADD(day, 7, CAST(GETDATE() AS date))
+                              AND CAST(b.ExpiryDate AS DATE) BETWEEN CAST(GETDATE() AS DATE) AND DATEADD(DAY, 7, CAST(GETDATE() AS DATE))
                              THEN 1 ELSE 0 END) AS expiringSoonBatches,
                     SUM(CASE WHEN b.ExpiryDate IS NOT NULL
-                              AND CAST(b.ExpiryDate AS date) < CAST(GETDATE() AS date)
+                              AND CAST(b.ExpiryDate AS DATE) < CAST(GETDATE() AS DATE)
                              THEN 1 ELSE 0 END) AS expiredBatches,
-                    ISNULL((SELECT SUM(d.Quantity) FROM DefectiveProducts d), 0) AS totalDefectiveQuantity
+                    COALESCE((SELECT SUM(d.Quantity) FROM DefectiveProducts d), 0) AS totalDefectiveQuantity
                 FROM ImportBatches b
                 """;
         return jdbcTemplate.queryForMap(sql);
@@ -51,18 +50,28 @@ public class DefectiveQueryRepository {
                     b.Quantity AS ImportedQuantity,
                     b.ImportDate,
                     b.ExpiryDate,
-                    CONVERT(varchar(10), b.ImportDate, 103) AS ImportDateText,
-                    CONVERT(varchar(10), b.ExpiryDate, 103) AS ExpiryDateText,
+                    FORMAT(b.ImportDate, 'dd/MM/yyyy') AS ImportDateText,
+                    FORMAT(b.ExpiryDate, 'dd/MM/yyyy') AS ExpiryDateText,
                     b.ImportPrice,
                     b.SellingPrice,
-                    ISNULL(stock.SellableStock, 0) AS SellableStock,
-                    ISNULL(df.TotalDefectiveQuantity, 0) AS DefectiveQuantity,
-                    df.LastReason,
-                    CONVERT(varchar(10), df.LastDefectiveDate, 103) AS LastDefectiveDateText,
+                    COALESCE(stock.SellableStock, 0) AS SellableStock,
+                    COALESCE((SELECT SUM(d.Quantity) FROM DefectiveProducts d WHERE d.BatchID = b.BatchID), 0) AS DefectiveQuantity,
+                    (
+                        SELECT TOP 1 d2.Reason
+                        FROM DefectiveProducts d2
+                        WHERE d2.BatchID = b.BatchID
+                        ORDER BY d2.CreatedDate DESC, d2.DefectiveID DESC
+                    ) AS LastReason,
+                    FORMAT(
+                        (
+                            SELECT MAX(d3.CreatedDate) FROM DefectiveProducts d3 WHERE d3.BatchID = b.BatchID
+                        ),
+                        'dd/MM/yyyy'
+                    ) AS LastDefectiveDateText,
                     CASE
                         WHEN b.ExpiryDate IS NULL THEN 'NO_EXPIRY'
-                        WHEN CAST(b.ExpiryDate AS date) < CAST(GETDATE() AS date) THEN 'EXPIRED'
-                        WHEN CAST(b.ExpiryDate AS date) BETWEEN CAST(GETDATE() AS date) AND DATEADD(day, 7, CAST(GETDATE() AS date)) THEN 'EXPIRING'
+                        WHEN CAST(b.ExpiryDate AS DATE) < CAST(GETDATE() AS DATE) THEN 'EXPIRED'
+                        WHEN CAST(b.ExpiryDate AS DATE) BETWEEN CAST(GETDATE() AS DATE) AND DATEADD(DAY, 7, CAST(GETDATE() AS DATE)) THEN 'EXPIRING'
                         ELSE 'VALID'
                     END AS ExpiryStatus
                 FROM ImportBatches b
@@ -73,41 +82,33 @@ public class DefectiveQueryRepository {
                     WHERE it.IsSellable = 1
                     GROUP BY it.BatchID
                 ) stock ON stock.BatchID = b.BatchID
-                OUTER APPLY (
-                    SELECT
-                        ISNULL(SUM(d.Quantity), 0) AS TotalDefectiveQuantity,
-                        (
-                            SELECT TOP 1 d2.Reason
-                            FROM DefectiveProducts d2
-                            WHERE d2.BatchID = b.BatchID
-                            ORDER BY d2.CreatedDate DESC, d2.DefectiveID DESC
-                        ) AS LastReason,
-                        MAX(d.CreatedDate) AS LastDefectiveDate
-                    FROM DefectiveProducts d
-                    WHERE d.BatchID = b.BatchID
-                ) df
-                WHERE (:fromDate IS NULL OR CAST(COALESCE(df.LastDefectiveDate, b.ImportDate) AS date) >= :fromDate)
-                  AND (:toDate IS NULL OR CAST(COALESCE(df.LastDefectiveDate, b.ImportDate) AS date) <= :toDate)
+                WHERE (:fromDate IS NULL OR CAST(COALESCE(
+                            (SELECT MAX(d.CreatedDate) FROM DefectiveProducts d WHERE d.BatchID = b.BatchID),
+                            b.ImportDate
+                        ) AS DATE) >= :fromDate)
+                  AND (:toDate IS NULL OR CAST(COALESCE(
+                            (SELECT MAX(d.CreatedDate) FROM DefectiveProducts d WHERE d.BatchID = b.BatchID),
+                            b.ImportDate
+                        ) AS DATE) <= :toDate)
                   AND (:keyword IS NULL OR :keyword = ''
-                       OR CAST(b.BatchID AS VARCHAR(30)) LIKE '%' + :keyword + '%'
-                       OR p.ProductID LIKE '%' + :keyword + '%'
-                       OR p.Name LIKE '%' + :keyword + '%')
+                       OR CAST(b.BatchID AS VARCHAR(30)) LIKE CONCAT('%', :keyword, '%')
+                       OR p.ProductID LIKE CONCAT('%', :keyword, '%')
+                       OR p.Name LIKE CONCAT('%', :keyword, '%'))
                   AND (
                       :expiryStatus IS NULL OR :expiryStatus = '' OR :expiryStatus = 'ALL'
                       OR (
                           :expiryStatus = 'EXPIRED'
                           AND b.ExpiryDate IS NOT NULL
-                          AND CAST(b.ExpiryDate AS date) < CAST(GETDATE() AS date)
+                          AND CAST(b.ExpiryDate AS DATE) < CAST(GETDATE() AS DATE)
                       )
                       OR (
                           :expiryStatus = 'EXPIRING'
                           AND b.ExpiryDate IS NOT NULL
-                          AND CAST(b.ExpiryDate AS date) BETWEEN CAST(GETDATE() AS date)
-                              AND DATEADD(day, 7, CAST(GETDATE() AS date))
+                          AND CAST(b.ExpiryDate AS DATE) BETWEEN CAST(GETDATE() AS DATE) AND DATEADD(DAY, 7, CAST(GETDATE() AS DATE))
                       )
                       OR (
                           :expiryStatus = 'VALID'
-                          AND (b.ExpiryDate IS NULL OR CAST(b.ExpiryDate AS date) > DATEADD(day, 7, CAST(GETDATE() AS date)))
+                          AND (b.ExpiryDate IS NULL OR CAST(b.ExpiryDate AS DATE) > DATEADD(DAY, 7, CAST(GETDATE() AS DATE)))
                       )
                   )
                   AND (
@@ -116,7 +117,7 @@ public class DefectiveQueryRepository {
                           SELECT 1
                           FROM DefectiveProducts dr
                           WHERE dr.BatchID = b.BatchID
-                            AND dr.Reason LIKE '%' + :reason + '%'
+                            AND dr.Reason LIKE CONCAT('%', :reason, '%')
                       )
                   )
                 ORDER BY b.BatchID DESC
@@ -133,6 +134,7 @@ public class DefectiveQueryRepository {
     }
 
     public Map<String, Object> getBatchHandleInfo(Integer batchId) {
+        // Trong SQL Server, LIMIT 1 ở cuối được thay bằng SELECT TOP 1 ở đầu
         String sql = """
                 SELECT TOP 1
                     b.BatchID,
@@ -143,9 +145,9 @@ public class DefectiveQueryRepository {
                     b.SellingPrice,
                     b.ImportDate,
                     b.ExpiryDate,
-                    CONVERT(varchar(10), b.ImportDate, 103) AS ImportDateText,
-                    CONVERT(varchar(10), b.ExpiryDate, 103) AS ExpiryDateText,
-                    ISNULL(stock.SellableStock, 0) AS SellableStock
+                    FORMAT(b.ImportDate, 'dd/MM/yyyy') AS ImportDateText,
+                    FORMAT(b.ExpiryDate, 'dd/MM/yyyy') AS ExpiryDateText,
+                    COALESCE(stock.SellableStock, 0) AS SellableStock
                 FROM ImportBatches b
                 JOIN Products p ON p.ProductID = b.ProductID
                 LEFT JOIN (
@@ -164,7 +166,7 @@ public class DefectiveQueryRepository {
         String sql = """
                 SELECT
                     b.BatchID,
-                    ISNULL(stock.SellableStock, 0) AS SellableStock
+                    COALESCE(stock.SellableStock, 0) AS SellableStock
                 FROM ImportBatches b
                 LEFT JOIN (
                     SELECT it.BatchID, SUM(it.QuantityChange) AS SellableStock
@@ -173,8 +175,8 @@ public class DefectiveQueryRepository {
                     GROUP BY it.BatchID
                 ) stock ON stock.BatchID = b.BatchID
                 WHERE b.ExpiryDate IS NOT NULL
-                  AND CAST(b.ExpiryDate AS date) < CAST(GETDATE() AS date)
-                  AND ISNULL(stock.SellableStock, 0) > 0
+                  AND CAST(b.ExpiryDate AS DATE) < CAST(GETDATE() AS DATE)
+                  AND COALESCE(stock.SellableStock, 0) > 0
                 """;
         return jdbcTemplate.queryForList(sql);
     }
