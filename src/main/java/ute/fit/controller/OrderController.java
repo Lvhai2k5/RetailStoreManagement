@@ -114,6 +114,19 @@ public class OrderController {
         return "order/payment";
     }
 
+    @GetMapping("/payment/{id}")
+    public String payment(@PathVariable Integer id, Model model) {
+        model.addAttribute("order", orderService.getById(id));
+        return "order/paymentdirect";
+    }
+
+    @PostMapping("/paydirect")
+    public String pay(@RequestParam Integer orderId,
+                      @RequestParam String paymentMethod) {
+
+        orderService.payOrder(orderId, paymentMethod);
+        return "redirect:/order/listorder";
+    }
     // ================= CONFIRM PAYMENT =================
     @PostMapping("/pay")
     public String pay(@RequestParam String paymentMethod,
@@ -144,5 +157,10 @@ public class OrderController {
         res.put("ok", ok);
 
         return res;
+    }
+
+    @PostMapping("/pay/{id}")
+    public String payOrder(@PathVariable("id") Integer id) {
+        return "redirect:/order/save";
     }
 }
