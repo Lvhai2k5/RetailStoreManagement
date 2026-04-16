@@ -48,7 +48,15 @@
                         <input type="text" id="liveSearchInput" name="keyword" th:value="${keyword}" placeholder="Gõ để tìm nhanh..." autocomplete="off" class="border-none bg-transparent p-0 text-sm font-bold text-slate-700 w-full focus:ring-0 placeholder:text-slate-400 outline-none">
                     </div>
 
-                    <select name="status" class="text-sm font-bold border-slate-200 rounded-2xl bg-white focus:ring-0 focus:border-[#45617c] outline-none h-11 shadow-sm cursor-pointer">
+					<select name="productTypeId" class="text-sm font-bold border-slate-200 rounded-2xl bg-white focus:ring-0 focus:border-[#45617c] outline-none h-11 shadow-sm cursor-pointer max-w-[180px]">
+                        <option value="" th:selected="${currentProductType == null}">Tất cả loại hàng</option>
+                        <option th:each="pt : ${productTypes}" 
+                                th:value="${pt.id}" 
+                                th:text="${pt.name}" 
+                                th:selected="${currentProductType == pt.id}"></option>
+                    </select>
+
+                    <select name="status" class="text-sm font-bold border-slate-200 rounded-2xl bg-white focus:ring-0 focus:border-[#45617c] outline-none h-11 shadow-sm cursor-pointer max-w-[160px]">
                         <option value="" th:selected="${currentStatus == null or currentStatus == ''}">Tất cả trạng thái</option>
                         <option value="AVAILABLE" th:selected="${currentStatus == 'AVAILABLE'}">Sẵn sàng</option>
                         <option value="LOW_STOCK" th:selected="${currentStatus == 'LOW_STOCK'}">Sắp hết hàng</option>
@@ -58,7 +66,7 @@
                     </select>
 
                     <button type="submit" class="bg-[#45617c] text-white hover:bg-[#344b61] px-5 rounded-2xl transition-all shadow-sm h-11 font-bold text-sm flex items-center">Lọc DB</button>
-                    <a th:href="@{/inventory}" th:if="${keyword != null or currentStatus != null}" class="text-xs font-bold text-slate-400 hover:text-rose-500 underline ml-2 transition-all">Xóa bộ lọc</a>
+                    <a th:href="@{/inventory}" th:if="${keyword != null or currentStatus != null or currentProductType != null}" class="text-xs font-bold text-slate-400 hover:text-rose-500 underline ml-2 transition-all">Xóa bộ lọc</a>
                 </form>
             </div>
 
@@ -173,9 +181,9 @@
                     <span class="text-xs text-slate-400 font-bold uppercase tracking-widest" 
                           th:text="'Trang ' + (${batchPage.number} + 1) + ' / ' + ${batchPage.totalPages}"></span>
                     <div class="flex items-center gap-2">
-                        <a th:href="@{/inventory(page=${batchPage.number - 1}, keyword=${keyword}, status=${currentStatus})}" 
+                        <a th:href="@{/inventory(page=${batchPage.number - 1}, keyword=${keyword}, status=${currentStatus}, productTypeId=${currentProductType})}" 
                            th:if="${batchPage.hasPrevious()}" class="p-2 rounded-xl border border-slate-200 hover:bg-white transition-all text-slate-500 cursor-pointer"><span class="material-symbols-outlined text-sm">chevron_left</span></a>
-                        <a th:href="@{/inventory(page=${batchPage.number + 1}, keyword=${keyword}, status=${currentStatus})}" 
+                        <a th:href="@{/inventory(page=${batchPage.number + 1}, keyword=${keyword}, status=${currentStatus}, productTypeId=${currentProductType})}" 
                            th:if="${batchPage.hasNext()}" class="p-2 rounded-xl border border-slate-200 hover:bg-white transition-all text-slate-500 cursor-pointer"><span class="material-symbols-outlined text-sm">chevron_right</span></a>
                     </div>
                 </div>
@@ -204,7 +212,10 @@
                                     <div class="flex-1 min-w-0">
                                         <select id="importProductId" name="productId" required placeholder="Gõ để tìm mã hoặc tên...">
                                             <option value="">-- Gõ để tìm hoặc chọn --</option>
-                                            <option th:each="p : ${products}" th:value="${p.id}" th:text="${p.id + ' - ' + p.name}"></option>
+                                            <option th:each="p : ${products}" 
+                                                    th:value="${p.id}" 
+                                                    th:data-markup="${p.markup}" 
+                                                    th:text="${p.id + ' - ' + p.name}"></option>
                                         </select>
                                     </div>
                                     <button type="button" onclick="openProductDrawer()" class="shrink-0 w-11 h-11 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-xl flex items-center justify-center transition-all border border-slate-200 shadow-sm" title="Thêm vị trí sản phẩm mới">
@@ -240,19 +251,28 @@
                                     => Vốn: <span id="calcUnitPrice">0</span> đ/SP
                                 </p>
                             </div>
-                            
+
                             <div>
                                 <label class="text-[10px] font-black uppercase text-slate-400 tracking-widest block mb-2">Giá bán dự kiến 1 SP (VNĐ)</label>
                                 <div class="relative">
-                                    <input type="text" inputmode="numeric" id="importSellingPriceDisplay" required placeholder="Giá bán..." oninput="handleSellingPriceInput(this, 'importSellingPrice')" class="w-full text-sm font-bold border-slate-200 rounded-xl bg-slate-50 focus:bg-white focus:ring-emerald-500 focus:border-emerald-500 h-11 text-rose-500">
+                                    <input type="text" inputmode="numeric"
+                                        id="importSellingPriceDisplay" required
+                                        placeholder="Giá bán..."
+                                        oninput="handleSellingPriceInput(this, 'importSellingPrice')"
+                                        class="w-full text-sm font-bold border-slate-200 rounded-xl bg-slate-50 focus:bg-white focus:ring-emerald-500 focus:border-emerald-500 h-11 text-rose-500">
                                     <input type="hidden" id="importSellingPrice" name="sellingPrice">
-                                    
-                                    <button type="button" onclick="forceSuggestSellingPrice()" class="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 bg-rose-50 text-rose-500 hover:bg-rose-100 rounded-lg text-[10px] font-black uppercase tracking-wider transition-all" title="Gợi ý mức lời 50%">
-                                        +50% Lời
+
+                                    <button type="button" onclick="forceSuggestSellingPrice()"
+                                        class="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 bg-rose-50 text-rose-500 hover:bg-rose-100 rounded-lg text-[10px] font-black uppercase tracking-wider transition-all"
+                                        title="Gợi ý mức lời theo loại SP">
+                                        +<span id="suggestedMarkupLabel">0</span>% Lời
                                     </button>
                                 </div>
                                 <p id="sellingPriceHintText" class="text-[10px] text-slate-500 font-medium mt-1 hidden">
-                                    Gợi ý (+50%): <a href="javascript:void(0)" onclick="forceSuggestSellingPrice()" class="text-rose-500 font-bold hover:underline" id="suggestedPriceText">0</a> đ
+                                    Gợi ý (+<span id="hintMarkupLabel">0</span>%): <a
+                                        href="javascript:void(0)" onclick="forceSuggestSellingPrice()"
+                                        class="text-rose-500 font-bold hover:underline"
+                                        id="suggestedPriceText">0</a> đ
                                 </p>
                             </div>
 
@@ -396,7 +416,10 @@
                     <label class="text-[10px] font-black uppercase text-slate-400 tracking-widest block mb-2">Loại Hàng</label>
                     <select id="newProductType" required class="w-full text-sm font-bold border-slate-200 rounded-xl bg-slate-50 focus:bg-white focus:ring-[#08658b] focus:border-[#08658b] h-11">
                         <option value="">-- Chọn Loại Hàng --</option>
-                        <option th:each="pt : ${productTypes}" th:value="${pt.id}" th:text="${pt.name}"></option>
+                        <option th:each="pt : ${productTypes}" 
+                                th:value="${pt.id}" 
+                                th:data-markup="${pt.markup}" 
+                                th:text="${pt.name}"></option>
                     </select>
                 </div>
             </form>
@@ -419,7 +442,11 @@
         document.addEventListener("DOMContentLoaded", function() {
             productSelect = new TomSelect("#importProductId", {
                 create: false,
-                sortField: { field: "text", direction: "asc" }
+                sortField: { field: "text", direction: "asc" },
+                onChange: function() {
+                    // Tự động tính lại giá bán khi đổi sản phẩm khác nhau (vì có MarkupPercent khác nhau)
+                    calculateUnitAndSellingPrice();
+                }
             });
 
             supplierSelect = new TomSelect("#importSupplierId", {
@@ -480,7 +507,7 @@
             formatCurrency(displayInput, hiddenInputId);
         }
 
-        // --- TÍNH GIÁ VỐN & GIÁ BÁN TỰ ĐỘNG ---
+        // --- TÍNH GIÁ VỐN & GIÁ BÁN TỰ ĐỘNG (THEO MARKUPPERCENT) ---
         let currentUnitPrice = 0;
 
         function calculateUnitAndSellingPrice() {
@@ -490,7 +517,22 @@
             const calcSpan = document.getElementById('calcUnitPrice');
             const sellingHintBox = document.getElementById('sellingPriceHintText');
             const suggestedTextSpan = document.getElementById('suggestedPriceText');
+            const markupLabel = document.getElementById('suggestedMarkupLabel');
+            const hintMarkupLabel = document.getElementById('hintMarkupLabel');
+
+            // 1. Lấy MarkupPercent từ Sản phẩm đang được chọn
+            const productIdSelect = document.getElementById('importProductId');
+            const selectedOption = productIdSelect.options[productIdSelect.selectedIndex];
             
+            let markupPercent = 0;
+            if (selectedOption && selectedOption.getAttribute('data-markup')) {
+                markupPercent = parseFloat(selectedOption.getAttribute('data-markup'));
+            }
+            
+            // Cập nhật số % hiển thị trên UI
+            if (markupLabel) markupLabel.textContent = markupPercent;
+            if (hintMarkupLabel) hintMarkupLabel.textContent = markupPercent;
+
             const qty = parseFloat(qtyInput);
             const total = parseFloat(totalInput);
 
@@ -500,12 +542,14 @@
                 calcSpan.textContent = currentUnitPrice.toLocaleString('vi-VN', { maximumFractionDigits: 0 });
                 hintBox.classList.remove('hidden');
 
-                // Tính và hiện DÒNG CHỮ gợi ý giá bán (+50%)
-                const suggested = Math.ceil((currentUnitPrice * 1.5) / 1000) * 1000; 
+                // 2. Tính giá bán gợi ý: Giá vốn * (1 + Markup/100) -> Làm tròn lên nghìn đồng
+                const markupFactor = 1 + (markupPercent / 100);
+                const suggested = Math.ceil((currentUnitPrice * markupFactor) / 1000) * 1000; 
+                
                 suggestedTextSpan.textContent = suggested.toLocaleString('en-US');
                 sellingHintBox.classList.remove('hidden');
 
-                // Nếu người dùng chưa gõ, tự động điền luôn vào ô input
+                // Tự động điền nếu chưa sửa bằng tay
                 if (!isSellingPriceManuallyEdited) {
                     document.getElementById('importSellingPrice').value = suggested;
                     document.getElementById('importSellingPriceDisplay').value = suggested.toLocaleString('en-US');
@@ -522,9 +566,19 @@
         }
 
         function forceSuggestSellingPrice() {
+            const productIdSelect = document.getElementById('importProductId');
+            const selectedOption = productIdSelect.options[productIdSelect.selectedIndex];
+            let markupPercent = 0;
+            
+            if (selectedOption && selectedOption.getAttribute('data-markup')) {
+                markupPercent = parseFloat(selectedOption.getAttribute('data-markup'));
+            }
+
             if (currentUnitPrice > 0) {
                 isSellingPriceManuallyEdited = false;
-                const suggested = Math.ceil((currentUnitPrice * 1.5) / 1000) * 1000; 
+                const markupFactor = 1 + (markupPercent / 100);
+                const suggested = Math.ceil((currentUnitPrice * markupFactor) / 1000) * 1000; 
+                
                 document.getElementById('importSellingPrice').value = suggested;
                 document.getElementById('importSellingPriceDisplay').value = suggested.toLocaleString('en-US');
             }
@@ -734,7 +788,8 @@
         function submitQuickAddProduct() {
             const idInput = document.getElementById('newProductId');
             const nameInput = document.getElementById('newProductName');
-            const typeId = document.getElementById('newProductType').value;
+            const typeSelect = document.getElementById('newProductType');
+            const typeId = typeSelect.value;
             const btnSubmit = document.getElementById('btnQuickAdd');
             const errorMsg = document.getElementById('productIdError');
 
@@ -757,6 +812,10 @@
                 idInput.focus();
                 return;
             }
+
+            // Lấy thông tin markup của Loại SP đang chọn để đính kèm vào Option
+            const selectedTypeOption = typeSelect.options[typeSelect.selectedIndex];
+            const typeMarkup = selectedTypeOption ? selectedTypeOption.getAttribute('data-markup') : 0;
 
             const originalText = btnSubmit.innerHTML;
             btnSubmit.innerHTML = `<span class="material-symbols-outlined text-[18px] animate-spin">refresh</span> Đang xử lý...`;
@@ -781,7 +840,17 @@
             })
             .then(data => {
                 const optionText = data.id + ' - ' + data.name;
-                productSelect.addOption({ value: data.id, text: optionText });
+                
+                // CẬP NHẬT: Thêm trực tiếp thẻ <option> vào DOM để giữ được thuộc tính data-markup
+                const selectEl = document.getElementById('importProductId');
+                const newOption = document.createElement('option');
+                newOption.value = data.id;
+                newOption.text = optionText;
+                newOption.setAttribute('data-markup', typeMarkup); 
+                selectEl.appendChild(newOption);
+                
+                // Đồng bộ TomSelect để nó nhận diện option mới
+                productSelect.sync();
                 productSelect.setValue(data.id); 
                 
                 document.getElementById('quickAddProductForm').reset();

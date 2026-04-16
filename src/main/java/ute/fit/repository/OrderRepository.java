@@ -28,6 +28,6 @@ public interface OrderRepository extends JpaRepository<OrdersEntity, Integer> {
     List<Object[]> getRevenueByDay(LocalDateTime start, LocalDateTime end);
 
     List<OrdersEntity> findByStatus(ute.fit.model.OrderStatus status);
-}
+
     List<OrdersEntity> findByStatusNot(String status);
 }

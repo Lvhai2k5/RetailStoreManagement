@@ -1,21 +1,32 @@
 package ute.fit.service;
 
-import ute.fit.dto.OrderDTO;
-import ute.fit.dto.OrderItemDTO;
-import ute.fit.entity.*;
-import ute.fit.model.OrderStatus;
-import ute.fit.model.TransactionType;
-import ute.fit.repository.*;
-
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.time.LocalDateTime;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import lombok.RequiredArgsConstructor;
+import ute.fit.dto.OrderDTO;
+import ute.fit.dto.OrderItemDTO;
+import ute.fit.entity.ImportBatchesEntity;
+import ute.fit.entity.InventoryTransactionsEntity;
+import ute.fit.entity.OrderDetailsEntity;
+import ute.fit.entity.OrdersEntity;
+import ute.fit.entity.ProductsEntity;
+import ute.fit.entity.SaleAllocationsEntity;
+import ute.fit.model.OrderStatus;
+import ute.fit.model.TransactionType;
+import ute.fit.repository.ImportBatchRepository;
+import ute.fit.repository.InventoryTransactionRepository;
+import ute.fit.repository.OrderDetailRepository;
+import ute.fit.repository.OrderJdbcRepository;
+import ute.fit.repository.OrderRepository;
+import ute.fit.repository.ProductRepository;
+import ute.fit.repository.SaleAllocationRepository;
 
 @Service
 @RequiredArgsConstructor
@@ -29,6 +40,16 @@ public class OrderService {
     private final ImportBatchRepository importBatchRepo;
     private final InventoryTransactionRepository inventoryRepo;
     private final SaleAllocationRepository saleAllocationRepo;
+
+    public void payOrder(Integer orderId, String method) {
+        OrdersEntity order = orderRepo.findById(orderId).orElseThrow();
+
+        order.setPaymentMethod(method);
+        order.setStatus(OrderStatus.Paid);
+        order.setPaidDate(LocalDateTime.now());
+
+        orderRepo.save(order);
+    }
 
 @Transactional
 public OrdersEntity createOrder(OrderDTO dto) {
@@ -220,7 +241,7 @@ public OrdersEntity createOrder(OrderDTO dto) {
     public boolean checkStock(String productID, int qty) {
 
         String sql = """
-        SELECT ISNULL(SUM(it.QuantityChange),0)
+        SELECT COALESCE(SUM(it.QuantityChange),0)
         FROM InventoryTransactions it
         JOIN ImportBatches b ON it.BatchID = b.BatchID
         WHERE b.ProductID = ? AND it.IsSellable = 1

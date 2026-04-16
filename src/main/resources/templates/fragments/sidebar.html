@@ -1,12 +1,19 @@
 <aside th:fragment="sidebar"
-       class="hidden lg:flex flex-col fixed left-0 top-16 h-[calc(100vh-64px)] w-64 p-6 bg-slate-50 border-r border-slate-100 font-manrope">
+       class="hidden lg:flex flex-col fixed left-0 top-16 h-[calc(100vh-64px)] w-64 p-6 bg-white border-r border-slate-100 font-manrope shadow-sm">
 
     <!-- LOGO -->
     <div class="mb-10 px-2">
-        <h2 class="font-bold text-rose-400 text-lg">Vũ Hải</h2>
-        <p class="text-[10px] text-slate-400 uppercase tracking-widest font-bold">
-            Number 01
+
+        <h2 class="font-extrabold text-rose-500 text-xl tracking-wide">
+            Retailer
+        </h2>
+
+        <p class="text-[11px] text-slate-400 uppercase tracking-[0.3em] font-semibold mt-1">
+            VietNam
         </p>
+
+        <div class="w-10 h-[2px] bg-rose-400 mt-3 rounded-full"></div>
+
     </div>
 
     <!-- MENU -->
@@ -15,9 +22,10 @@
         <!-- Dashboard -->
         <a th:href="@{/dashboard}"
            th:classappend="${currentPath != null and currentPath.startsWith('/dashboard')}
-           ? 'bg-white shadow-sm text-rose-500 border border-rose-50 font-bold'
+           ? 'bg-rose-50 text-rose-500 font-bold shadow-sm'
            : 'text-slate-500'"
-           class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all hover:bg-white hover:shadow-sm">
+           class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all hover:bg-rose-50 hover:text-rose-500">
+
             <span class="material-symbols-outlined">dashboard</span>
             <span class="text-sm font-semibold">Tổng quan</span>
         </a>
@@ -25,19 +33,21 @@
         <!-- Báo cáo -->
         <a th:href="@{/revenue}"
            th:classappend="${currentPath != null and currentPath.startsWith('/revenue')}
-           ? 'bg-white shadow-sm text-rose-500 border border-rose-50 font-bold'
+           ? 'bg-rose-50 text-rose-500 font-bold shadow-sm'
            : 'text-slate-500'"
-           class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all hover:bg-white hover:shadow-sm">
+           class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all hover:bg-rose-50 hover:text-rose-500">
+
             <span class="material-symbols-outlined">analytics</span>
             <span class="text-sm font-semibold">Báo cáo doanh thu</span>
         </a>
 
         <!-- Đơn hàng -->
         <a th:href="@{/order/listorder}"
-           th:classappend="${currentPath != null and currentPath.startsWith('/admin/orders')}
-           ? 'bg-white shadow-sm text-rose-500 border border-rose-50 font-bold'
+           th:classappend="${currentPath != null and currentPath.startsWith('/order')}
+           ? 'bg-rose-50 text-rose-500 font-bold shadow-sm'
            : 'text-slate-500'"
-           class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all hover:bg-white hover:shadow-sm">
+           class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all hover:bg-rose-50 hover:text-rose-500">
+
             <span class="material-symbols-outlined">receipt_long</span>
             <span class="text-sm font-semibold">Đơn hàng</span>
         </a>
@@ -45,9 +55,10 @@
         <!-- Kho hàng -->
         <a th:href="@{/inventory}"
            th:classappend="${currentPath != null and currentPath.startsWith('/inventory')}
-           ? 'bg-white shadow-sm text-rose-500 border border-rose-50 font-bold'
+           ? 'bg-rose-50 text-rose-500 font-bold shadow-sm'
            : 'text-slate-500'"
-           class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all hover:bg-white hover:shadow-sm">
+           class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all hover:bg-rose-50 hover:text-rose-500">
+
             <span class="material-symbols-outlined">inventory_2</span>
             <span class="text-sm font-semibold">Kho hàng</span>
         </a>
@@ -55,28 +66,53 @@
         <!-- Sản phẩm -->
         <a th:href="@{/listproduct}"
            th:classappend="${currentPath != null and currentPath.startsWith('/listproduct')}
-           ? 'bg-white shadow-sm text-rose-500 border border-rose-50 font-bold'
+           ? 'bg-rose-50 text-rose-500 font-bold shadow-sm'
            : 'text-slate-500'"
-           class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all hover:bg-white hover:shadow-sm hover:scale-[1.02]">
-            <span class="material-symbols-outlined text-[20px]">inventory</span>
-            <span class="text-sm font-semibold">Danh sách sản phẩm</span>
+           class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all hover:bg-rose-50 hover:text-rose-500">
+
+            <span class="material-symbols-outlined">inventory</span>
+            <span class="text-sm font-semibold">Sản phẩm</span>
         </a>
 
-        <!-- ✅ NHÀ CUNG CẤP -->
+        <!-- Nhà cung cấp -->
         <a th:href="@{/suppliers}"
            th:classappend="${currentPath != null and currentPath.startsWith('/suppliers')}
-           ? 'bg-white shadow-sm text-rose-500 border border-rose-50 font-bold'
+           ? 'bg-rose-50 text-rose-500 font-bold shadow-sm'
            : 'text-slate-500'"
-           class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all hover:bg-white hover:shadow-sm hover:scale-[1.02]">
-            <span class="material-symbols-outlined text-[20px]">groups</span>
+           class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all hover:bg-rose-50 hover:text-rose-500">
+
+            <span class="material-symbols-outlined">groups</span>
             <span class="text-sm font-semibold">Nhà cung cấp</span>
+        </a>
+
+        <!-- Hàng lỗi -->
+        <a th:href="@{/defective}"
+           th:classappend="${currentPath != null and currentPath.startsWith('/defective')}
+           ? 'bg-rose-50 text-rose-500 font-bold shadow-sm'
+           : 'text-slate-500'"
+           class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all hover:bg-rose-50 hover:text-rose-500">
+
+            <span class="material-symbols-outlined">warning</span>
+            <span class="text-sm font-semibold">Hàng lỗi</span>
+        </a>
+
+        <!-- Hàng trả -->
+        <a th:href="@{/return}"
+           th:classappend="${currentPath != null and currentPath.startsWith('/return')}
+           ? 'bg-rose-50 text-rose-500 font-bold shadow-sm'
+           : 'text-slate-500'"
+           class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all hover:bg-rose-50 hover:text-rose-500">
+
+            <span class="material-symbols-outlined">keyboard_return</span>
+            <span class="text-sm font-semibold">Hàng trả</span>
         </a>
 
     </nav>
 
     <!-- BUTTON -->
     <a href="/order/create"
-       class="mt-auto w-full py-4 bg-[#8b4d4d] text-white rounded-2xl font-bold flex items-center justify-center gap-2 shadow-lg shadow-rose-100 hover:opacity-90 transition-opacity">
+       class="mt-auto w-full py-4 bg-rose-500 text-white rounded-2xl font-bold flex items-center justify-center gap-2 shadow-lg hover:bg-rose-600 transition">
+
         <span class="material-symbols-outlined text-lg">add_circle</span>
         Tạo đơn mới
     </a>
