@@ -9,7 +9,7 @@ SELECT * FROM (VALUES
                    (N'Mỹ phẩm', 30.00),
                    (N'Vệ sinh cá nhân', 28.00),
                    (N'Đông lạnh', 10.00),
-                   (N'Thực phẩm tươi sống', 8.00)
+                   (N'Thực phẩm tươi sống', 9.00)
               ) AS v(Name, MarkupPercent)
 WHERE NOT EXISTS (
     SELECT 1 FROM ProductTypesMarkup
