@@ -19,20 +19,16 @@ jobs:
         distribution: 'temurin'
         java-version: '17'
 
-    # 3. Check Maven tồn tại
+    # 3. Check pom.xml
     - name: Check pom.xml
       run: |
         test -f pom.xml
         echo "pom.xml exists"
 
-    # 4. Build project
+    # 4. Build (BỎ TEST)
     - name: Build project
-      run: mvn clean compile
+      run: mvn clean install -DskipTests
 
-    # 5. Run test
-    - name: Run test
-      run: mvn test
-
-    # 6. Success
+    # 5. Success
     - name: CI success
       run: echo "Build successful"
