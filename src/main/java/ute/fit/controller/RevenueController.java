@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import jakarta.servlet.http.HttpServletResponse;
 import ute.fit.dto.RevenueReportDTO;
 import ute.fit.service.IRevenueService;
+import ute.fit.util.ExcelExportUtils;
 
 @Controller
 @RequestMapping("/revenue")
@@ -37,27 +38,35 @@ public class RevenueController {
         return "revenue-report"; // Trỏ tới file HTML của bạn
     }
 
-    // Endpoint chuẩn bị cho chức năng xuất Excel
     @GetMapping("/export/excel")
     public void exportToExcel(
             @RequestParam(value = "range", defaultValue = "month") String range,
             @RequestParam(value = "startDate", required = false) String startDate,
             @RequestParam(value = "endDate", required = false) String endDate,
-            HttpServletResponse response) { // <--- QUAN TRỌNG: Phải thêm tham số này
+            HttpServletResponse response) {
 
         try {
-            // 1. Khai báo kiểu nội dung là file Excel
-            response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
-            
-            // 2. Ra lệnh cho trình duyệt tải file xuống với tên cụ thể
-            response.setHeader("Content-Disposition", "attachment; filename=Bao_Cao_Doanh_Thu_Tam_Thoi.xlsx");
+            // 1. Lấy dữ liệu từ Service
+            RevenueReportDTO report = revenueService.getFullReport(range, startDate, endDate);
 
-            // 3. Logic gọi sang Service xuất Excel sẽ nằm ở đây
-            // (Hiện tại đang để trống nên khi bạn bấm tải, nó sẽ tải về một file Excel lỗi/trống)
-            // excelExportService.exportRevenueReport(report, response);
+            // 2. Tạo tên file động: BaoCaoDoanhthu_yyyy-MM-dd_yyyy-MM-dd.xlsx
+            String fileName = "BaoCaoDoanhthu_" + 
+                             (startDate != null ? startDate : "Start") + "_" + 
+                             (endDate != null ? endDate : "End") + ".xlsx";
+
+            // 3. Thiết lập thông tin phản hồi (Headers)
+            response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+            response.setHeader("Content-Disposition", "attachment; filename=" + fileName);
+
+            // 4. Gọi Utils để ghi dữ liệu trực tiếp vào Response OutputStream
+            ExcelExportUtils.exportRevenueReport(report, startDate, endDate, response);
+            
+            // 5. Quan trọng: Flush để đảm bảo dữ liệu được đẩy xuống trình duyệt
+            response.flushBuffer();
 
         } catch (Exception e) {
             e.printStackTrace();
+            // Có thể bổ sung log lỗi ở đây
         }
     }
 }

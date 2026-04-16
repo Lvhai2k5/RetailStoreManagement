@@ -18,12 +18,13 @@ public class RevenueReportDTO {
 
     // Dữ liệu biểu đồ
     private Map<String, Long> statusDistribution; // Biểu đồ tròn: Pending, Paid, Cancelled
-    private List<DailyRevenueDTO> dailyRevenue;    // Biểu đồ đường: Doanh thu theo ngày
+    private List<DailyRevenueDTO> dailyRevenue;   // Biểu đồ đường: Doanh thu theo ngày
 
     // Top sản phẩm
-    private List<ProductSalesDTO> topProducts; // Top 5 sản phẩm
+    private List<ProductSalesDTO> topProducts;    // Top 5 sản phẩm
 
     @Data
+    @NoArgsConstructor // Thêm constructor không tham số để an toàn khi parse JSON (nếu cần)
     @AllArgsConstructor
     public static class DailyRevenueDTO {
         private String date;
@@ -31,10 +32,15 @@ public class RevenueReportDTO {
     }
 
     @Data
+    @NoArgsConstructor
     @AllArgsConstructor
     public static class ProductSalesDTO {
         private String productName;
-        private Long quantity;      // Tổng OrderDetailsEntity.quantity
-        private BigDecimal revenue; // Tổng quantity * unitPrice
+        
+        // Cập nhật tên biến để đồng bộ với phương thức getSoldQuantity() trong ExcelExportUtils
+        private Long soldQuantity;      // Tổng OrderDetailsEntity.quantity
+        
+        // Cập nhật tên biến để đồng bộ với phương thức getProductRevenue() trong ExcelExportUtils
+        private BigDecimal productRevenue; // Tổng quantity * unitPrice
     }
 }
